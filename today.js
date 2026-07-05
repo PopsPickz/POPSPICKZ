@@ -42,10 +42,37 @@ const todayData = {
   ],
 
   weather: [
-    { stadium: "Dodger Stadium", condition: "Warm night game • hitter-friendly total at 9.5", boost: "🔥🔥🔥" },
-    { stadium: "Angel Stadium", condition: "Late game • total 8 • moderate HR environment", boost: "🔥🔥" },
-    { stadium: "T-Mobile Park", condition: "Lower total 7.5 • pitcher-friendlier park", boost: "🔥" }
-  ],
+  {
+    game: "Padres @ Dodgers",
+    stadium: "Dodger Stadium",
+    wind: "9 mph",
+    direction: "Out to CF",
+    rain: "0%",
+    temperature: "Warm night",
+    hrBoost: "🔥🔥🔥 Excellent",
+    weatherScore: "9.2/10"
+  },
+  {
+    game: "Red Sox @ Angels",
+    stadium: "Angel Stadium",
+    wind: "8 mph",
+    direction: "Out to LF/LCF",
+    rain: "1%",
+    temperature: "Mild night",
+    hrBoost: "🔥🔥 Good",
+    weatherScore: "8.1/10"
+  },
+  {
+    game: "Blue Jays @ Mariners",
+    stadium: "T-Mobile Park",
+    wind: "10 mph",
+    direction: "Across Field",
+    rain: "0%",
+    temperature: "Controlled / cooler park",
+    hrBoost: "⭐ Neutral",
+    weatherScore: "5.4/10"
+  }
+],
 
   nrfi: [
     { game: "Blue Jays vs Mariners", pick: "NRFI lean", confidence: "63%" },
