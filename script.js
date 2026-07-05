@@ -102,3 +102,24 @@ function loadMoneylinePicks() {
 }
 
 loadMoneylinePicks();
+
+[7/5/26, 1:50:53 PM] Sean g: ]
+[7/5/26, 1:52:57 PM] Sean g: function loadWeatherBoosts() {
+  const section = document.getElementById("weatherBoosts");
+
+  if (!section) return;
+  if (!popsData || !popsData.weatherBoosts) return;
+
+  section.innerHTML = "";
+
+  popsData.weatherBoosts.forEach(function(item) {
+    section.innerHTML +=
+      "<div class='model-card'>" +
+      "<h3>🌦 " + item.stadium + "</h3>" +
+      "<p>" + item.condition + "</p>" +
+      "<span>HR Weather Boost: " + item.boost + "</span>" +
+      "</div>";
+  });
+}
+
+loadWeatherBoosts();
