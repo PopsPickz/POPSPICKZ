@@ -1,3 +1,4 @@
+// LIVE MLB SCOREBOARD - DO NOT DELETE
 async function loadMLBScores() {
   const today = new Date().toISOString().split("T")[0];
   const url = "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=" + today;
