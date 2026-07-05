@@ -214,7 +214,7 @@ async function loadDailySlate() {
     const away = game.teams.away.team.name;
     const home = game.teams.home.team.name;
     const status = game.status.detailedState;
-
+    const url = "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=" + today + "&hydrate=probablePitcher";
     const awayPitcher = game.teams.away.probablePitcher
       ? game.teams.away.probablePitcher.fullName
       : "TBD";
@@ -228,7 +228,8 @@ async function loadDailySlate() {
     card.innerHTML =
       "<h3>" + away + " vs " + home + "</h3>" +
       "<p>" + awayPitcher + " vs " + homePitcher + "</p>" +
-      "<span>" + status + "</span>";
+"<p>" + venue + "</p>" +
+"<span>" + gameTime + " • " + status + "</span>";
 
     slateList.appendChild(card);
   });
