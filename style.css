@@ -256,3 +256,11 @@ footer{
   color:#00ff66;
   font-weight:900;
 }
+
+.bomb-card{
+  border-color:rgba(0,255,102,.45);
+}
+
+.bomb-card h3{
+  color:#00ff66;
+}
