@@ -1,15 +1,13 @@
-// POPS Pickz Version 4
+function showCheatSheet() {
+  alert(
+`🔥 POPS PICKZ DAILY CHEAT SHEET 🔥
 
-document.addEventListener("DOMContentLoaded", () => {
+💣 Top HR Pick: Elite Power Bat
+⚾ Top Pitcher to Target: High HR/9 Starter
+💰 Best Moneyline: Strong Team Edge
+🌤 Best Weather: Wind Out + Warm Temps
+🚦 NRFI: Coming Soon
 
-    console.log("POPS Pickz Loaded!");
-
-    const cheatButton = document.querySelector(".button");
-
-    if (cheatButton) {
-        cheatButton.addEventListener("click", () => {
-            alert("🚀 Today's Elite HR Cheat Sheet is coming soon!");
-        });
-    }
-
-});
+Good luck!`
+  );
+}

@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>POPS Pickz V2</title>
+  <title>POPS Pickz Pro</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <nav class="navbar">
-  <div class="logo">💣 POPS PICKZ</div>
+  <div class="logo">💣 POPS PICKZ PRO</div>
   <div class="nav-links">
-    <a href="#hr">HR Model</a>
+    <a href="#scores">Scores</a>
+    <a href="#hr">HR Picks</a>
     <a href="#pitchers">Pitchers</a>
     <a href="#moneyline">Moneyline</a>
     <a href="#weather">Weather</a>
@@ -19,77 +20,126 @@
 </nav>
 
 <header class="hero">
-  <h1>POPS Pickz MLB Command Center</h1>
-  <p>Home Runs • Pitchers to Target • Weather • Moneyline • NRFI/YRFI</p>
-  <button>🔥 Today’s Cheat Sheet</button>
+  <p class="tag">MLB Analytics Command Center</p>
+  <h1>POPS Pickz Pro Dashboard</h1>
+  <p class="subtitle">Home Runs • Moneyline • Pitchers to Target • Weather • NRFI/YRFI</p>
+  <button onclick="showCheatSheet()">🔥 Today’s Cheat Sheet</button>
 </header>
 
+<section class="ticker" id="scores">
+  <div>⚾ NYY 4 - BOS 2</div>
+  <div>⚾ LAD 6 - SF 3</div>
+  <div>⚾ ATL 5 - MIA 1</div>
+  <div>⚾ PHI 3 - NYM 3</div>
+</section>
+
 <section class="dashboard">
-  <div class="stat-card">
-    <h2>💣 HR Model</h2>
-    <p>Find power bats with weather, park, and pitcher advantages.</p>
+  <div class="card">
+    <h2>💣 Top HR Pick</h2>
+    <p class="big">Elite Power Bat</p>
+    <p>Weather boost + pitcher HR risk</p>
+    <span>Grade: ⭐⭐⭐⭐⭐</span>
   </div>
 
-  <div class="stat-card">
-    <h2>⚾ Pitchers to Target</h2>
-    <p>Track HR/9, ERA, barrel rate, hard contact, and recent form.</p>
+  <div class="card">
+    <h2>⚾ Pitcher Target</h2>
+    <p class="big">High HR/9 Starter</p>
+    <p>Bad form + hard contact allowed</p>
+    <span>Danger: 🔥🔥🔥</span>
   </div>
 
-  <div class="stat-card">
+  <div class="card">
+    <h2>💰 Moneyline Edge</h2>
+    <p class="big">Strong Team Edge</p>
+    <p>Starter + bullpen + offense advantage</p>
+    <span>Confidence: 78%</span>
+  </div>
+
+  <div class="card">
     <h2>🌦 Weather Boost</h2>
-    <p>Wind out, hot weather, humidity, and hitter-friendly parks.</p>
-  </div>
-
-  <div class="stat-card">
-    <h2>💰 Moneyline Model</h2>
-    <p>Compare starting pitching, bullpen, offense, defense, and line movement.</p>
+    <p class="big">Wind Blowing Out</p>
+    <p>Warm temps + hitter-friendly park</p>
+    <span>Boost: 🔥🔥</span>
   </div>
 </section>
 
-<section id="hr" class="panel">
-  <h2>💣 POPS Home Run Model</h2>
+<section class="panel" id="hr">
+  <h2>💣 POPS Home Run Picks</h2>
   <table>
     <tr>
-      <th>Factor</th>
-      <th>What We Look For</th>
+      <th>Rank</th>
+      <th>Player</th>
+      <th>Matchup</th>
       <th>Boost</th>
+      <th>Grade</th>
     </tr>
     <tr>
-      <td>Pitcher HR Risk</td>
-      <td>High HR/9, hard contact, bad recent form</td>
+      <td>1</td>
+      <td>Elite Target</td>
+      <td>Power bat vs HR-prone pitcher</td>
+      <td>Weather + Park</td>
+      <td>⭐⭐⭐⭐⭐</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Strong Target</td>
+      <td>Platoon edge + barrel rate</td>
+      <td>Wind Out</td>
+      <td>⭐⭐⭐⭐</td>
+    </tr>
+  </table>
+</section>
+
+<section class="panel" id="pitchers">
+  <h2>🎯 Pitchers to Target</h2>
+  <table>
+    <tr>
+      <th>Pitcher</th>
+      <th>HR Risk</th>
+      <th>ERA</th>
+      <th>Target Grade</th>
+    </tr>
+    <tr>
+      <td>Pitcher A</td>
+      <td>High</td>
+      <td>5.20</td>
       <td>🔥🔥🔥</td>
     </tr>
     <tr>
-      <td>Hitter Power</td>
-      <td>Barrel %, ISO, SLG, hard-hit rate</td>
-      <td>🔥🔥🔥</td>
-    </tr>
-    <tr>
-      <td>Weather</td>
-      <td>Wind blowing out, warm temps</td>
+      <td>Pitcher B</td>
+      <td>Medium</td>
+      <td>4.60</td>
       <td>🔥🔥</td>
     </tr>
   </table>
 </section>
 
-<section id="pitchers" class="panel">
-  <h2>⚾ Pitchers to Target</h2>
-  <p>Coming next: daily pitcher rankings and HR danger grades.</p>
-</section>
-
-<section id="moneyline" class="panel">
+<section class="panel" id="moneyline">
   <h2>💰 Moneyline Model</h2>
-  <p>Coming next: team edge chart for starter, bullpen, offense, and defense.</p>
+  <div class="meter">
+    <div style="width:78%">78% POPS Edge</div>
+  </div>
+  <p>Model checks: starting pitcher, bullpen, offense, defense, injuries, travel, and line movement.</p>
 </section>
 
-<section id="weather" class="panel">
+<section class="panel" id="weather">
   <h2>🌦 Weather Center</h2>
-  <p>Coming next: wind direction, temperature, stadium boost, and HR weather rating.</p>
+  <div class="weather-grid">
+    <div>🏟 Yankee Stadium<br>Wind Out 12 MPH<br>HR Boost 🔥🔥</div>
+    <div>🏟 Dodger Stadium<br>Warm Temps<br>HR Boost 🔥</div>
+    <div>🏟 Citizens Bank Park<br>Hitter Park<br>HR Boost 🔥🔥🔥</div>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>🚦 NRFI / YRFI Center</h2>
+  <p>Coming next: first inning scoring probability by game.</p>
 </section>
 
 <footer>
-  <p>POPS Pickz ©️ 2026 | MLB Analytics Dashboard</p>
+  POPS Pickz Pro ©️ 2026
 </footer>
+
 <script src="script.js"></script>
 </body>
 </html>
