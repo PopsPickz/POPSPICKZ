@@ -1,7 +1,6 @@
 async function loadMLBScores() {
   const today = new Date().toISOString().split("T")[0];
-  const url = ⁠ https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today} ⁠;
-
+ const url = "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=" + today;
   const ticker = document.querySelector(".ticker");
 
   try {
