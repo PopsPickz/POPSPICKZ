@@ -27,11 +27,21 @@ const todayData = {
   ],
 
   pitcherTargets: [
-    { pitcher: "High HR Risk Pitcher", stats: "HR/9 • ERA • Hard Contact", grade: "🔥🔥🔥🔥" },
-    { pitcher: "Medium HR Risk Pitcher", stats: "Barrel Rate • Weather Boost", grade: "🔥🔥🔥" },
-    { pitcher: "Low Confidence Target", stats: "Bad bullpen behind starter", grade: "🔥🔥" }
-  ],
-
+  {
+    pitcher: "Pitcher Name",
+    opponent: "vs Team",
+    hand: "RHP",
+    stats: "ERA: 5.20 • HR/9: 1.8 • Hard Contact: High",
+    grade: "🔥🔥🔥🔥"
+  },
+  {
+    pitcher: "Pitcher Name",
+    opponent: "vs Team",
+    hand: "LHP",
+    stats: "ERA: 4.60 • HR/9: 1.4 • Hard Contact: Medium",
+    grade: "🔥🔥🔥"
+  }
+],
   moneyline: [
     { team: "Strong Team Edge", reason: "Starter + bullpen + offense advantage", confidence: "78%" },
     { team: "Value Team Edge", reason: "Better bullpen + line movement", confidence: "65%" },
