@@ -1,62 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POPS Admin</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">💣 POPS ADMIN</div>
+  <div class="nav-links">
+    <a href="index.html">Dashboard</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <p class="tag">Research Workspace</p>
+  <h1>POPS Pickz Admin</h1>
+  <p class="subtitle">Enter players, stats, and calculate POPS Scores</p>
+</header>
+
 <section class="panel">
-  <h2>📋 Daily HR Pick Entry</h2>
-  <p>Research today's top Home Run candidates below.</p>  <div class="model-card">
-    <label>Player Name</label>
-    <input id="playerName" placeholder="Aaron Judge">
+  <h2>💣 HR Research Table</h2>
+  <p>Enter today’s HR candidates below, then click calculate.</p>
 
-    <label>Matchup</label>
-    <input id="matchup" placeholder="vs RHP">
+  <div class="game-center">
 
-    <label>Barrel %</label>
-    <input id="barrel" placeholder="22">
+    <div class="model-card">
+      <h3>Player 1</h3>
+      <input id="p1" placeholder="Player name">
+      <input id="b1" placeholder="Barrel %">
+      <input id="h1" placeholder="Hard Hit %">
+      <input id="i1" placeholder="ISO">
+      <input id="hr1" placeholder="Pitcher HR/9">
+      <button onclick="calcScore(1)">Calculate</button>
+      <span id="s1">Score: --</span>
+    </div>
 
-    <label>Hard-Hit %</label>
-    <input id="hardHit" placeholder="61">
+    <div class="model-card">
+      <h3>Player 2</h3>
+      <input id="p2" placeholder="Player name">
+      <input id="b2" placeholder="Barrel %">
+      <input id="h2" placeholder="Hard Hit %">
+      <input id="i2" placeholder="ISO">
+      <input id="hr2" placeholder="Pitcher HR/9">
+      <button onclick="calcScore(2)">Calculate</button>
+      <span id="s2">Score: --</span>
+    </div>
 
-    <label>ISO</label>
-    <input id="iso" placeholder="0.360">
+    <div class="model-card">
+      <h3>Player 3</h3>
+      <input id="p3" placeholder="Player name">
+      <input id="b3" placeholder="Barrel %">
+      <input id="h3" placeholder="Hard Hit %">
+      <input id="i3" placeholder="ISO">
+      <input id="hr3" placeholder="Pitcher HR/9">
+      <button onclick="calcScore(3)">Calculate</button>
+      <span id="s3">Score: --</span>
+    </div>
 
-    <label>Pitcher HR/9</label>
-    <input id="hr9" placeholder="1.8">
-
-    <button onclick="previewPick()">Preview POPS Pick</button>
-<hr>
-
-<h3>Second HR Pick</h3>
-
-<label>Player Name</label>
-<input id="playerName2" placeholder="Shohei Ohtani">
-
-<label>Matchup</label>
-<input id="matchup2" placeholder="vs RHP">
-
-<label>Barrel %</label>
-<input id="barrel2" placeholder="19">
-
-<label>Hard-Hit %</label>
-<input id="hardHit2" placeholder="58">
-
-<label>ISO</label>
-<input id="iso2" placeholder="0.340">
-
-<label>Pitcher HR/9</label>
-<input id="hr92" placeholder="1.5">    <div id="previewBox"></div>
   </div>
 </section>
 
 <script>
-function previewPick() {
-  const player = document.getElementById("playerName").value;
-  const matchup = document.getElementById("matchup").value;
-  const barrel = document.getElementById("barrel").value;
-  const hardHit = document.getElementById("hardHit").value;
-  const iso = document.getElementById("iso").value;
-  const hr9 = document.getElementById("hr9").value;
+function calcScore(num) {
+  const barrel = Number(document.getElementById("b" + num).value || 0);
+  const hardHit = Number(document.getElementById("h" + num).value || 0);
+  const iso = Number(document.getElementById("i" + num).value || 0);
+  const hr9 = Number(document.getElementById("hr" + num).value || 0);
 
-  document.getElementById("previewBox").innerHTML =
-    "<h3>💣 " + player + "</h3>" +
-    "<p>" + matchup + "</p>" +
-    "<p>Barrel: " + barrel + "% • Hard Hit: " + hardHit + "%</p>" +
-    "<p>ISO: " + iso + " • Pitcher HR/9: " + hr9 + "</p>";
+  let score = 0;
+  score += Math.min(barrel, 25);
+  score += Math.min(hardHit, 20);
+  score += Math.min(iso * 40, 15);
+  score += Math.min(hr9 * 10, 20);
+
+  document.getElementById("s" + num).innerText =
+    "Score: " + Math.round(score) + "/100";
 }
 </script>
+
+</body>
+</html>
