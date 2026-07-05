@@ -92,14 +92,12 @@ button{
   font-weight:bold;
 }
 
-.panel{
-  max-width:1150px;
-  margin:28px auto;
-  padding:25px;
-  background:linear-gradient(180deg,#14231a,#0b120d);
-  border:1px solid rgba(0,255,102,.28);
-  border-radius:22px;
-  box-shadow:0 0 22px rgba(0,255,102,.14);
+.panel {
+    background: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px;
 }
 
 .panel h2{
