@@ -145,8 +145,91 @@ async function loadDailySlate() {
     slateList.appendChild(card);
   });
 }}
+function showGameBreakdown(gameName) {
+  const section = document.getElementById("gameBreakdownContent");
+  if (!section) return;
 
-function formatTopPlayers(players, showScore) {
+  const games = safeArray("games");
+  const game = games.find(function(g) {
+    return g.game === gameName;
+  });
+
+  if (!game) {
+    section.innerHTML =
+      "<div class='model-card'>" +
+      "<h3>No game data found.</h3>" +
+      "<p>This game does not have a POPS breakdown in today.js yet.</p>" +
+      "</div>";
+    return;
+  }
+
+  section.innerHTML =
+    "<div class='model-card premium-card'>" +
+      "<h2>⚾ " + game.game + "</h2>" +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>⚾ Pitcher Matchups</h3>" +
+      "<p><strong>" + game.pitchers.away.name + "</strong></p>" +
+      "<p>" + game.pitchers.away.stats + "</p>" +
+      "<span>Danger Rating: " + game.pitchers.away.risk + "</span>" +
+      "<hr>" +
+      "<p><strong>" + game.pitchers.home.name + "</strong></p>" +
+      "<p>" + game.pitchers.home.stats + "</p>" +
+      "<span>Danger Rating: " + game.pitchers.home.risk + "</span>" +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>💰 POPS Moneyline Pick</h3>" +
+      "<p><strong>" + game.moneylinePick.pick + "</strong></p>" +
+      "<p>" + game.moneylinePick.reason + "</p>" +
+      "<span>Confidence: " + game.moneylinePick.confidence + "</span>" +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>💣 Best HR Targets</h3>" +
+      formatGameTargets(game.hrTargets) +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>⚾ Best Hit Targets</h3>" +
+      formatGameTargets(game.hitTargets) +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>🌦 Weather</h3>" +
+      "<p>Wind: " + game.weather.wind + "</p>" +
+      "<p>Direction: " + game.weather.direction + "</p>" +
+      "<p>Rain: " + game.weather.rain + "</p>" +
+      "<span>Weather Score: " + game.weather.score + "</span>" +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>🚦 NRFI / YRFI</h3>" +
+      "<p><strong>" + game.nrfi.pick + "</strong></p>" +
+      "<p>" + game.nrfi.reason + "</p>" +
+      "<span>Confidence: " + game.nrfi.confidence + "</span>" +
+    "</div>";
+
+  document.getElementById("gameBreakdown").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+function formatGameTargets(players) {
+  if (!players || players.length === 0) {
+    return "<p>No targets loaded.</p>";
+  }
+
+  let html = "<ol>";
+
+  players.forEach(function(player) {
+    html += "<li><strong>" + player.player + "</strong> — " + player.score + "</li>";
+  });
+
+  html += "</ol>";
+  return html;
+}function formatTopPlayers(players, showScore) {
   if (!players || players.length === 0) {
     return "<p>No game-specific targets loaded yet.</p>";
   }
