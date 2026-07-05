@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>POPS Pickz 3.0</title>
+  <title>POPS Pickz 3.0 Pro</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <nav class="navbar">
-  <div class="logo">💣 POPS PICKZ 3.0</div>
+  <div class="logo">💣 POPS PICKZ 3.0 PRO</div>
   <div class="nav-links">
     <a href="#scores">Scores</a>
     <a href="#slate">Slate</a>
@@ -25,54 +25,58 @@
 <header class="hero">
   <p class="tag">Daily MLB Analytics Command Center</p>
   <h1>POPS Pickz Dashboard</h1>
-  <p class="subtitle">Live Scores • Daily Slate • HR Model • Pitcher Targets • Moneyline • Weather • NRFI/YRFI</p>
+  <p class="subtitle">Live Scores • Daily Slate • POPS Score • HR Model • Pitcher Targets</p>
 </header>
 
 <section id="scores" class="ticker">
   <div>Loading live MLB scores...</div>
 </section>
 
-<section id="slate" class="panel">
-  <h2>📅 Today’s MLB Slate</h2>
-  <div id="slateList" class="game-center">
-    <div>Loading today’s MLB slate...</div>
-  </div>
-</section>
+<main class="container">
 
-<section id="hr" class="panel">
-  <h2>💣 POPS Home Run Picks</h2>
-  <div id="dailyHRPicks" class="model-list">
-    <div class="model-card">Loading HR picks...</div>
-  </div>
-</section>
+  <section id="slate" class="panel">
+    <h2>📅 Today’s MLB Slate</h2>
+    <div id="slateList" class="grid">
+      <div class="model-card">Loading today’s MLB slate...</div>
+    </div>
+  </section>
 
-<section id="pitchers" class="panel">
-  <h2>🎯 Pitchers to Target</h2>
-  <div id="pitcherTargets" class="model-list">
-    <div class="model-card">Loading pitcher targets...</div>
-  </div>
-</section>
+  <section id="hr" class="panel">
+    <h2>💣 POPS Home Run Picks</h2>
+    <div id="dailyHRPicks" class="grid">
+      <div class="model-card">Loading HR picks...</div>
+    </div>
+  </section>
 
-<section id="moneyline" class="panel">
-  <h2>💰 Moneyline Model</h2>
-  <div id="moneylinePicks" class="model-list">
-    <div class="model-card">Loading moneyline picks...</div>
-  </div>
-</section>
+  <section id="pitchers" class="panel">
+    <h2>🎯 Pitchers to Target</h2>
+    <div id="pitcherTargets" class="grid">
+      <div class="model-card">Loading pitcher targets...</div>
+    </div>
+  </section>
 
-<section id="weather" class="panel">
-  <h2>🌦 Weather Center</h2>
-  <div id="weatherBoosts" class="model-list">
-    <div class="model-card">Loading weather boosts...</div>
-  </div>
-</section>
+  <section id="moneyline" class="panel">
+    <h2>💰 Moneyline Model</h2>
+    <div id="moneylinePicks" class="grid">
+      <div class="model-card">Loading moneyline picks...</div>
+    </div>
+  </section>
 
-<section id="nrfi" class="panel">
-  <h2>🚦 NRFI / YRFI Center</h2>
-  <div id="nrfiPicks" class="model-list">
-    <div class="model-card">Loading NRFI/YRFI picks...</div>
-  </div>
-</section>
+  <section id="weather" class="panel">
+    <h2>🌦 Weather Center</h2>
+    <div id="weatherBoosts" class="grid">
+      <div class="model-card">Loading weather boosts...</div>
+    </div>
+  </section>
+
+  <section id="nrfi" class="panel">
+    <h2>🚦 NRFI / YRFI Center</h2>
+    <div id="nrfiPicks" class="grid">
+      <div class="model-card">Loading NRFI/YRFI picks...</div>
+    </div>
+  </section>
+
+</main>
 
 <footer>
   POPS Pickz ©️ 2026
