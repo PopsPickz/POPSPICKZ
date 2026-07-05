@@ -28,18 +28,34 @@ const todayData = {
 
   pitcherTargets: [
   {
-    pitcher: "Pitcher Name",
-    opponent: "vs Team",
-    hand: "RHP",
-    stats: "ERA: 5.20 • HR/9: 1.8 • Hard Contact: High",
+    pitcher: "JP Sears",
+    stats: "Padres vs Dodgers • LHP • ERA: 6.97 • WHIP: 1.74 • Last start: 3 HR allowed • POPS HR Risk: Very High",
+    grade: "🔥🔥🔥🔥🔥"
+  },
+  {
+    pitcher: "Ryan Johnson",
+    stats: "Angels vs Red Sox • RHP • ERA: 7.40 • WHIP: 1.52 • POPS HR Risk: Very High",
+    grade: "🔥🔥🔥🔥🔥"
+  },
+  {
+    pitcher: "Emmet Sheehan",
+    stats: "Dodgers vs Padres • RHP • ERA: 5.08 • WHIP: 1.27 • POPS HR Risk: High",
     grade: "🔥🔥🔥🔥"
   },
   {
-    pitcher: "Pitcher Name",
-    opponent: "vs Team",
-    hand: "LHP",
-    stats: "ERA: 4.60 • HR/9: 1.4 • Hard Contact: Medium",
-    grade: "🔥🔥🔥"
+    pitcher: "Emerson Hancock",
+    stats: "Mariners vs Blue Jays • RHP • Barrel% Allowed: 9.8 • Hard-Hit% Allowed: 44.9 • Avg EV: 90.6 • POPS HR Risk: High",
+    grade: "🔥🔥🔥🔥"
+  },
+  {
+    pitcher: "Ranger Suarez",
+    stats: "Red Sox vs Angels • LHP • Last 7 ERA: 3.60 • Last 30 ERA: 2.94 • WHIP: 1.13 • POPS HR Risk: Medium",
+    grade: "🔥🔥"
+  },
+  {
+    pitcher: "Trey Yesavage",
+    stats: "Blue Jays vs Mariners • RHP • ERA: 3.34 • WHIP: 1.10 • Hard-Hit% Allowed: 37.0 • POPS HR Risk: Low-Medium",
+    grade: "🔥🔥"
   }
 ],
   moneyline: [
