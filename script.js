@@ -77,8 +77,19 @@ async function loadGameCenter() {
     gameCenter.appendChild(card);
   });
 }
+function calculatePopsScore(player) {
+  let score = 0;
 
-function loadHRPicks() {
+  score += Math.min(player.barrel || 0, 25);       // Barrel %
+  score += Math.min(player.hardHit || 0, 20);      // Hard-hit %
+  score += Math.min((player.iso || 0) * 40, 15);   // ISO
+  score += Math.min((player.hr9 || 0) * 10, 20);   // Pitcher HR/9
+  score += player.weather || 0;                    // Weather
+  score += player.ballpark || 0;                   // Ballpark
+  score += player.platoon || 0;                    // Platoon
+
+  return Math.round(Math.min(score, 100));
+}function loadHRPicks() {
   const section = document.getElementById("dailyHRPicks");
   if (!section || typeof todayData === "undefined") return;
 
