@@ -237,3 +237,21 @@ async function loadDailySlate() {
 
 loadDailySlate();
 setInterval(loadDailySlate, 60000);
+function loadBatterStats() {
+  const section = document.getElementById("batterStatsList");
+  if (!section || typeof todayData === "undefined" || !todayData.hrPicks) return;
+
+  section.innerHTML = "";
+
+  todayData.hrPicks.forEach(function(player) {
+    section.innerHTML +=
+      "<div class='model-card'>" +
+      "<h3>📊 " + player.player + "</h3>" +
+      "<p>Matchup: " + player.matchup + "</p>" +
+      "<p>Barrel: " + player.barrel + "% • Hard Hit: " + player.hardHit + "%</p>" +
+      "<p>ISO: " + player.iso + " • Pitcher HR/9: " + player.hr9 + "</p>" +
+      "</div>";
+  });
+}
+
+loadBatterStats();
