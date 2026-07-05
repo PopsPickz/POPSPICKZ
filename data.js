@@ -10,3 +10,8 @@ const popsData = {
     { pitcher: "Medium HR Risk Pitcher", stats: "Barrel Rate • Weather Boost", grade: "🔥🔥🔥" }
   ]
 };
+
+moneylinePicks: [
+  { team: "Strong Team Edge", reason: "Starter + bullpen + offense advantage", confidence: "78%" },
+  { team: "Value Team Edge", reason: "Better bullpen + line movement", confidence: "65%" }
+]
