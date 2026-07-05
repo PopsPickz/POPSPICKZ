@@ -3,142 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>POPS Pickz Pro</title>
+  <title>POPS Pickz 2.0</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <nav class="navbar">
-  <div class="logo">💣 POPS PICKZ PRO</div>
+  <div class="logo">💣 POPS PICKZ 2.0</div>
   <div class="nav-links">
     <a href="#scores">Scores</a>
     <a href="#hr">HR Picks</a>
     <a href="#pitchers">Pitchers</a>
     <a href="#moneyline">Moneyline</a>
     <a href="#weather">Weather</a>
+    <a href="#nrfi">NRFI</a>
   </div>
 </nav>
 
 <header class="hero">
   <p class="tag">MLB Analytics Command Center</p>
-  <h1>POPS Pickz Pro Dashboard</h1>
-  <p class="subtitle">Home Runs • Moneyline • Pitchers to Target • Weather • NRFI/YRFI</p>
+  <h1>POPS Pickz Daily Dashboard</h1>
+  <p class="subtitle">Live Scores • HR Picks • Pitchers to Target • Moneyline • Weather • NRFI/YRFI</p>
   <button onclick="showCheatSheet()">🔥 Today’s Cheat Sheet</button>
 </header>
 
-<section class="ticker" id="scores">
-  <div>⚾ NYY 4 - BOS 2</div>
-  <div>⚾ LAD 6 - SF 3</div>
-  <div>⚾ ATL 5 - MIA 1</div>
-  <div>⚾ PHI 3 - NYM 3</div>
+<section id="scores" class="ticker">
+  <div>Loading live MLB scores...</div>
 </section>
+
 <section class="panel">
   <h2>⚾ Live MLB Game Center</h2>
   <div id="gameCenter" class="game-center">
     <div>Loading today’s MLB games...</div>
   </div>
-</section><section class="dashboard">
-  <div class="card">
-    <h2>💣 Top HR Pick</h2>
-    <p class="big">Elite Power Bat</p>
-    <p>Weather boost + pitcher HR risk</p>
-    <span>Grade: ⭐⭐⭐⭐⭐</span>
-  </div>
+</section>
 
-<div id="pitcherTargets" class="model-list">
-  <div class="model-card">
-    <h3>Loading pitcher targets...</h3>
-  </div>
-</div>
-
-  <div class="card">
-    <h2>💰 Moneyline Edge</h2>
-    <p class="big">Strong Team Edge</p>
-    <p>Starter + bullpen + offense advantage</p>
-    <span>Confidence: 78%</span>
-  </div>
-
-  <div class="card">
-    <h2>🌦 Weather Boost</h2>
-    <p class="big">Wind Blowing Out</p>
-    <p>Warm temps + hitter-friendly park</p>
-    <span>Boost: 🔥🔥</span>
+<section id="hr" class="panel">
+  <h2>💣 POPS Home Run Picks</h2>
+  <div id="dailyHRPicks" class="model-list">
+    <div class="model-card">Loading HR picks...</div>
   </div>
 </section>
 
-[7/5/26, 1:26:55 PM] Sean g: }
-[7/5/26, 1:29:40 PM] Sean g: <div id="dailyHRPicks" class="model-list">
-    <div class="model-card bomb-card">
-        <h3>Loading today's POPS Pickz...</h3>
-    </div>
-</div>
-
-  <div class="model-list">
-    <div class="model-card bomb-card">
-      <h3>💣 Elite HR Target</h3>
-      <p>Power bat + HR-prone pitcher + weather boost.</p>
-      <span>POPS HR Grade: ⭐⭐⭐⭐⭐</span>
-    </div>
-
-    <div class="model-card bomb-card">
-      <h3>🔥 Strong HR Target</h3>
-      <p>Good barrel rate, hard-hit rate, and park boost.</p>
-      <span>POPS HR Grade: ⭐⭐⭐⭐</span>
-    </div>
-
-    <div class="model-card bomb-card">
-      <h3>👀 Value HR Target</h3>
-      <p>Good odds with matchup upside.</p>
-      <span>POPS HR Grade: ⭐⭐⭐⭐</span>
-    </div>
-  </div>
-</section>
-<section class="panel" id="pitchers">
+<section id="pitchers" class="panel">
   <h2>🎯 Pitchers to Target</h2>
   <div id="pitcherTargets" class="model-list">
-    <div class="model-card">
-      <h3>🔥 High HR Risk Pitcher</h3>
-      <p>HR/9 • ERA • Hard Contact • Recent Form</p>
-      <span>POPS Target Grade: 🔥🔥🔥🔥</span>
-    </div>
-
-    <div class="model-card">
-      <h3>⚾ Medium HR Risk Pitcher</h3>
-      <p>Watch barrel rate allowed and weather boost.</p>
-      <span>POPS Target Grade: 🔥🔥🔥</span>
-    </div>
+    <div class="model-card">Loading pitcher targets...</div>
   </div>
 </section>
-<section class="panel" id="moneyline">
-  <section class="panel" id="moneyline">
+
+<section id="moneyline" class="panel">
   <h2>💰 Moneyline Model</h2>
   <div id="moneylinePicks" class="model-list">
-    <div class="model-card">
-      <h3>Loading moneyline picks...</h3>
-    </div>
+    <div class="model-card">Loading moneyline picks...</div>
   </div>
 </section>
 
-weatherBoosts: [
-  { stadium: "Yankee Stadium", condition: "Wind blowing out 12 MPH", boost: "🔥🔥" },
-  { stadium: "Citizens Bank Park", condition: "Warm weather + hitter park", boost: "🔥🔥🔥" }
-]
+<section id="weather" class="panel">
+  <h2>🌦 Weather Center</h2>
+  <div id="weatherBoosts" class="model-list">
+    <div class="model-card">Loading weather boosts...</div>
+  </div>
+</section>
 
-<section class="panel">
+<section id="nrfi" class="panel">
   <h2>🚦 NRFI / YRFI Center</h2>
   <div id="nrfiPicks" class="model-list">
-    <div class="model-card">
-      <h3>Loading NRFI/YRFI picks...</h3>
-    </div>
+    <div class="model-card">Loading NRFI/YRFI picks...</div>
   </div>
 </section>
 
-
 <footer>
-  POPS Pickz Pro ©️ 2026
+  POPS Pickz ©️ 2026
 </footer>
 
-<script src="data.js"></script>
 <script src="today.js"></script>
 <script src="script.js"></script>
 </body>
