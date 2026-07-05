@@ -2,10 +2,25 @@ const todayData = {
   date: "Today",
 
   hrPicks: [
-    { player: "Aaron Judge", matchup: "vs RHP", grade: "⭐⭐⭐⭐⭐" },
-    { player: "Shohei Ohtani", matchup: "vs LHP", grade: "⭐⭐⭐⭐⭐" },
-    { player: "Kyle Schwarber", matchup: "vs RHP", grade: "⭐⭐⭐⭐" }
-  ],
+  {
+    player: "Aaron Judge",
+    matchup: "vs RHP",
+    note: "Power bat + strong barrel profile",
+    grade: "⭐⭐⭐⭐⭐"
+  },
+  {
+    player: "Shohei Ohtani",
+    matchup: "vs RHP",
+    note: "Elite power + matchup upside",
+    grade: "⭐⭐⭐⭐⭐"
+  },
+  {
+    player: "Kyle Schwarber",
+    matchup: "vs RHP",
+    note: "HR upside + hitter-friendly park",
+    grade: "⭐⭐⭐⭐"
+  }
+],
 
   pitcherTargets: [
     { pitcher: "High HR Risk Pitcher", stats: "HR/9 • ERA • Hard Contact", grade: "🔥🔥🔥🔥" }
