@@ -12,7 +12,17 @@ const todayData = {
   ballpark: 9,
   platoon: 10
 },
-    { player: "Shohei Ohtani", matchup: "vs RHP", note: "Elite power + matchup upside", popsScore: 94 },
+    {
+  player: "Shohei Ohtani",
+  matchup: "vs RHP",
+  barrel: 19,
+  hardHit: 58,
+  iso: 0.340,
+  hr9: 1.5,
+  weather: 7,
+  ballpark: 8,
+  platoon: 10
+},
     { player: "Kyle Schwarber", matchup: "vs RHP", note: "HR upside + hitter-friendly park", popsScore: 88 }
   ],
 
