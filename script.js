@@ -42,3 +42,45 @@ async function loadGameCenter() {
 
 loadGameCenter();
 setInterval(loadGameCenter, 60000);
+
+const todaysHRPicks = [
+  {
+    player: "Aaron Judge",
+    matchup: "vs RHP",
+    grade: "⭐⭐⭐⭐⭐"
+  },
+  {
+    player: "Shohei Ohtani",
+    matchup: "vs LHP",
+    grade: "⭐⭐⭐⭐⭐"
+  },
+  {
+    player: "Kyle Schwarber",
+    matchup: "vs RHP",
+    grade: "⭐⭐⭐⭐"
+  }
+];
+
+function loadDailyHRPicks() {
+
+  const section = document.getElementById("dailyHRPicks");
+
+  if (!section) return;
+
+  section.innerHTML = "";
+
+  todaysHRPicks.forEach(player => {
+
+    section.innerHTML += `
+      <div class="model-card bomb-card">
+        <h3>💣 ${player.player}</h3>
+        <p>${player.matchup}</p>
+        <span>${player.grade}</span>
+      </div>
+    `;
+
+  });
+
+}
+
+loadDailyHRPicks();
