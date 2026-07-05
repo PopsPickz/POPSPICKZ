@@ -1,5 +1,3 @@
-// POPS PICKZ COMMAND CENTER SCRIPT
-
 function safeArray(name) {
   if (typeof todayData === "undefined") return [];
   return Array.isArray(todayData[name]) ? todayData[name] : [];
@@ -7,7 +5,6 @@ function safeArray(name) {
 
 function calculatePopsScore(player) {
   let score = 0;
-
   score += Math.min(Number(player.barrel || 0), 25);
   score += Math.min(Number(player.hardHit || 0), 20);
   score += Math.min(Number(player.iso || 0) * 40, 15);
@@ -15,7 +12,6 @@ function calculatePopsScore(player) {
   score += Math.min(Number(player.weather || 0), 10);
   score += Math.min(Number(player.ballpark || 0), 10);
   score += Math.min(Number(player.platoon || 0), 10);
-
   return Math.round(Math.min(score, 100));
 }
 
@@ -111,7 +107,7 @@ async function loadDailySlate() {
       : "TBD";
 
     const card = document.createElement("div");
-    card.className = "game-card";
+    card.className = "game-card clickable-game";
 
     card.innerHTML =
       "<h3>" +
@@ -133,8 +129,151 @@ async function loadDailySlate() {
       status +
       "</span>";
 
+    card.onclick = function() {
+      showGameBreakdown({
+        game: away + " vs " + home,
+        away: away,
+        home: home,
+        awayPitcher: awayPitcher,
+        homePitcher: homePitcher,
+        venue: venue,
+        time: gameTime,
+        status: status
+      });
+    };
+
     slateList.appendChild(card);
   });
+}
+
+function showGameBreakdown(gameInfo) {
+  const section = document.getElementById("gameBreakdownContent");
+  if (!section) return;
+
+  const gameName = gameInfo.game;
+  const hrPicks = safeArray("hrPicks");
+  const pitcherTargets = safeArray("pitcherTargets");
+  const moneyline = safeArray("moneyline");
+  const weather = safeArray("weather");
+  const nrfi = safeArray("nrfi");
+
+  const relatedHR = hrPicks
+    .filter(function(player) {
+      const text = (player.matchup || "") + " " + (player.player || "");
+      return (
+        gameName.toLowerCase().includes("dodgers") && text.toLowerCase().includes("sears") ||
+        gameName.toLowerCase().includes("padres") && text.toLowerCase().includes("sheehan") ||
+        gameName.toLowerCase().includes("red sox") && text.toLowerCase().includes("johnson") ||
+        gameName.toLowerCase().includes("angels") && text.toLowerCase().includes("suarez") ||
+        gameName.toLowerCase().includes("blue jays") && text.toLowerCase().includes("hancock") ||
+        gameName.toLowerCase().includes("mariners") && text.toLowerCase().includes("yesavage")
+      );
+    })
+    .sort(function(a, b) {
+      return calculatePopsScore(b) - calculatePopsScore(a);
+    })
+    .slice(0, 3);
+
+  const relatedPitchers = pitcherTargets.filter(function(p) {
+    const name = (p.pitcher || "").toLowerCase();
+    return (
+      gameInfo.awayPitcher.toLowerCase().includes(name) ||
+      gameInfo.homePitcher.toLowerCase().includes(name) ||
+      name.includes(gameInfo.awayPitcher.toLowerCase()) ||
+      name.includes(gameInfo.homePitcher.toLowerCase())
+    );
+  });
+
+  const relatedMoneyline =
+    moneyline.find(function(item) {
+      return gameName.toLowerCase().includes((item.team || "").toLowerCase().split(" ").pop());
+    }) || moneyline[0];
+
+  const relatedWeather =
+    weather.find(function(item) {
+      const text = ((item.stadium || "") + " " + (item.condition || "")).toLowerCase();
+      return (
+        text.includes(gameInfo.venue.toLowerCase()) ||
+        text.includes(gameInfo.away.toLowerCase().split(" ").pop()) ||
+        text.includes(gameInfo.home.toLowerCase().split(" ").pop())
+      );
+    }) || weather[0];
+
+  const relatedNRFI =
+    nrfi.find(function(item) {
+      return (item.game || "").toLowerCase().includes(gameInfo.away.toLowerCase().split(" ").pop()) ||
+        (item.game || "").toLowerCase().includes(gameInfo.home.toLowerCase().split(" ").pop());
+    }) || nrfi[0];
+
+  section.innerHTML =
+    "<div class='model-card premium-card'>" +
+      "<h3>📌 " + gameInfo.game + "</h3>" +
+      "<p><strong>Venue:</strong> " + gameInfo.venue + "</p>" +
+      "<p><strong>Game Time:</strong> " + gameInfo.time + " • " + gameInfo.status + "</p>" +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>⚾ Pitcher Matchup</h3>" +
+      "<p><strong>" + gameInfo.awayPitcher + "</strong></p>" +
+      "<p>All pitching stats loaded from POPS pitcher model when available.</p>" +
+      "<p><strong>" + gameInfo.homePitcher + "</strong></p>" +
+      "<p>All pitching stats loaded from POPS pitcher model when available.</p>" +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>💰 POPS Moneyline Pick</h3>" +
+      "<p>" + (relatedMoneyline ? relatedMoneyline.team : "No pick loaded") + "</p>" +
+      "<span>" + (relatedMoneyline ? "Confidence: " + relatedMoneyline.confidence : "") + "</span>" +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>💣 Best HR Targets</h3>" +
+      formatTopPlayers(relatedHR, true) +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>⚾ Best Hitters Targets</h3>" +
+      formatTopPlayers(relatedHR, false) +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>🌦 Weather</h3>" +
+      "<p>" + (relatedWeather ? relatedWeather.condition : "No weather loaded") + "</p>" +
+      "<span>" + (relatedWeather ? relatedWeather.boost : "") + "</span>" +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>🚦 NRFI/YRFI</h3>" +
+      "<p>" + (relatedNRFI ? relatedNRFI.pick : "No NRFI/YRFI loaded") + "</p>" +
+      "<span>" + (relatedNRFI ? "Confidence: " + relatedNRFI.confidence : "") + "</span>" +
+    "</div>";
+
+  document.getElementById("gameBreakdown").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+function formatTopPlayers(players, showScore) {
+  if (!players || players.length === 0) {
+    return "<p>No game-specific targets loaded yet.</p>";
+  }
+
+  let html = "";
+
+  players.forEach(function(player, index) {
+    const score = calculatePopsScore(player);
+
+    html +=
+      "<p><strong>" +
+      (index + 1) +
+      ". " +
+      player.player +
+      "</strong>" +
+      (showScore ? " — POPS " + score + "/100" : "") +
+      "</p>";
+  });
+
+  return html;
 }
 
 function loadHRPicks() {
@@ -186,18 +325,21 @@ function loadHRPicks() {
 
 function loadBatterStats() {
   const section = document.getElementById("batterStatsList");
+  const stats = safeArray("batterStats");
   const picks = safeArray("hrPicks");
 
   if (!section) return;
 
-  if (picks.length === 0) {
+  const data = stats.length > 0 ? stats : picks;
+
+  if (data.length === 0) {
     section.innerHTML = "<div class='model-card'>No batter stats loaded.</div>";
     return;
   }
 
   section.innerHTML = "";
 
-  picks.forEach(function(player) {
+  data.forEach(function(player) {
     section.innerHTML +=
       "<div class='model-card'>" +
       "<h3>📊 " +
@@ -206,17 +348,17 @@ function loadBatterStats() {
       "<p><strong>Matchup:</strong> " +
       (player.matchup || "N/A") +
       "</p>" +
-      "<p>Barrel: " +
-      (player.barrel ?? "N/A") +
-      "%</p>" +
-      "<p>Hard Hit: " +
-      (player.hardHit ?? "N/A") +
-      "%</p>" +
-      "<p>ISO: " +
-      (player.iso ?? "N/A") +
+      "<p><strong>HR Score:</strong> " +
+      (player.hrScore || calculatePopsScore(player) + "/100") +
       "</p>" +
-      "<p>Pitcher HR/9: " +
-      (player.hr9 ?? "N/A") +
+      "<p><strong>Hit Score:</strong> " +
+      (player.hitScore || "N/A") +
+      "</p>" +
+      "<p>" +
+      (player.hitModel || "Barrel: " + (player.barrel ?? "N/A") + "% • Hard Hit: " + (player.hardHit ?? "N/A") + "% • ISO: " + (player.iso ?? "N/A")) +
+      "</p>" +
+      "<p><strong>Why POPS likes it:</strong> " +
+      (player.why || "Strong POPS model profile.") +
       "</p>" +
       "</div>";
   });
