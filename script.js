@@ -224,12 +224,12 @@ async function loadDailySlate() {
       : "TBD";
 
     const card = document.createElement("div");
-    card.className = "game-card";
     card.innerHTML =
-      "<h3>" + away + " vs " + home + "</h3>" +
-      "<p>" + awayPitcher + " vs " + homePitcher + "</p>" +
-"<p>" + venue + "</p>" +
-"<span>" + gameTime + " • " + status + "</span>";
+  "<h3>" + away + " vs " + home + "</h3>" +
+  "<p>" + awayPitcher + " — " + awayRisk + "</p>" +
+  "<p>" + homePitcher + " — " + homeRisk + "</p>" +
+  "<p>" + venue + "</p>" +
+  "<span>" + gameTime + " • " + status + "</span>";
 
     slateList.appendChild(card);
   });
