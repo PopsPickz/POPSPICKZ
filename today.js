@@ -1,6 +1,17 @@
 const todayData = {
   hrPicks: [
-    { player: "Aaron Judge", matchup: "vs RHP", note: "Power bat + strong barrel profile", popsScore: 96 },
+    {
+  player: "Aaron Judge",
+  matchup: "vs RHP",
+
+  barrel: 22,
+  hardHit: 61,
+  iso: .360,
+  hr9: 1.8,
+  weather: 8,
+  ballpark: 9,
+  platoon: 10
+},
     { player: "Shohei Ohtani", matchup: "vs RHP", note: "Elite power + matchup upside", popsScore: 94 },
     { player: "Kyle Schwarber", matchup: "vs RHP", note: "HR upside + hitter-friendly park", popsScore: 88 }
   ],
