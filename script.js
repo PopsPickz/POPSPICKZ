@@ -35,14 +35,7 @@ async function loadMLBScores() {
 }
 
 function showCheatSheet() {
-  alert(
-`🔥 POPS PICKZ DAILY CHEAT SHEET 🔥
-
-💣 Top HR Pick: Coming Soon
-⚾ Pitchers to Target: Coming Soon
-💰 Moneyline Edge: Coming Soon
-🌤 Weather Boost: Coming Soon`
-  );
+  alert("🔥 POPS Pickz Cheat Sheet coming soon!");
 }
 
 loadMLBScores();
