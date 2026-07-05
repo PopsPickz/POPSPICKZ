@@ -9,19 +9,50 @@ const todayData = {
     { player: "Freddie Freeman", matchup: "vs JP Sears", barrel: 11, hardHit: 47, iso: 0.220, hr9: 1.8, weather: 9, ballpark: 9, platoon: 7 },
     { player: "Cal Raleigh", matchup: "vs Trey Yesavage", barrel: 17, hardHit: 50, iso: 0.290, hr9: 1.1, weather: 5, ballpark: 5, platoon: 7 },
     { player: "Jorge Soler", matchup: "vs Ranger Suarez", barrel: 16, hardHit: 50, iso: 0.260, hr9: 1.0, weather: 8, ballpark: 7, platoon: 7 },
-    { player: "Logan O'Hoppe", matchup: "vs Ranger Suarez", barrel: 15, hardHit: 49, iso: 0.250, hr9: 1.0, weather: 8, ballpark: 7, platoon: 7 },
-    { player: "Vladimir Guerrero Jr.", matchup: "vs Emerson Hancock", barrel: 14, hardHit: 52, iso: 0.230, hr9: 1.3, weather: 5, ballpark: 5, platoon: 7 },
-    { player: "Jackson Merrill", matchup: "vs Emmet Sheehan", barrel: 12, hardHit: 45, iso: 0.210, hr9: 1.4, weather: 9, ballpark: 9, platoon: 7 },
-    { player: "Jo Adell", matchup: "vs Ranger Suarez", barrel: 15, hardHit: 51, iso: 0.250, hr9: 1.0, weather: 8, ballpark: 7, platoon: 7 },
-    { player: "Zach Neto", matchup: "vs Ranger Suarez", barrel: 13, hardHit: 47, iso: 0.220, hr9: 1.0, weather: 8, ballpark: 7, platoon: 7 },
-    { player: "Luke Raley", matchup: "vs Trey Yesavage", barrel: 14, hardHit: 48, iso: 0.240, hr9: 1.1, weather: 5, ballpark: 5, platoon: 7 },
-    { player: "Randy Arozarena", matchup: "vs Trey Yesavage", barrel: 12, hardHit: 45, iso: 0.210, hr9: 1.1, weather: 5, ballpark: 5, platoon: 7 },
-    { player: "Daulton Varsho", matchup: "vs Emerson Hancock", barrel: 13, hardHit: 46, iso: 0.220, hr9: 1.3, weather: 5, ballpark: 5, platoon: 7 },
-    { player: "Jarren Duran", matchup: "vs Ryan Johnson", barrel: 10, hardHit: 44, iso: 0.190, hr9: 1.7, weather: 8, ballpark: 7, platoon: 8 },
-    { player: "Masataka Yoshida", matchup: "vs Ryan Johnson", barrel: 9, hardHit: 43, iso: 0.170, hr9: 1.7, weather: 8, ballpark: 7, platoon: 7 },
-    { player: "Alejandro Kirk", matchup: "vs Emerson Hancock", barrel: 8, hardHit: 42, iso: 0.160, hr9: 1.3, weather: 5, ballpark: 5, platoon: 6 },
-    { player: "Will Smith", matchup: "vs JP Sears", barrel: 11, hardHit: 45, iso: 0.210, hr9: 1.8, weather: 9, ballpark: 9, platoon: 7 },
-    { player: "Xander Bogaerts", matchup: "vs Emmet Sheehan", barrel: 8, hardHit: 40, iso: 0.160, hr9: 1.4, weather: 9, ballpark: 9, platoon: 6 }
+    { player: "Logan O'Hoppe", matchup: "vs Ranger Suarez", barrel: 15, hardHit: 49, iso: 0.250, hr9: 1.0, weather: 8, ballpark: 7, platoon: 7 }
+  ],
+
+  batterStats: [
+    {
+      player: "Shohei Ohtani",
+      matchup: "vs JP Sears",
+      hrScore: "98/100",
+      hitScore: "97/100",
+      hitModel: "Elite AVG/contact profile • elite xBA/xwOBA • elite hard contact • strong matchup",
+      why: "Elite power + high HR-risk pitcher + great weather + strong ballpark boost"
+    },
+    {
+      player: "Teoscar Hernandez",
+      matchup: "vs JP Sears",
+      hrScore: "96/100",
+      hitScore: "90/100",
+      hitModel: "Strong hard-hit profile • good ISO • strong matchup vs vulnerable pitcher",
+      why: "High power bat against one of the top pitcher targets"
+    },
+    {
+      player: "Fernando Tatis Jr.",
+      matchup: "vs Emmet Sheehan",
+      hrScore: "93/100",
+      hitScore: "91/100",
+      hitModel: "Strong contact quality • speed/power profile • strong recent upside",
+      why: "Elite athletic profile + strong weather + good power matchup"
+    },
+    {
+      player: "Mookie Betts",
+      matchup: "vs JP Sears",
+      hrScore: "88/100",
+      hitScore: "95/100",
+      hitModel: "Elite hit tool • strong contact rate • low strikeout profile • strong top-order run environment",
+      why: "Better hit play than HR play, but still strong vs Sears"
+    },
+    {
+      player: "Freddie Freeman",
+      matchup: "vs JP Sears",
+      hrScore: "86/100",
+      hitScore: "96/100",
+      hitModel: "Elite contact hitter • strong AVG/xBA profile • line-drive bat • excellent 1+ hit profile",
+      why: "One of the best hit-score players on the slate"
+    }
   ],
 
   pitcherTargets: [
