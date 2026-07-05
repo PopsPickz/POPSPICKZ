@@ -15,3 +15,8 @@ moneylinePicks: [
   { team: "Strong Team Edge", reason: "Starter + bullpen + offense advantage", confidence: "78%" },
   { team: "Value Team Edge", reason: "Better bullpen + line movement", confidence: "65%" }
 ]
+
+weatherBoosts: [
+  { stadium: "Yankee Stadium", condition: "Wind blowing out 12 MPH", boost: "🔥🔥" },
+  { stadium: "Citizens Bank Park", condition: "Warm weather + hitter park", boost: "🔥🔥🔥" }
+]
