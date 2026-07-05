@@ -123,3 +123,23 @@ loadMoneylinePicks();
 }
 
 loadWeatherBoosts();
+
+function loadNRFIPicks() {
+  const section = document.getElementById("nrfiPicks");
+
+  if (!section) return;
+  if (!popsData || !popsData.nrfiPicks) return;
+
+  section.innerHTML = "";
+
+  popsData.nrfiPicks.forEach(function(item) {
+    section.innerHTML +=
+      "<div class='model-card'>" +
+      "<h3>🚦 " + item.game + "</h3>" +
+      "<p>Pick: " + item.pick + "</p>" +
+      "<span>Confidence: " + item.confidence + "</span>" +
+      "</div>";
+  });
+}
+
+loadNRFIPicks();
