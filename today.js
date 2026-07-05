@@ -1,7 +1,7 @@
 const todayData = {
   hrPicks: [
     {
-  player: "Aaron Judge",
+  player: "Juan Soto",
   matchup: "vs RHP",
 
   barrel: 22,
