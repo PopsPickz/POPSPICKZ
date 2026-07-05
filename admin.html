@@ -1,28 +1,44 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>POPS Admin</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<nav class="navbar">
-  <div class="logo">💣 POPS ADMIN</div>
-  <div class="nav-links">
-    <a href="index.html">Back to Dashboard</a>
-  </div>
-</nav>
-
 <section class="panel">
-  <h2>📋 Daily Admin Panel</h2>
-  <p>This page will let you enter today’s picks without touching code.</p>
+  <h2>📋 Daily HR Pick Entry</h2>
 
   <div class="model-card">
-    <h3>Coming Next</h3>
-    <p>Player name, pitcher, Barrel %, Hard-Hit %, ISO, HR/9, weather, and ballpark boost.</p>
-    <span>POPS Pickz Admin v1</span>
+    <label>Player Name</label>
+    <input id="playerName" placeholder="Aaron Judge">
+
+    <label>Matchup</label>
+    <input id="matchup" placeholder="vs RHP">
+
+    <label>Barrel %</label>
+    <input id="barrel" placeholder="22">
+
+    <label>Hard-Hit %</label>
+    <input id="hardHit" placeholder="61">
+
+    <label>ISO</label>
+    <input id="iso" placeholder="0.360">
+
+    <label>Pitcher HR/9</label>
+    <input id="hr9" placeholder="1.8">
+
+    <button onclick="previewPick()">Preview POPS Pick</button>
+
+    <div id="previewBox"></div>
   </div>
 </section>
 
-</body>
-</html>
+<script>
+function previewPick() {
+  const player = document.getElementById("playerName").value;
+  const matchup = document.getElementById("matchup").value;
+  const barrel = document.getElementById("barrel").value;
+  const hardHit = document.getElementById("hardHit").value;
+  const iso = document.getElementById("iso").value;
+  const hr9 = document.getElementById("hr9").value;
+
+  document.getElementById("previewBox").innerHTML =
+    "<h3>💣 " + player + "</h3>" +
+    "<p>" + matchup + "</p>" +
+    "<p>Barrel: " + barrel + "% • Hard Hit: " + hardHit + "%</p>" +
+    "<p>ISO: " + iso + " • Pitcher HR/9: " + hr9 + "</p>";
+}
+</script>
