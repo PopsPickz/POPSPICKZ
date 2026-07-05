@@ -188,3 +188,45 @@ function initDashboard() {
 initDashboard();
 setInterval(loadMLBScores, 60000);
 setInterval(loadGameCenter, 60000);
+
+async function loadDailySlate() {
+  const slateList = document.getElementById("slateList");
+  if (!slateList) return;
+
+  slateList.innerHTML = "<div>Loading today’s MLB slate...</div>";
+
+  const data = await fetchMLBData();
+
+  if (!data || !data.dates || data.dates.length === 0) {
+    slateList.innerHTML = "<div>No MLB games today</div>";
+    return;
+  }
+
+  slateList.innerHTML = "";
+
+  data.dates[0].games.forEach(function(game) {
+    const away = game.teams.away.team.name;
+    const home = game.teams.home.team.name;
+    const status = game.status.detailedState;
+
+    const awayPitcher = game.teams.away.probablePitcher
+      ? game.teams.away.probablePitcher.fullName
+      : "TBD";
+
+    const homePitcher = game.teams.home.probablePitcher
+      ? game.teams.home.probablePitcher.fullName
+      : "TBD";
+
+    const card = document.createElement("div");
+    card.className = "game-card";
+    card.innerHTML =
+      "<h3>" + away + " vs " + home + "</h3>" +
+      "<p>" + awayPitcher + " vs " + homePitcher + "</p>" +
+      "<span>" + status + "</span>";
+
+    slateList.appendChild(card);
+  });
+}
+
+loadDailySlate();
+setInterval(loadDailySlate, 60000);
