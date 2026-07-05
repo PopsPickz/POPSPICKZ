@@ -90,7 +90,7 @@ function loadHRPicks() {
       "<h3>💣 " + player.player + "</h3>" +
       "<p>" + player.matchup + "</p>" +
       "<p>" + player.note + "</p>" +
-      "<span>" + player.grade + "</span>" +
+      "<span>POPS Score: " + player.popsScore + "/100</span>" +
       "</div>";
   });
 }
