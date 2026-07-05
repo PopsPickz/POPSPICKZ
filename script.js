@@ -82,3 +82,23 @@ function loadPitcherTargets() {
 }
 
 loadPitcherTargets();
+
+function loadMoneylinePicks() {
+  const section = document.getElementById("moneylinePicks");
+
+  if (!section) return;
+  if (!popsData || !popsData.moneylinePicks) return;
+
+  section.innerHTML = "";
+
+  popsData.moneylinePicks.forEach(function(item) {
+    section.innerHTML +=
+      "<div class='model-card'>" +
+      "<h3>💰 " + item.team + "</h3>" +
+      "<p>" + item.reason + "</p>" +
+      "<span>Confidence: " + item.confidence + "</span>" +
+      "</div>";
+  });
+}
+
+loadMoneylinePicks();
