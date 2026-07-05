@@ -20,3 +20,8 @@ weatherBoosts: [
   { stadium: "Yankee Stadium", condition: "Wind blowing out 12 MPH", boost: "🔥🔥" },
   { stadium: "Citizens Bank Park", condition: "Warm weather + hitter park", boost: "🔥🔥🔥" }
 ]
+
+nrfiPicks: [
+  { game: "Phillies vs Braves", pick: "NRFI", confidence: "72%" },
+  { game: "Yankees vs Red Sox", pick: "YRFI", confidence: "68%" }
+]
