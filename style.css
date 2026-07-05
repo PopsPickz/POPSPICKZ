@@ -233,3 +233,26 @@ footer{
   color:#ffd700;
   font-weight:bold;
 }
+
+.model-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+}
+
+.model-card{
+  background:#0f1912;
+  border:1px solid rgba(255,215,0,.35);
+  border-radius:18px;
+  padding:18px;
+}
+
+.model-card h3{
+  color:#ffd700;
+  margin-top:0;
+}
+
+.model-card span{
+  color:#00ff66;
+  font-weight:900;
+}
