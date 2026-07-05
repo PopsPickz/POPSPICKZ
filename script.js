@@ -95,7 +95,13 @@ function calculatePopsScore(player) {
 
   section.innerHTML = "";
 
-  todayData.hrPicks.forEach(function(player) {
+  const savedPicks = JSON.parse(localStorage.getItem("popsPublishedPicks"));
+
+const hrPlayers = savedPicks && savedPicks.length > 0
+  ? savedPicks
+  : todayData.hrPicks;
+
+hrPlayers.forEach(function(player) {
     section.innerHTML +=
       "<div class='model-card'>" +
       "<h3>💣 " + player.player + "</h3>" +
