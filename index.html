@@ -3,46 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>POPS Pickz 2.0</title>
+  <title>POPS Pickz 3.0</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <nav class="navbar">
-  <div class="logo">💣 POPS PICKZ 2.0</div>
+  <div class="logo">💣 POPS PICKZ 3.0</div>
   <div class="nav-links">
     <a href="#scores">Scores</a>
+    <a href="#slate">Slate</a>
     <a href="#hr">HR Picks</a>
     <a href="#pitchers">Pitchers</a>
     <a href="#moneyline">Moneyline</a>
     <a href="#weather">Weather</a>
     <a href="#nrfi">NRFI</a>
-    <a href="admin.html">Admin</a>  </div>
+    <a href="admin.html">Admin</a>
+  </div>
 </nav>
 
 <header class="hero">
-  <p class="tag">MLB Analytics Command Center</p>
-  <h1>POPS Pickz Daily Dashboard</h1>
-  <p class="subtitle">Live Scores • HR Picks • Pitchers to Target • Moneyline • Weather • NRFI/YRFI</p>
-  <button onclick="showCheatSheet()">🔥 Today’s Cheat Sheet</button>
+  <p class="tag">Daily MLB Analytics Command Center</p>
+  <h1>POPS Pickz Dashboard</h1>
+  <p class="subtitle">Live Scores • Daily Slate • HR Model • Pitcher Targets • Moneyline • Weather • NRFI/YRFI</p>
 </header>
 
 <section id="scores" class="ticker">
   <div>Loading live MLB scores...</div>
 </section>
 
-<section class="panel">
-  <h2>⚾ Live MLB Game Center</h2>
-  <div id="gameCenter" class="game-center">
-    <div>Loading today’s MLB games...</div>
-  </div>
-</section>
-<section class="panel" id="dailySlate">
+<section id="slate" class="panel">
   <h2>📅 Today’s MLB Slate</h2>
   <div id="slateList" class="game-center">
     <div>Loading today’s MLB slate...</div>
   </div>
-</section><section id="hr" class="panel">
+</section>
+
+<section id="hr" class="panel">
   <h2>💣 POPS Home Run Picks</h2>
   <div id="dailyHRPicks" class="model-list">
     <div class="model-card">Loading HR picks...</div>
