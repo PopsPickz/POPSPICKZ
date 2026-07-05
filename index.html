@@ -3,54 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>POPS Pickz</title>
+  <title>POPS Pickz V2</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
 
+<nav class="navbar">
+  <div class="logo">💣 POPS PICKZ</div>
+  <div class="nav-links">
+    <a href="#hr">HR Model</a>
+    <a href="#pitchers">Pitchers</a>
+    <a href="#moneyline">Moneyline</a>
+    <a href="#weather">Weather</a>
+  </div>
+</nav>
+
 <header class="hero">
-  <h1>💣 POPS PICKZ 💣</h1>
-  <p>MLB Command Center</p>
+  <h1>POPS Pickz MLB Command Center</h1>
   <p>Home Runs • Pitchers to Target • Weather • Moneyline • NRFI/YRFI</p>
+  <button>🔥 Today’s Cheat Sheet</button>
 </header>
 
-<section class="cards">
-
-  <div class="card">
-    <h2>💣 Home Run Model</h2>
-    <p>Find hitters with power, weather boost, park boost, and pitcher weakness.</p>
+<section class="dashboard">
+  <div class="stat-card">
+    <h2>💣 HR Model</h2>
+    <p>Find power bats with weather, park, and pitcher advantages.</p>
   </div>
 
-  <div class="card">
+  <div class="stat-card">
     <h2>⚾ Pitchers to Target</h2>
-    <p>Track HR/9, ERA, hard contact, barrel rate allowed, and recent form.</p>
+    <p>Track HR/9, ERA, barrel rate, hard contact, and recent form.</p>
   </div>
 
-  <div class="card">
-    <h2>🌤️ Weather Center</h2>
-    <p>Watch wind, temperature, humidity, and ballpark conditions.</p>
+  <div class="stat-card">
+    <h2>🌦 Weather Boost</h2>
+    <p>Wind out, hot weather, humidity, and hitter-friendly parks.</p>
   </div>
 
-  <div class="card">
+  <div class="stat-card">
     <h2>💰 Moneyline Model</h2>
-    <p>Compare starting pitcher, bullpen, offense, defense, and line movement.</p>
+    <p>Compare starting pitching, bullpen, offense, defense, and line movement.</p>
   </div>
+</section>
 
-  <div class="card">
-    <h2>🎯 NRFI/YRFI</h2>
-    <p>First inning scoring model for every MLB game.</p>
-  </div>
+<section id="hr" class="panel">
+  <h2>💣 POPS Home Run Model</h2>
+  <table>
+    <tr>
+      <th>Factor</th>
+      <th>What We Look For</th>
+      <th>Boost</th>
+    </tr>
+    <tr>
+      <td>Pitcher HR Risk</td>
+      <td>High HR/9, hard contact, bad recent form</td>
+      <td>🔥🔥🔥</td>
+    </tr>
+    <tr>
+      <td>Hitter Power</td>
+      <td>Barrel %, ISO, SLG, hard-hit rate</td>
+      <td>🔥🔥🔥</td>
+    </tr>
+    <tr>
+      <td>Weather</td>
+      <td>Wind blowing out, warm temps</td>
+      <td>🔥🔥</td>
+    </tr>
+  </table>
+</section>
 
-  <div class="card">
-    <h2>🔥 Elite HR Cheat Sheet</h2>
-    <p>Your daily ranked POPS Pickz home run targets.</p>
-  </div>
+<section id="pitchers" class="panel">
+  <h2>⚾ Pitchers to Target</h2>
+  <p>Coming next: daily pitcher rankings and HR danger grades.</p>
+</section>
 
+<section id="moneyline" class="panel">
+  <h2>💰 Moneyline Model</h2>
+  <p>Coming next: team edge chart for starter, bullpen, offense, and defense.</p>
+</section>
+
+<section id="weather" class="panel">
+  <h2>🌦 Weather Center</h2>
+  <p>Coming next: wind direction, temperature, stadium boost, and HR weather rating.</p>
 </section>
 
 <footer>
-  POPS Pickz ©️ 2026
+  <p>POPS Pickz ©️ 2026 | MLB Analytics Dashboard</p>
 </footer>
 
 </body>
