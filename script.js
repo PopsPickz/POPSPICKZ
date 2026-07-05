@@ -130,26 +130,19 @@ async function loadDailySlate() {
       "</span>";
 
     card.onclick = function() {
-      showGameBreakdown({
-        game: away + " vs " + home,
-        away: away,
-        home: home,
-        awayPitcher: awayPitcher,
-        homePitcher: homePitcher,
-        venue: venue,
-        time: gameTime,
-        status: status
-      });
+      showGameBreakdown(away + " vs " + home);
     };
 
     slateList.appendChild(card);
   });
-}}
+}
+
 function showGameBreakdown(gameName) {
   const section = document.getElementById("gameBreakdownContent");
   if (!section) return;
 
   const games = safeArray("games");
+
   const game = games.find(function(g) {
     return g.game === gameName;
   });
@@ -165,55 +158,92 @@ function showGameBreakdown(gameName) {
 
   section.innerHTML =
     "<div class='model-card premium-card'>" +
-      "<h2>⚾ " + game.game + "</h2>" +
+    "<h2>⚾ " +
+    game.game +
+    "</h2>" +
     "</div>" +
 
     "<div class='model-card'>" +
-      "<h3>⚾ Pitcher Matchups</h3>" +
-      "<p><strong>" + game.pitchers.away.name + "</strong></p>" +
-      "<p>" + game.pitchers.away.stats + "</p>" +
-      "<span>Danger Rating: " + game.pitchers.away.risk + "</span>" +
-      "<hr>" +
-      "<p><strong>" + game.pitchers.home.name + "</strong></p>" +
-      "<p>" + game.pitchers.home.stats + "</p>" +
-      "<span>Danger Rating: " + game.pitchers.home.risk + "</span>" +
+    "<h3>⚾ Pitcher Matchups</h3>" +
+    "<p><strong>" +
+    game.pitchers.away.name +
+    "</strong></p>" +
+    "<p>" +
+    game.pitchers.away.stats +
+    "</p>" +
+    "<span>Danger Rating: " +
+    game.pitchers.away.risk +
+    "</span>" +
+    "<hr>" +
+    "<p><strong>" +
+    game.pitchers.home.name +
+    "</strong></p>" +
+    "<p>" +
+    game.pitchers.home.stats +
+    "</p>" +
+    "<span>Danger Rating: " +
+    game.pitchers.home.risk +
+    "</span>" +
     "</div>" +
 
     "<div class='model-card'>" +
-      "<h3>💰 POPS Moneyline Pick</h3>" +
-      "<p><strong>" + game.moneylinePick.pick + "</strong></p>" +
-      "<p>" + game.moneylinePick.reason + "</p>" +
-      "<span>Confidence: " + game.moneylinePick.confidence + "</span>" +
+    "<h3>💰 POPS Moneyline Pick</h3>" +
+    "<p><strong>" +
+    game.moneylinePick.pick +
+    "</strong></p>" +
+    "<p>" +
+    game.moneylinePick.reason +
+    "</p>" +
+    "<span>Confidence: " +
+    game.moneylinePick.confidence +
+    "</span>" +
     "</div>" +
 
     "<div class='model-card'>" +
-      "<h3>💣 Best HR Targets</h3>" +
-      formatGameTargets(game.hrTargets) +
+    "<h3>💣 Best HR Targets</h3>" +
+    formatGameTargets(game.hrTargets) +
     "</div>" +
 
     "<div class='model-card'>" +
-      "<h3>⚾ Best Hit Targets</h3>" +
-      formatGameTargets(game.hitTargets) +
+    "<h3>⚾ Best Hit Targets</h3>" +
+    formatGameTargets(game.hitTargets) +
     "</div>" +
 
     "<div class='model-card'>" +
-      "<h3>🌦 Weather</h3>" +
-      "<p>Wind: " + game.weather.wind + "</p>" +
-      "<p>Direction: " + game.weather.direction + "</p>" +
-      "<p>Rain: " + game.weather.rain + "</p>" +
-      "<span>Weather Score: " + game.weather.score + "</span>" +
+    "<h3>🌦 Weather</h3>" +
+    "<p>Wind: " +
+    game.weather.wind +
+    "</p>" +
+    "<p>Direction: " +
+    game.weather.direction +
+    "</p>" +
+    "<p>Rain: " +
+    game.weather.rain +
+    "</p>" +
+    "<span>Weather Score: " +
+    game.weather.score +
+    "</span>" +
     "</div>" +
 
     "<div class='model-card'>" +
-      "<h3>🚦 NRFI / YRFI</h3>" +
-      "<p><strong>" + game.nrfi.pick + "</strong></p>" +
-      "<p>" + game.nrfi.reason + "</p>" +
-      "<span>Confidence: " + game.nrfi.confidence + "</span>" +
+    "<h3>🚦 NRFI / YRFI</h3>" +
+    "<p><strong>" +
+    game.nrfi.pick +
+    "</strong></p>" +
+    "<p>" +
+    game.nrfi.reason +
+    "</p>" +
+    "<span>Confidence: " +
+    game.nrfi.confidence +
+    "</span>" +
     "</div>";
 
-  document.getElementById("gameBreakdown").scrollIntoView({
-    behavior: "smooth"
-  });
+  const breakdown = document.getElementById("gameBreakdown");
+  if (breakdown) {
+    breakdown.scrollIntoView({
+      behavior: "smooth"
+    });
+  }
 }
 
 function formatGameTargets(players) {
@@ -224,12 +254,19 @@ function formatGameTargets(players) {
   let html = "<ol>";
 
   players.forEach(function(player) {
-    html += "<li><strong>" + player.player + "</strong> — " + player.score + "</li>";
+    html +=
+      "<li><strong>" +
+      player.player +
+      "</strong> — " +
+      player.score +
+      "</li>";
   });
 
   html += "</ol>";
   return html;
-}function formatTopPlayers(players, showScore) {
+}
+
+function formatTopPlayers(players, showScore) {
   if (!players || players.length === 0) {
     return "<p>No game-specific targets loaded yet.</p>";
   }
@@ -331,7 +368,13 @@ function loadBatterStats() {
       (player.hitScore || "N/A") +
       "</p>" +
       "<p>" +
-      (player.hitModel || "Barrel: " + (player.barrel ?? "N/A") + "% • Hard Hit: " + (player.hardHit ?? "N/A") + "% • ISO: " + (player.iso ?? "N/A")) +
+      (player.hitModel ||
+        "Barrel: " +
+          (player.barrel ?? "N/A") +
+          "% • Hard Hit: " +
+          (player.hardHit ?? "N/A") +
+          "% • ISO: " +
+          (player.iso ?? "N/A")) +
       "</p>" +
       "<p><strong>Why POPS likes it:</strong> " +
       (player.why || "Strong POPS model profile.") +
