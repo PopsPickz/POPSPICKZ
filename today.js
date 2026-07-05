@@ -9,7 +9,19 @@ const todayData = {
     { player: "Freddie Freeman", matchup: "vs JP Sears", barrel: 11, hardHit: 47, iso: 0.220, hr9: 1.8, weather: 9, ballpark: 9, platoon: 7 },
     { player: "Cal Raleigh", matchup: "vs Trey Yesavage", barrel: 17, hardHit: 50, iso: 0.290, hr9: 1.1, weather: 5, ballpark: 5, platoon: 7 },
     { player: "Jorge Soler", matchup: "vs Ranger Suarez", barrel: 16, hardHit: 50, iso: 0.260, hr9: 1.0, weather: 8, ballpark: 7, platoon: 7 },
-    { player: "Logan O'Hoppe", matchup: "vs Ranger Suarez", barrel: 15, hardHit: 49, iso: 0.250, hr9: 1.0, weather: 8, ballpark: 7, platoon: 7 }
+    { player: "Logan O'Hoppe", matchup: "vs Ranger Suarez", barrel: 15, hardHit: 49, iso: 0.250, hr9: 1.0, weather: 8, ballpark: 7, platoon: 7 },
+    { player: "Vladimir Guerrero Jr.", matchup: "vs Emerson Hancock", barrel: 14, hardHit: 52, iso: 0.230, hr9: 1.3, weather: 5, ballpark: 5, platoon: 7 },
+    { player: "Jackson Merrill", matchup: "vs Emmet Sheehan", barrel: 12, hardHit: 45, iso: 0.210, hr9: 1.4, weather: 9, ballpark: 9, platoon: 7 },
+    { player: "Jo Adell", matchup: "vs Ranger Suarez", barrel: 15, hardHit: 51, iso: 0.250, hr9: 1.0, weather: 8, ballpark: 7, platoon: 7 },
+    { player: "Zach Neto", matchup: "vs Ranger Suarez", barrel: 13, hardHit: 47, iso: 0.220, hr9: 1.0, weather: 8, ballpark: 7, platoon: 7 },
+    { player: "Luke Raley", matchup: "vs Trey Yesavage", barrel: 14, hardHit: 48, iso: 0.240, hr9: 1.1, weather: 5, ballpark: 5, platoon: 7 },
+    { player: "Randy Arozarena", matchup: "vs Trey Yesavage", barrel: 12, hardHit: 45, iso: 0.210, hr9: 1.1, weather: 5, ballpark: 5, platoon: 7 },
+    { player: "Daulton Varsho", matchup: "vs Emerson Hancock", barrel: 13, hardHit: 46, iso: 0.220, hr9: 1.3, weather: 5, ballpark: 5, platoon: 7 },
+    { player: "Jarren Duran", matchup: "vs Ryan Johnson", barrel: 10, hardHit: 44, iso: 0.190, hr9: 1.7, weather: 8, ballpark: 7, platoon: 8 },
+    { player: "Masataka Yoshida", matchup: "vs Ryan Johnson", barrel: 9, hardHit: 43, iso: 0.170, hr9: 1.7, weather: 8, ballpark: 7, platoon: 7 },
+    { player: "Alejandro Kirk", matchup: "vs Emerson Hancock", barrel: 8, hardHit: 42, iso: 0.160, hr9: 1.3, weather: 5, ballpark: 5, platoon: 6 },
+    { player: "Will Smith", matchup: "vs JP Sears", barrel: 11, hardHit: 45, iso: 0.210, hr9: 1.8, weather: 9, ballpark: 9, platoon: 7 },
+    { player: "Xander Bogaerts", matchup: "vs Emmet Sheehan", barrel: 8, hardHit: 40, iso: 0.160, hr9: 1.4, weather: 9, ballpark: 9, platoon: 6 }
   ],
 
   pitcherTargets: [
