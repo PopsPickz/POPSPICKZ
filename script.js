@@ -62,3 +62,23 @@ function loadDailyHRPicks() {
 }
 
 loadDailyHRPicks();
+
+function loadPitcherTargets() {
+  const section = document.getElementById("pitcherTargets");
+
+  if (!section) return;
+  if (!popsData || !popsData.pitcherTargets) return;
+
+  section.innerHTML = "";
+
+  popsData.pitcherTargets.forEach(function(item) {
+    section.innerHTML +=
+      "<div class='model-card'>" +
+      "<h3>🎯 " + item.pitcher + "</h3>" +
+      "<p>" + item.stats + "</p>" +
+      "<span>POPS Target Grade: " + item.grade + "</span>" +
+      "</div>";
+  });
+}
+
+loadPitcherTargets();
