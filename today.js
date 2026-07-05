@@ -1,24 +1,24 @@
 const todayData = {
   hrPicks: [
-    {
-      player: "Aaron Judge",
-      matchup: "vs RHP",
-      note: "Power bat + strong barrel profile",
-      grade: "⭐⭐⭐⭐⭐"
-    },
-    {
-      player: "Shohei Ohtani",
-      matchup: "vs RHP",
-      note: "Elite power + matchup upside",
-      grade: "⭐⭐⭐⭐⭐"
-    },
-    {
-      player: "Kyle Schwarber",
-      matchup: "vs RHP",
-      note: "HR upside + hitter-friendly park",
-      grade: "⭐⭐⭐⭐"
-    }
-  ],
+  {
+    player: "Aaron Judge",
+    matchup: "vs RHP",
+    note: "Power bat + strong barrel profile",
+    popsScore: 96
+  },
+  {
+    player: "Shohei Ohtani",
+    matchup: "vs RHP",
+    note: "Elite power + matchup upside",
+    popsScore: 94
+  },
+  {
+    player: "Kyle Schwarber",
+    matchup: "vs RHP",
+    note: "HR upside + hitter-friendly park",
+    popsScore: 88
+  }
+],
 
   pitcherTargets: [
     {
