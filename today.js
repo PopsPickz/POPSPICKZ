@@ -59,10 +59,43 @@ const todayData = {
   }
 ],
   moneyline: [
-    { team: "Strong Team Edge", reason: "Starter + bullpen + offense advantage", confidence: "78%" },
-    { team: "Value Team Edge", reason: "Better bullpen + line movement", confidence: "65%" },
-    { team: "Live Watch Team", reason: "Good offense but weak starter", confidence: "55%" }
-  ],
+  {
+    team: "Seattle Mariners",
+    matchup: "Blue Jays @ Mariners",
+    starter: "Edge: Emerson Hancock",
+    bullpen: "Edge: Mariners",
+    offense: "Edge: Mariners",
+    defense: "Edge: Mariners",
+    runSupport: "Edge: Mariners",
+    confidence: "76%",
+    popsGrade: "⭐⭐⭐⭐",
+    pick: "Mariners ML"
+  },
+  {
+    team: "Los Angeles Dodgers",
+    matchup: "Padres @ Dodgers",
+    starter: "Edge: Dodgers",
+    bullpen: "Edge: Padres",
+    offense: "Edge: Dodgers",
+    defense: "Edge: Dodgers",
+    runSupport: "Edge: Dodgers",
+    confidence: "83%",
+    popsGrade: "⭐⭐⭐⭐⭐",
+    pick: "Dodgers ML"
+  },
+  {
+    team: "Boston Red Sox",
+    matchup: "Red Sox @ Angels",
+    starter: "Edge: Ranger Suarez",
+    bullpen: "Edge: Red Sox",
+    offense: "Edge: Red Sox",
+    defense: "Edge: Red Sox",
+    runSupport: "Edge: Red Sox",
+    confidence: "72%",
+    popsGrade: "⭐⭐⭐⭐",
+    pick: "Red Sox ML"
+  }
+],
 
   weather: [
     { stadium: "Yankee Stadium", condition: "Wind blowing out 12 MPH", boost: "🔥🔥" },
