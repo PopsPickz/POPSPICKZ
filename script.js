@@ -100,7 +100,8 @@ function calculatePopsScore(player) {
       "<div class='model-card'>" +
       "<h3>💣 " + player.player + "</h3>" +
       "<p>" + player.matchup + "</p>" +
-      "<p>" + player.note + "</p>" +
+      "<p>Barrel: " + player.barrel + "% • Hard Hit: " + player.hardHit + "%</p>" +
+"<p>ISO: " + player.iso + " • Pitcher HR/9: " + player.hr9 + "</p>" +
       "<span class='score-badge'>POPS Score: " + calculatePopsScore(player) + "/100</span>" +
       "</div>";
   });
