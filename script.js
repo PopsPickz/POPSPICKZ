@@ -1,6 +1,7 @@
 async function loadMLBScores() {
   const today = new Date().toISOString().split("T")[0];
- const url = "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=" + today;
+  const url = "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=" + today;
+
   const ticker = document.querySelector(".ticker");
 
   try {
@@ -14,15 +15,15 @@ async function loadMLBScores() {
       return;
     }
 
-    data.dates[0].games.forEach(game => {
+    data.dates[0].games.forEach(function(game) {
       const away = game.teams.away.team.abbreviation;
       const home = game.teams.home.team.abbreviation;
-      const awayScore = game.teams.away.score ?? 0;
-      const homeScore = game.teams.home.score ?? 0;
+      const awayScore = game.teams.away.score || 0;
+      const homeScore = game.teams.home.score || 0;
       const status = game.status.detailedState;
 
       const gameBox = document.createElement("div");
-      gameBox.innerHTML = ⁠ ⚾ ${away} ${awayScore} - ${home} ${homeScore}<br><small>${status}</small> ⁠;
+      gameBox.innerHTML = "⚾ " + away + " " + awayScore + " - " + home + " " + homeScore + "<br><small>" + status + "</small>";
 
       ticker.appendChild(gameBox);
     });
