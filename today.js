@@ -74,9 +74,26 @@ const todayData = {
   }
 ],
 
-  nrfi: [
-    { game: "Blue Jays vs Mariners", pick: "NRFI lean", confidence: "63%" },
-    { game: "Padres vs Dodgers", pick: "YRFI lean", confidence: "61%" },
-    { game: "Red Sox vs Angels", pick: "YRFI lean", confidence: "59%" }
-  ]
-};
+ nrfi: [
+  {
+    game: "Blue Jays @ Mariners",
+    pick: "NRFI",
+    confidence: "74%",
+    score: "8.5/10",
+    reason: "Pitcher's park • lower first-inning scoring environment"
+  },
+  {
+    game: "Red Sox @ Angels",
+    pick: "NRFI",
+    confidence: "62%",
+    score: "6.8/10",
+    reason: "Starting pitcher edge and moderate offensive profile"
+  },
+  {
+    game: "Padres @ Dodgers",
+    pick: "YRFI",
+    confidence: "61%",
+    score: "4.5/10",
+    reason: "Explosive top of the Dodgers lineup against a higher-risk starter"
+  }
+]
