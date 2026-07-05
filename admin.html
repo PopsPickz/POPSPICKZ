@@ -3,72 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>POPS Admin</title>
+  <title>POPS Admin v3</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <nav class="navbar">
-  <div class="logo">💣 POPS ADMIN</div>
+  <div class="logo">💣 POPS ADMIN v3</div>
   <div class="nav-links">
     <a href="index.html">Dashboard</a>
   </div>
 </nav>
 
 <header class="hero">
-  <p class="tag">Research Workspace</p>
+  <p class="tag">Daily Research Workspace</p>
   <h1>POPS Pickz Admin</h1>
-  <p class="subtitle">Enter players, stats, and calculate POPS Scores</p>
+  <p class="subtitle">Enter HR candidates, calculate POPS Scores, and publish picks</p>
 </header>
 
 <section class="panel">
-  <h2>💣 HR Research Table</h2>
-  <p>Enter today’s HR candidates below, then click calculate.</p>
+  <h2>💣 HR Picks Builder</h2>
+  <p>Enter today’s players. Then click calculate and publish.</p>
 
-  <div class="game-center">
+  <div id="adminRows" class="game-center"></div>
 
-    <div class="model-card">
-      <h3>Player 1</h3>
-      <input id="p1" placeholder="Player name">
-      <input id="b1" placeholder="Barrel %">
-      <input id="h1" placeholder="Hard Hit %">
-      <input id="i1" placeholder="ISO">
-      <input id="hr1" placeholder="Pitcher HR/9">
-      <button onclick="calcScore(1)">Calculate</button>
-      <span id="s1">Score: --</span>
-    </div>
+  <button onclick="addPlayerRow()">➕ Add Player</button>
+  <button onclick="calculateAllScores()">🧮 Calculate All</button>
+  <button onclick="publishPicks()">💾 Publish Today’s Picks</button>
 
-    <div class="model-card">
-      <h3>Player 2</h3>
-      <input id="p2" placeholder="Player name">
-      <input id="b2" placeholder="Barrel %">
-      <input id="h2" placeholder="Hard Hit %">
-      <input id="i2" placeholder="ISO">
-      <input id="hr2" placeholder="Pitcher HR/9">
-      <button onclick="calcScore(2)">Calculate</button>
-      <span id="s2">Score: --</span>
-    </div>
-
-    <div class="model-card">
-      <h3>Player 3</h3>
-      <input id="p3" placeholder="Player name">
-      <input id="b3" placeholder="Barrel %">
-      <input id="h3" placeholder="Hard Hit %">
-      <input id="i3" placeholder="ISO">
-      <input id="hr3" placeholder="Pitcher HR/9">
-      <button onclick="calcScore(3)">Calculate</button>
-      <span id="s3">Score: --</span>
-    </div>
-
-  </div>
+  <div id="saveMessage" class="model-card" style="display:none; margin-top:20px;"></div>
 </section>
 
 <script>
-function calcScore(num) {
-  const barrel = Number(document.getElementById("b" + num).value || 0);
-  const hardHit = Number(document.getElementById("h" + num).value || 0);
-  const iso = Number(document.getElementById("i" + num).value || 0);
-  const hr9 = Number(document.getElementById("hr" + num).value || 0);
+let rowCount = 0;
+
+function addPlayerRow() {
+  rowCount++;
+
+  const box = document.createElement("div");
+  box.className = "model-card";
+  box.innerHTML = `
+    <h3>Player ${rowCount}</h3>
+    <input id="player${rowCount}" placeholder="Player name">
+    <input id="matchup${rowCount}" placeholder="Matchup ex: vs RHP">
+    <input id="barrel${rowCount}" placeholder="Barrel %">
+    <input id="hardHit${rowCount}" placeholder="Hard Hit %">
+    <input id="iso${rowCount}" placeholder="ISO ex: 0.360">
+    <input id="hr9${rowCount}" placeholder="Pitcher HR/9">
+    <span id="score${rowCount}" class="score-badge">Score: --</span>
+  `;
+
+  document.getElementById("adminRows").appendChild(box);
+}
+
+function calculateScore(num) {
+  const barrel = Number(document.getElementById("barrel" + num).value || 0);
+  const hardHit = Number(document.getElementById("hardHit" + num).value || 0);
+  const iso = Number(document.getElementById("iso" + num).value || 0);
+  const hr9 = Number(document.getElementById("hr9" + num).value || 0);
 
   let score = 0;
   score += Math.min(barrel, 25);
@@ -76,9 +68,45 @@ function calcScore(num) {
   score += Math.min(iso * 40, 15);
   score += Math.min(hr9 * 10, 20);
 
-  document.getElementById("s" + num).innerText =
-    "Score: " + Math.round(score) + "/100";
+  score = Math.round(Math.min(score, 100));
+  document.getElementById("score" + num).innerText = "Score: " + score + "/100";
+  return score;
 }
+
+function calculateAllScores() {
+  for (let i = 1; i <= rowCount; i++) {
+    calculateScore(i);
+  }
+}
+
+function publishPicks() {
+  const picks = [];
+
+  for (let i = 1; i <= rowCount; i++) {
+    const player = document.getElementById("player" + i).value.trim();
+    if (!player) continue;
+
+    picks.push({
+      player: player,
+      matchup: document.getElementById("matchup" + i).value || "vs Pitcher",
+      barrel: Number(document.getElementById("barrel" + i).value || 0),
+      hardHit: Number(document.getElementById("hardHit" + i).value || 0),
+      iso: Number(document.getElementById("iso" + i).value || 0),
+      hr9: Number(document.getElementById("hr9" + i).value || 0),
+      popsScore: calculateScore(i)
+    });
+  }
+
+  localStorage.setItem("popsPublishedPicks", JSON.stringify(picks));
+
+  const msg = document.getElementById("saveMessage");
+  msg.style.display = "block";
+  msg.innerHTML = "<h3>✅ Picks Published</h3><p>Go back to the dashboard to see them.</p>";
+}
+
+addPlayerRow();
+addPlayerRow();
+addPlayerRow();
 </script>
 
 </body>
