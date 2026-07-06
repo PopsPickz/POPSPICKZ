@@ -277,8 +277,9 @@ pitcherTargetList.push({
 
           <p><strong>Run Support:</strong> ${away} ${awayRunSupport}/100 vs ${home} ${homeRunSupport}/100</p>
 
+          <p><strong>NRFI/YRFI:</strong> ${nrfiPick} — ${nrfiScore}/100</p>
+
           <p><strong>POPS Moneyline Lean:</strong> ✅ ${moneylinePick}</p>
-        </div>
       `;
     }));
 
