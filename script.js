@@ -1,6 +1,6 @@
 function safeArray(name) {
-  if (typeof todayData === "undefined") return [];
-  return Array.isArray(todayData[name]) ? todayData[name] : [];
+  const data = window.todayData || todayData || {};
+  return Array.isArray(data[name]) ? data[name] : [];
 }
 
 function clean(value) {
@@ -251,4 +251,6 @@ function initDashboard() {
   loadNRFI();
 }
 
-initDashboard();
+window.addEventListener("DOMContentLoaded", function () {
+  initDashboard();
+});
