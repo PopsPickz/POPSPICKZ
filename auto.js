@@ -107,5 +107,41 @@ async function loadAutoSlate() {
     console.error(err);
   }
 }
+function getPitcherScore(pitcherName) {
+  if (!pitcherName || pitcherName === "TBD") return 50;
+  return 70;
+}
 
+function getRunSupportScore(teamName) {
+  const eliteTeams = [
+    "Los Angeles Dodgers",
+    "New York Yankees",
+    "Philadelphia Phillies",
+    "Atlanta Braves"
+  ];
+
+  const strongTeams = [
+    "Toronto Blue Jays",
+    "Houston Astros",
+    "Arizona Diamondbacks",
+    "Milwaukee Brewers"
+  ];
+
+  if (eliteTeams.includes(teamName)) return 90;
+  if (strongTeams.includes(teamName)) return 82;
+
+  return 72;
+}
+
+function getMoneylinePick(away, home, awayPitcher, homePitcher) {
+  const awayRun = getRunSupportScore(away);
+  const homeRun = getRunSupportScore(home);
+
+  const awayPitcherScore = getPitcherScore(awayPitcher);
+  const homePitcherScore = getPitcherScore(homePitcher);
+
+  const awayTotal = awayRun + awayPitcherScore;
+  const homeTotal = homeRun + homePitcherScore + 3;
+
+  return homeTotal >= awayTotal ? home : away;
 loadAutoSlate();
