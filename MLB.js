@@ -1,16 +1,15 @@
-// ===========================
-// POPS Pickz MLB API — Test Safe Version
-// ===========================
-
 async function getTodaysGames() {
   const today = new Date().toISOString().split("T")[0];
-
   const url = ⁠ https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=probablePitcher,venue ⁠;
 
-  const res = await fetch(url);
-  const data = await res.json();
-
-  return data.dates?.[0]?.games || [];
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.dates?.[0]?.games || [];
+  } catch (err) {
+    console.error("MLB schedule error:", err);
+    return [];
+  }
 }
 
 async function getTeamStats() {
