@@ -1,7 +1,6 @@
 // ===============================
-// POPS Pickz 6.0 — auto.js v2.1
+// POPS Pickz 6.0 — auto.js v2.2
 // Auto-loads MLB slate + models
-// Filters site to 8.0+ plays only
 // ===============================
 
 async function loadAutoSlate() {
@@ -16,7 +15,7 @@ async function loadAutoSlate() {
     const pitcherStats = await getPitcherStats();
     const hitterStats = await getHitterStats();
 
-    if (!games.length) {
+    if (!games || !games.length) {
       slateBox.innerHTML = loadingCard("No MLB games found today.");
       return;
     }
@@ -25,7 +24,6 @@ async function loadAutoSlate() {
       games.map(game => buildAutoGame(game, teamStats, pitcherStats))
     );
 
-    // POPS Pickz 6.0 Score Engine
     const scoredGames = gameModels
       .map(game => {
         const moneylineModel = buildMoneylineModel(game);
@@ -33,10 +31,6 @@ async function loadAutoSlate() {
         return scorePlay(
           {
             ...game,
-            model: {
-              ...game.model,
-              moneylineModel
-            },
             popsModel: moneylineModel
           },
           "moneyline"
@@ -44,10 +38,10 @@ async function loadAutoSlate() {
       })
       .filter(game => game.showOnSite);
 
-    renderSlate(scoredGames, slateBox);
-    renderPitcherTargets(scoredGames);
-    renderMoneyline(scoredGames);
-    renderNRFI(scoredGames);
+    renderSlate(scoredGames.length ? scoredGames : gameModels, slateBox);
+    renderPitcherTargets(gameModels);
+    renderMoneyline(gameModels);
+    renderNRFI(gameModels);
     renderHRPicks(games, hitterStats, pitcherStats);
     renderHitTargets(games, hitterStats);
 
@@ -96,7 +90,7 @@ function gradeFromScore(score) {
 }
 
 function ratingFromScore(score) {
-  return Number((score / 10).toFixed(1));
+  return Number((Number(score) / 10).toFixed(1));
 }
 
 // ---------- Build Game Model ----------
@@ -140,10 +134,10 @@ function renderSlate(gameModels, slateBox) {
 
         <p><strong>Time:</strong> ${g.time}</p>
         <p><strong>Venue:</strong> ${g.venue}</p>
-        <p><strong>Weather:</strong> ${g.weather.temp}, Wind ${g.weather.wind}</p>
+        <p><strong>Weather:</strong> ${g.weather?.temp || "N/A"}, Wind ${g.weather?.wind || "N/A"}</p>
 
-        <p><strong>POPS Rating:</strong> ${g.rating}/10</p>
-        <p><strong>Tier:</strong> ${g.tier}</p>
+        ${g.rating ? ⁠ <p><strong>POPS Rating:</strong> ${g.rating}/10</p> ⁠ : ""}
+        ${g.tier ? ⁠ <p><strong>Tier:</strong> ${g.tier}</p> ⁠ : ""}
 
         <p><strong>${g.away} Pitcher:</strong> ${g.awayPitcher}</p>
         <p>${g.awayPitcherLine} | POPS Pitcher Score: ${g.model.awayPitchScore}/100</p>
@@ -158,7 +152,7 @@ function renderSlate(gameModels, slateBox) {
         <p><strong>POPS Moneyline Lean:</strong> ✅ ${g.model.moneyline}</p>
       </div>
     `).join("")
-    : loadingCard("No Strong+ POPS plays found yet.");
+    : loadingCard("No MLB games loaded yet.");
 }
 
 // ---------- Render Pitcher Targets ----------
@@ -193,11 +187,12 @@ function renderPitcherTargets(gameModels) {
 
   box.innerHTML = filtered.length
     ? filtered.map(p => `
-      <div class="model-card">
+      <div class="model-card premium-card">
         <h3>${targetGrade(p.risk)} ${p.pitcher}</h3>
         <p><strong>Team:</strong> ${p.team}</p>
         <p><strong>Opponent:</strong> ${p.opponent}</p>
         <p><strong>HR Risk:</strong> ${p.risk}/100</p>
+        <p><strong>Rating:</strong> ${ratingFromScore(p.risk)}/10</p>
         <p><strong>Tier:</strong> ${gradeFromScore(p.risk)}</p>
       </div>
     `).join("")
@@ -212,30 +207,78 @@ function renderMoneyline(gameModels) {
 
   const manualMoneyline =
     window.todayData && Array.isArray(window.todayData.moneyline)
-      ? window.todayData.moneyline.filter(m => Number(m.score || 0) >= 80)
+      ? window.todayData.moneyline
+          .map(m => {
+            const score = Number(m.score || String(m.confidence || "").match(/\d+/)?.[0] || 0);
+            return { ...m, score };
+          })
+          .filter(m => m.score >= 80)
+          .sort((a, b) => b.score - a.score)
       : [];
 
   if (manualMoneyline.length) {
     box.innerHTML = manualMoneyline.map(m => `
       <div class="model-card premium-card">
         <h3>💰 ${m.team || m.pick}</h3>
+        <span class="score-badge">POPS Rating: ${(m.score / 10).toFixed(1)}/10 | ${gradeFromScore(m.score)}</span>
         <p><strong>POPS Score:</strong> ${m.score}/100</p>
-        <p><strong>POPS Rating:</strong> ${(m.score / 10).toFixed(1)}/10</p>
         <p><strong>Confidence:</strong> ${m.confidence || ""}</p>
         <p>${m.reason || ""}</p>
       </div>
     `).join("");
-
     return;
   }
 
-  box.innerHTML = loadingCard("No moneyline picks 80+ found yet.");
+  const autoMoneyline = gameModels
+    .map(g => {
+      const score = Math.max(g.model.awayRun, g.model.homeRun);
+      return {
+        team: g.model.moneyline,
+        game: ⁠ ${g.away} vs ${g.home} ⁠,
+        score,
+        reason: ⁠ Run support edge: ${g.away} ${g.model.awayRun}/100 vs ${g.home} ${g.model.homeRun}/100 ⁠
+      };
+    })
+    .filter(m => m.score >= 80)
+    .sort((a, b) => b.score - a.score);
+
+  box.innerHTML = autoMoneyline.length
+    ? autoMoneyline.map(m => `
+      <div class="model-card premium-card">
+        <h3>💰 ${m.team}</h3>
+        <span class="score-badge">POPS Rating: ${(m.score / 10).toFixed(1)}/10 | ${gradeFromScore(m.score)}</span>
+        <p><strong>${m.game}</strong></p>
+        <p><strong>POPS Score:</strong> ${m.score}/100</p>
+        <p>${m.reason}</p>
+      </div>
+    `).join("")
+    : loadingCard("No moneyline picks 80+ found yet.");
 }
+
 // ---------- Render NRFI ----------
 
 function renderNRFI(gameModels) {
   const box = $("nrfiPicks");
   if (!box) return;
+
+  const manualNRFI =
+    window.todayData && Array.isArray(window.todayData.eliteNRFI)
+      ? window.todayData.eliteNRFI.filter(n => Number(n.score || 0) >= 80)
+      : [];
+
+  if (manualNRFI.length) {
+    box.innerHTML = manualNRFI.map(n => `
+      <div class="model-card premium-card">
+        <h3>🚦 ${n.game}</h3>
+        <p><strong>${n.pick}</strong></p>
+        <p><strong>Score:</strong> ${n.score}/100</p>
+        <p><strong>Rating:</strong> ${ratingFromScore(n.score)}/10</p>
+        <p><strong>Tier:</strong> ${gradeFromScore(n.score)}</p>
+        <p>${n.reason || ""}</p>
+      </div>
+    `).join("");
+    return;
+  }
 
   const filtered = gameModels
     .filter(g => g.model.nrfiScore >= 80)
@@ -243,7 +286,7 @@ function renderNRFI(gameModels) {
 
   box.innerHTML = filtered.length
     ? filtered.map(g => `
-      <div class="model-card">
+      <div class="model-card premium-card">
         <h3>${g.nrfiLabel}</h3>
         <p><strong>${g.away} vs ${g.home}</strong></p>
         <p><strong>Score:</strong> ${g.model.nrfiScore}/100</p>
@@ -259,6 +302,23 @@ function renderNRFI(gameModels) {
 function renderHRPicks(games, hitterStats, pitcherStats) {
   const box = $("dailyHRPicks");
   if (!box) return;
+
+  const manualHR =
+    window.todayData && Array.isArray(window.todayData.hrPicks)
+      ? window.todayData.hrPicks.filter(p => Number(p.score || 0) >= 80)
+      : [];
+
+  if (manualHR.length) {
+    box.innerHTML = manualHR.map((p, i) => `
+      <div class="model-card premium-card">
+        <h3>💣 #${i + 1} ${p.player}</h3>
+        <span class="score-badge">POPS Rating: ${(p.score / 10).toFixed(1)}/10 | ${gradeFromScore(p.score)}</span>
+        <p><strong>Matchup:</strong> ${p.matchup || ""}</p>
+        <p>${p.reason || ""}</p>
+      </div>
+    `).join("");
+    return;
+  }
 
   const hitters = Object.values(hitterStats || {});
   const picks = [];
@@ -298,7 +358,7 @@ function renderHRPicks(games, hitterStats, pitcherStats) {
 
   box.innerHTML = filtered.length
     ? filtered.map(p => `
-      <div class="model-card">
+      <div class="model-card premium-card">
         <h3>💣 ${p.player}</h3>
         <p>${p.matchup}</p>
         <p><strong>POPS HR Score:</strong> ${p.score}/100</p>
@@ -314,6 +374,23 @@ function renderHRPicks(games, hitterStats, pitcherStats) {
 function renderHitTargets(games, hitterStats) {
   const box = $("batterStatsList");
   if (!box) return;
+
+  const manualHits =
+    window.todayData && Array.isArray(window.todayData.batterStats)
+      ? window.todayData.batterStats.filter(p => Number(p.score || 0) >= 80)
+      : [];
+
+  if (manualHits.length) {
+    box.innerHTML = manualHits.map((p, i) => `
+      <div class="model-card premium-card">
+        <h3>⚾ #${i + 1} ${p.player}</h3>
+        <span class="score-badge">POPS Rating: ${(p.score / 10).toFixed(1)}/10 | ${gradeFromScore(p.score)}</span>
+        <p><strong>Matchup:</strong> ${p.matchup || ""}</p>
+        <p>${p.reason || p.why || ""}</p>
+      </div>
+    `).join("");
+    return;
+  }
 
   const hitters = Object.values(hitterStats || {});
   const picks = [];
@@ -350,7 +427,7 @@ function renderHitTargets(games, hitterStats) {
 
   box.innerHTML = filtered.length
     ? filtered.map(p => `
-      <div class="model-card">
+      <div class="model-card premium-card">
         <h3>⚾ ${p.player}</h3>
         <p>${p.matchup}</p>
         <p><strong>POPS Hit Score:</strong> ${p.score}/100</p>
