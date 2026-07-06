@@ -166,8 +166,28 @@ async function getWeather(venueName, gameDate) {
     };
   }
 }
+function getHRRiskScore(pitcherName) {
+  const p = getPitcherStats(pitcherName);
 
-async function loadAutoSlate() {
+  if (p.era === "N/A") return 50;
+
+  let score = 50;
+
+  const era = Number(p.era);
+  const whip = Number(p.whip);
+
+  score += p.homeRuns * 1.5;
+
+  if (era >= 5.00) score += 15;
+  else if (era >= 4.25) score += 8;
+
+  if (whip >= 1.40) score += 10;
+  else if (whip >= 1.30) score += 5;
+
+  if (p.walks > p.strikeouts * 0.4) score += 6;
+
+  return Math.max(40, Math.min(99, Math.round(score)));
+}async function loadAutoSlate() {
   const slateBox = document.getElementById("slateList");
   if (!slateBox) return;
 
