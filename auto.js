@@ -38,12 +38,26 @@ async function loadAutoSlate() {
       })
       .filter(game => game.showOnSite);
 
-    renderSlate(scoredGames.length ? scoredGames : gameModels, slateBox);
-    renderPitcherTargets(gameModels);
-    renderMoneyline(gameModels);
-    renderNRFI(gameModels);
-    renderHRPicks(games, hitterStats, pitcherStats);
-    renderHitTargets(games, hitterStats);
+const autoMoneyline = createAutoMoneylinePicks(gameModels);
+const autoNRFI = createAutoNRFIPicks(gameModels);
+const autoPitchers = createAutoPitcherTargets(gameModels);
+const autoHR = createAutoHRPicks(games, hitterStats, pitcherStats);
+const autoHits = createAutoHitPicks(games, hitterStats);
+
+window.popsAutoData = {
+  moneyline: autoMoneyline,
+  nrfi: autoNRFI,
+  pitcherTargets: autoPitchers,
+  hrPicks: autoHR,
+  batterStats: autoHits
+};
+
+renderSlate(scoredGames.length ? scoredGames : gameModels, slateBox);
+renderAutoMoneyline(autoMoneyline);
+renderAutoNRFI(autoNRFI);
+renderAutoPitcherTargets(autoPitchers);
+renderAutoHRPicks(autoHR);
+renderAutoHitTargets(autoHits);
 
   } catch (err) {
     console.error(err);
