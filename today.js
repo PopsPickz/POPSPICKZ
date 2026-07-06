@@ -1,4 +1,4 @@
-window.todayData = {
+var todayData = {
   eliteNRFI: [],
 
   hrPicks: [
@@ -268,3 +268,4 @@ window.todayData = {
     }
   ]
 };
+window.todayData = todayData;
