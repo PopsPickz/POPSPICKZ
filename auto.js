@@ -8,8 +8,7 @@ async function loadAutoSlate() {
     const games = await getTodaysGames();
     const teamStats = await getTeamStats();
     const pitcherStats = await getPitcherStats();
-
-    if (!games.length) {
+    const hitterStats = await getHitterStats();    if (!games.length) {
       slateBox.innerHTML = "<div class='model-card'>No MLB games found today.</div>";
       return;
     }
