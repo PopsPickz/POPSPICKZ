@@ -124,58 +124,38 @@ async function loadMLBScores() {
   });
 }
 
-async function loadDailySlate() {
+function loadDailySlate() {
   const slateList = document.getElementById("slateList");
   if (!slateList) return;
 
-  slateList.innerHTML = "<div class='model-card'>Loading today’s MLB slate...</div>";
-  const data = await fetchMLBData();
+  const games = safeArray("games");
 
-  if (!data || !data.dates || data.dates.length === 0) {
-    slateList.innerHTML = "<div class='model-card'>No MLB games today</div>";
+  if (games.length === 0) {
+    slateList.innerHTML =
+      "<div class='model-card'>No POPS games loaded.</div>";
     return;
   }
 
   slateList.innerHTML = "";
 
-  data.dates[0].games.forEach(function(game) {
-    const away = game.teams.away.team.name;
-    const home = game.teams.home.team.name;
-    const status = game.status.detailedState;
-    const venue = game.venue ? game.venue.name : "Venue TBD";
-
-    const gameTime = new Date(game.gameDate).toLocaleTimeString([], {
-      hour: "numeric",
-      minute: "2-digit"
-    });
-
-    const awayPitcher = game.teams.away.probablePitcher
-      ? game.teams.away.probablePitcher.fullName
-      : "TBD";
-
-    const homePitcher = game.teams.home.probablePitcher
-      ? game.teams.home.probablePitcher.fullName
-      : "TBD";
-
+  games.forEach(function(game) {
     const card = document.createElement("div");
     card.className = "game-card clickable-game";
 
     card.innerHTML =
-      "<h3>" + away + " vs " + home + "</h3>" +
-      "<p>" + awayPitcher + " vs " + homePitcher + "</p>" +
-      "<p>" + venue + "</p>" +
-      "<span>" + gameTime + " • " + status + "</span>" +
+      "<h3>" + game.game + "</h3>" +
+      "<p>" + game.pitchers.away.name + " vs " + game.pitchers.home.name + "</p>" +
+      "<p>" + (game.venue || "Venue TBD") + "</p>" +
+      "<span>" + (game.time || "Time TBD") + "</span>" +
       "<p><small>Tap for POPS breakdown</small></p>";
 
     card.onclick = function() {
-      showGameBreakdown(away + " vs " + home);
+      showGameBreakdown(game.game);
     };
 
     slateList.appendChild(card);
   });
-}
-
-function showGameBreakdown(gameName) {
+}function showGameBreakdown(gameName) {
   const section = document.getElementById("gameBreakdownContent");
   if (!section) return;
 
@@ -775,4 +755,4 @@ function initDashboard() {
 initDashboard();
 
 setInterval(loadMLBScores, 60000);
-setInterval(loadDailySlate, 60000);
+
