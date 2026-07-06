@@ -210,33 +210,27 @@ function renderMoneyline(gameModels) {
   const box = $("moneylinePicks");
   if (!box) return;
 
-  box.innerHTML = gameModels.length
-    ? gameModels.map(g => {
-      const edge =
-        g.model.moneyline === g.home
-          ? g.model.homeRun - g.model.awayRun
-          : g.model.awayRun - g.model.homeRun;
+  const manualMoneyline =
+    window.todayData && Array.isArray(window.todayData.moneyline)
+      ? window.todayData.moneyline.filter(m => Number(m.score || 0) >= 80)
+      : [];
 
-      const confidence = Math.max(80, Math.min(98, Math.round(70 + Math.abs(edge))));
-      const rating = ratingFromScore(confidence);
-      const reasons = buildMoneylineExplanation(g);      return `
-        <div class="model-card">
-          <h3>💰 ${g.model.moneyline}</h3>
-          <p><strong>${g.away} vs ${g.home}</strong></p>
-          <p><strong>POPS Rating:</strong> ${g.rating}/10</p>
-          <p><strong>Tier:</strong> ${g.tier}</p>
-          <div class="ai-box">
-          <strong>Why POPS Likes It:</strong>
-  ${reasons.map(r => ⁠ <p>${r}</p> ⁠).join("")}
-</div>          <p><strong>Confidence:</strong> ${confidence}/100</p>
-          <p><strong>Display Rating:</strong> ${rating}/10</p>
-          <p><strong>Run Support:</strong> ${g.away} ${g.model.awayRun}/100 vs ${g.home} ${g.model.homeRun}/100</p>
-        </div>
-      `;
-    }).join("")
-    : loadingCard("No moneyline picks 8.0+ found yet.");
+  if (manualMoneyline.length) {
+    box.innerHTML = manualMoneyline.map(m => `
+      <div class="model-card premium-card">
+        <h3>💰 ${m.team || m.pick}</h3>
+        <p><strong>POPS Score:</strong> ${m.score}/100</p>
+        <p><strong>POPS Rating:</strong> ${(m.score / 10).toFixed(1)}/10</p>
+        <p><strong>Confidence:</strong> ${m.confidence || ""}</p>
+        <p>${m.reason || ""}</p>
+      </div>
+    `).join("");
+
+    return;
+  }
+
+  box.innerHTML = loadingCard("No moneyline picks 80+ found yet.");
 }
-
 // ---------- Render NRFI ----------
 
 function renderNRFI(gameModels) {
