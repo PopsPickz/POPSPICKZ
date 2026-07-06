@@ -36,7 +36,6 @@ async function loadMLBScores() {
   if (!ticker) return;
 
   ticker.innerHTML = "<div>Loading live MLB scores...</div>";
-
   const data = await fetchMLBData();
 
   if (!data || !data.dates || data.dates.length === 0) {
@@ -55,17 +54,8 @@ async function loadMLBScores() {
 
     const box = document.createElement("div");
     box.innerHTML =
-      "⚾ " +
-      away +
-      " " +
-      awayScore +
-      " - " +
-      home +
-      " " +
-      homeScore +
-      "<br><small>" +
-      status +
-      "</small>";
+      "⚾ " + away + " " + awayScore + " - " + home + " " + homeScore +
+      "<br><small>" + status + "</small>";
 
     ticker.appendChild(box);
   });
@@ -75,9 +65,7 @@ async function loadDailySlate() {
   const slateList = document.getElementById("slateList");
   if (!slateList) return;
 
-  slateList.innerHTML =
-    "<div class='model-card'>Loading today’s MLB slate...</div>";
-
+  slateList.innerHTML = "<div class='model-card'>Loading today’s MLB slate...</div>";
   const data = await fetchMLBData();
 
   if (!data || !data.dates || data.dates.length === 0) {
@@ -110,29 +98,16 @@ async function loadDailySlate() {
     card.className = "game-card clickable-game";
 
     card.innerHTML =
-      "<h3>" +
-      away +
-      " vs " +
-      home +
-      "</h3>" +
-      "<p>" +
-      awayPitcher +
-      " vs " +
-      homePitcher +
-      "</p>" +
-      "<p>" +
-      venue +
-      "</p>" +
-      "<span>" +
-      gameTime +
-      " • " +
-      status +
-      "</span>";
+      "<h3>" + away + " vs " + home + "</h3>" +
+      "<p>" + awayPitcher + " vs " + homePitcher + "</p>" +
+      "<p>" + venue + "</p>" +
+      "<span>" + gameTime + " • " + status + "</span>" +
+      "<p><small>Tap for POPS breakdown</small></p>";
 
     card.onclick = function() {
-  alert(away + " vs " + home);
-  showGameBreakdown(away + " vs " + home);
-};
+      showGameBreakdown(away + " vs " + home);
+    };
+
     slateList.appendChild(card);
   });
 }
@@ -142,7 +117,6 @@ function showGameBreakdown(gameName) {
   if (!section) return;
 
   const games = safeArray("games");
-
   const game = games.find(function(g) {
     return g.game === gameName;
   });
@@ -151,7 +125,8 @@ function showGameBreakdown(gameName) {
     section.innerHTML =
       "<div class='model-card'>" +
       "<h3>No game data found.</h3>" +
-      "<p>This game does not have a POPS breakdown in today.js yet.</p>" +
+      "<p>This game is clickable, but today.js does not have a matching POPS breakdown yet.</p>" +
+      "<p><strong>Needed game name:</strong> " + gameName + "</p>" +
       "</div>";
     return;
   }
@@ -179,17 +154,17 @@ function showGameBreakdown(gameName) {
 
     "<div class='model-card'>" +
       "<h3>📊 Best Hit Targets</h3>" +
-      formatGameTargets(game.hitTargets, "hit") +
+      formatGameTargets(game.hitTargets) +
     "</div>" +
 
     "<div class='model-card'>" +
       "<h3>💣 Home Run Model</h3>" +
-      formatGameTargets(game.hrTargets, "hr") +
+      formatGameTargets(game.hrTargets) +
     "</div>" +
 
     "<div class='model-card'>" +
       "<h3>🌦 Weather Center</h3>" +
-      "<p><strong>Temperature:</strong> " + game.weather.temp + "</p>" +
+      "<p><strong>Temperature:</strong> " + (game.weather.temp || "TBD") + "</p>" +
       "<p><strong>Wind:</strong> " + game.weather.wind + " " + game.weather.direction + "</p>" +
       "<p><strong>Rain:</strong> " + game.weather.rain + "</p>" +
       "<p><strong>HR Boost:</strong> " + game.weather.score + "</p>" +
@@ -212,9 +187,7 @@ function showGameBreakdown(gameName) {
     "</div>";
 
   const breakdown = document.getElementById("gameBreakdown");
-  if (breakdown) {
-    breakdown.scrollIntoView({ behavior: "smooth" });
-  }
+  if (breakdown) breakdown.scrollIntoView({ behavior: "smooth" });
 }
 
 function formatPitcher(pitcher) {
@@ -230,13 +203,10 @@ function formatPitcher(pitcher) {
   );
 }
 
-function formatGameTargets(players, type) {
-  if (!players || players.length === 0) {
-    return "<p>No targets loaded.</p>";
-  }
+function formatGameTargets(players) {
+  if (!players || players.length === 0) return "<p>No targets loaded.</p>";
 
   let html = "<ol>";
-
   players.forEach(function(player) {
     html +=
       "<li>" +
@@ -245,38 +215,13 @@ function formatGameTargets(players, type) {
       "<small>" + (player.reason || "Strong POPS profile.") + "</small>" +
       "</li><br>";
   });
-
   html += "</ol>";
-  return html;
-}
-
-function formatTopPlayers(players, showScore) {
-  if (!players || players.length === 0) {
-    return "<p>No game-specific targets loaded yet.</p>";
-  }
-
-  let html = "";
-
-  players.forEach(function(player, index) {
-    const score = calculatePopsScore(player);
-
-    html +=
-      "<p><strong>" +
-      (index + 1) +
-      ". " +
-      player.player +
-      "</strong>" +
-      (showScore ? " — POPS " + score + "/100" : "") +
-      "</p>";
-  });
-
   return html;
 }
 
 function loadHRPicks() {
   const section = document.getElementById("dailyHRPicks");
   const picks = safeArray("hrPicks");
-
   if (!section) return;
 
   if (picks.length === 0) {
@@ -295,27 +240,11 @@ function loadHRPicks() {
 
     section.innerHTML +=
       "<div class='model-card premium-card'>" +
-      "<h3>💣 #" +
-      (index + 1) +
-      " " +
-      player.player +
-      "</h3>" +
-      "<p><strong>Matchup:</strong> " +
-      (player.matchup || "N/A") +
-      "</p>" +
-      "<p>Barrel: " +
-      (player.barrel ?? "N/A") +
-      "% • Hard Hit: " +
-      (player.hardHit ?? "N/A") +
-      "%</p>" +
-      "<p>ISO: " +
-      (player.iso ?? "N/A") +
-      " • Pitcher HR/9: " +
-      (player.hr9 ?? "N/A") +
-      "</p>" +
-      "<span class='score-badge'>POPS Score: " +
-      score +
-      "/100</span>" +
+      "<h3>💣 #" + (index + 1) + " " + player.player + "</h3>" +
+      "<p><strong>Matchup:</strong> " + (player.matchup || "N/A") + "</p>" +
+      "<p>Barrel: " + (player.barrel ?? "N/A") + "% • Hard Hit: " + (player.hardHit ?? "N/A") + "%</p>" +
+      "<p>ISO: " + (player.iso ?? "N/A") + " • Pitcher HR/9: " + (player.hr9 ?? "N/A") + "</p>" +
+      "<span class='score-badge'>POPS Score: " + score + "/100</span>" +
       "</div>";
   });
 }
@@ -324,7 +253,6 @@ function loadBatterStats() {
   const section = document.getElementById("batterStatsList");
   const stats = safeArray("batterStats");
   const picks = safeArray("hrPicks");
-
   if (!section) return;
 
   const data = stats.length > 0 ? stats : picks;
@@ -339,30 +267,12 @@ function loadBatterStats() {
   data.forEach(function(player) {
     section.innerHTML +=
       "<div class='model-card'>" +
-      "<h3>📊 " +
-      player.player +
-      "</h3>" +
-      "<p><strong>Matchup:</strong> " +
-      (player.matchup || "N/A") +
-      "</p>" +
-      "<p><strong>HR Score:</strong> " +
-      (player.hrScore || calculatePopsScore(player) + "/100") +
-      "</p>" +
-      "<p><strong>Hit Score:</strong> " +
-      (player.hitScore || "N/A") +
-      "</p>" +
-      "<p>" +
-      (player.hitModel ||
-        "Barrel: " +
-          (player.barrel ?? "N/A") +
-          "% • Hard Hit: " +
-          (player.hardHit ?? "N/A") +
-          "% • ISO: " +
-          (player.iso ?? "N/A")) +
-      "</p>" +
-      "<p><strong>Why POPS likes it:</strong> " +
-      (player.why || "Strong POPS model profile.") +
-      "</p>" +
+      "<h3>📊 " + player.player + "</h3>" +
+      "<p><strong>Matchup:</strong> " + (player.matchup || "N/A") + "</p>" +
+      "<p><strong>HR Score:</strong> " + (player.hrScore || calculatePopsScore(player) + "/100") + "</p>" +
+      "<p><strong>Hit Score:</strong> " + (player.hitScore || "N/A") + "</p>" +
+      "<p>" + (player.hitModel || "Strong contact profile.") + "</p>" +
+      "<p><strong>Why POPS likes it:</strong> " + (player.why || "Strong POPS model profile.") + "</p>" +
       "</div>";
   });
 }
@@ -370,12 +280,10 @@ function loadBatterStats() {
 function loadPitcherTargets() {
   const section = document.getElementById("pitcherTargets");
   const items = safeArray("pitcherTargets");
-
   if (!section) return;
 
   if (items.length === 0) {
-    section.innerHTML =
-      "<div class='model-card'>No pitcher targets loaded.</div>";
+    section.innerHTML = "<div class='model-card'>No pitcher targets loaded.</div>";
     return;
   }
 
@@ -384,15 +292,9 @@ function loadPitcherTargets() {
   items.forEach(function(item) {
     section.innerHTML +=
       "<div class='model-card'>" +
-      "<h3>🎯 " +
-      item.pitcher +
-      "</h3>" +
-      "<p>" +
-      (item.stats || "No stats entered") +
-      "</p>" +
-      "<span>" +
-      (item.grade || "") +
-      "</span>" +
+      "<h3>🎯 " + item.pitcher + "</h3>" +
+      "<p>" + (item.stats || "No stats entered") + "</p>" +
+      "<span>" + (item.grade || "") + "</span>" +
       "</div>";
   });
 }
@@ -400,12 +302,10 @@ function loadPitcherTargets() {
 function loadMoneyline() {
   const section = document.getElementById("moneylinePicks");
   const items = safeArray("moneyline");
-
   if (!section) return;
 
   if (items.length === 0) {
-    section.innerHTML =
-      "<div class='model-card'>No moneyline picks loaded.</div>";
+    section.innerHTML = "<div class='model-card'>No moneyline picks loaded.</div>";
     return;
   }
 
@@ -414,15 +314,9 @@ function loadMoneyline() {
   items.forEach(function(item) {
     section.innerHTML +=
       "<div class='model-card'>" +
-      "<h3>💰 " +
-      item.team +
-      "</h3>" +
-      "<p>" +
-      (item.reason || "No reason entered") +
-      "</p>" +
-      "<span>Confidence: " +
-      (item.confidence || "N/A") +
-      "</span>" +
+      "<h3>💰 " + item.team + "</h3>" +
+      "<p>" + (item.reason || "No reason entered") + "</p>" +
+      "<span>Confidence: " + (item.confidence || "N/A") + "</span>" +
       "</div>";
   });
 }
@@ -430,12 +324,10 @@ function loadMoneyline() {
 function loadWeather() {
   const section = document.getElementById("weatherBoosts");
   const items = safeArray("weather");
-
   if (!section) return;
 
   if (items.length === 0) {
-    section.innerHTML =
-      "<div class='model-card'>No weather data loaded.</div>";
+    section.innerHTML = "<div class='model-card'>No weather data loaded.</div>";
     return;
   }
 
@@ -444,15 +336,9 @@ function loadWeather() {
   items.forEach(function(item) {
     section.innerHTML +=
       "<div class='model-card'>" +
-      "<h3>🌦 " +
-      (item.stadium || item.game || "Weather") +
-      "</h3>" +
-      "<p>" +
-      (item.condition || "") +
-      "</p>" +
-      "<span>" +
-      (item.boost || item.hrBoost || "") +
-      "</span>" +
+      "<h3>🌦 " + (item.stadium || item.game || "Weather") + "</h3>" +
+      "<p>" + (item.condition || "") + "</p>" +
+      "<span>" + (item.boost || item.hrBoost || "") + "</span>" +
       "</div>";
   });
 }
@@ -460,12 +346,10 @@ function loadWeather() {
 function loadNRFI() {
   const section = document.getElementById("nrfiPicks");
   const items = safeArray("nrfi");
-
   if (!section) return;
 
   if (items.length === 0) {
-    section.innerHTML =
-      "<div class='model-card'>No NRFI/YRFI picks loaded.</div>";
+    section.innerHTML = "<div class='model-card'>No NRFI/YRFI picks loaded.</div>";
     return;
   }
 
@@ -474,18 +358,10 @@ function loadNRFI() {
   items.forEach(function(item) {
     section.innerHTML +=
       "<div class='model-card'>" +
-      "<h3>🚦 " +
-      item.game +
-      "</h3>" +
-      "<p>Pick: " +
-      item.pick +
-      "</p>" +
-      "<p>" +
-      (item.reason || "") +
-      "</p>" +
-      "<span>Confidence: " +
-      (item.confidence || "N/A") +
-      "</span>" +
+      "<h3>🚦 " + item.game + "</h3>" +
+      "<p>Pick: " + item.pick + "</p>" +
+      "<p>" + (item.reason || "") + "</p>" +
+      "<span>Confidence: " + (item.confidence || "N/A") + "</span>" +
       "</div>";
   });
 }
@@ -500,7 +376,6 @@ function loadSummaryCards() {
     const top = [...hr].sort(function(a, b) {
       return calculatePopsScore(b) - calculatePopsScore(a);
     })[0];
-
     const el = document.getElementById("topHRPick");
     if (el) el.textContent = top.player;
   }
