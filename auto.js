@@ -85,7 +85,32 @@ async function loadAutoSlate() {
     });
 
    document.getElementById("slateList").innerHTML = cards.join("");
-   document.getElementById("pitcherTargetsList").innerHTML =
+   const moneyList = document.getElementById("moneylineList");
+
+if (moneyList) {
+  moneyList.innerHTML = games.map(g => {
+
+    const away = g.teams.away.team.name;
+    const home = g.teams.home.team.name;
+
+    const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
+    const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
+
+    const pick = getMoneylinePick(
+      away,
+      home,
+      awayPitcher,
+      homePitcher
+    );
+
+    return `
+      <div class="model-card">
+        <h3>💰 ${pick}</h3>
+        <p>${away} vs ${home}</p>
+      </div>
+    `;
+  }).join("");
+}    document.getElementById("pitcherTargetsList").innerHTML =
 games.map(g => {
 
     const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
