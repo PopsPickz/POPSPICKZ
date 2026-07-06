@@ -1,3 +1,8 @@
+// ===============================
+// POPS Pickz 6.0 — engine.js
+// Scores + filters 8.0+ plays
+// ===============================
+
 function calculateModelScore(model = {}, weights = {}) {
   let total = 0;
 
@@ -11,7 +16,7 @@ function calculateModelScore(model = {}, weights = {}) {
 }
 
 function scoreToRating(score) {
-  return Number((score / 10).toFixed(1));
+  return Number((Number(score) / 10).toFixed(1));
 }
 
 function getPopsTier(rating) {
@@ -29,7 +34,7 @@ function qualifiesForSite(rating) {
 function scorePlay(play = {}, modelType = "moneyline") {
   const weights = POPS.weights[modelType];
 
-  if (!weights || !play.model) {
+  if (!weights) {
     return {
       ...play,
       score: 0,
@@ -39,7 +44,8 @@ function scorePlay(play = {}, modelType = "moneyline") {
     };
   }
 
-  const score = calculateModelScore(play.model, weights);
+  const model = play.popsModel || play.model || {};
+  const score = calculateModelScore(model, weights);
   const rating = scoreToRating(score);
   const tier = getPopsTier(rating);
 
@@ -57,15 +63,4 @@ function scoreCategory(items = [], modelType = "moneyline") {
     .map(item => scorePlay(item, modelType))
     .filter(item => item.showOnSite)
     .sort((a, b) => b.rating - a.rating);
-}
-
-function applyPopsAnalytics() {
-  if (!window.todayData) return;
-
-  todayData.scored = {
-    moneyline: scoreCategory(todayData.moneyline || [], "moneyline"),
-    hr: scoreCategory(todayData.hr || [], "hr"),
-    hits: scoreCategory(todayData.hits || [], "hits"),
-    nrfi: scoreCategory(todayData.nrfi || [], "nrfi")
-  };
 }
