@@ -170,7 +170,30 @@ function getTargetGrade(score) {
   if (score >= 70) return "🔥🔥🔥";
   if (score >= 60) return "🔥🔥";
   return "🔥";
-}async function loadAutoSlate() {
+function getNRFIScore(awayPitcher, homePitcher, awayTeam, homeTeam) {
+  const awayPitcherScore = getPitcherScore(awayPitcher);
+  const homePitcherScore = getPitcherScore(homePitcher);
+
+  const awayHRRisk = getHRRiskScore(awayPitcher);
+  const homeHRRisk = getHRRiskScore(homePitcher);
+  const nrfiScore = getNRFIScore(awayPitcher, homePitcher, away, home);
+  const nrfiPick = getNRFIPick(nrfiScore);  const awayRun = getRunSupportScore(awayTeam);
+  const homeRun = getRunSupportScore(homeTeam);
+
+  let score = 50;
+
+  score += (awayPitcherScore + homePitcherScore) / 4;
+  score -= (awayHRRisk + homeHRRisk) / 6;
+  score -= (awayRun + homeRun) / 10;
+
+  return Math.max(30, Math.min(95, Math.round(score)));
+}
+
+function getNRFIPick(score) {
+  if (score >= 80) return "🟢 Elite NRFI";
+  if (score >= 65) return "🟡 NRFI Lean";
+  return "🔴 YRFI Alert";
+}}async function loadAutoSlate() {
   const slateBox = document.getElementById("slateList");
   if (!slateBox) return;
 
