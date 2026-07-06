@@ -158,95 +158,79 @@ function showGameBreakdown(gameName) {
 
   section.innerHTML =
     "<div class='model-card premium-card'>" +
-    "<h2>⚾ " +
-    game.game +
-    "</h2>" +
+      "<h2>⚾ " + game.game + "</h2>" +
+      "<p><strong>POPS Final Grade:</strong> " + (game.finalGrade || "TBD") + "</p>" +
     "</div>" +
 
     "<div class='model-card'>" +
-    "<h3>⚾ Pitcher Matchups</h3>" +
-    "<p><strong>" +
-    game.pitchers.away.name +
-    "</strong></p>" +
-    "<p>" +
-    game.pitchers.away.stats +
-    "</p>" +
-    "<span>Danger Rating: " +
-    game.pitchers.away.risk +
-    "</span>" +
-    "<hr>" +
-    "<p><strong>" +
-    game.pitchers.home.name +
-    "</strong></p>" +
-    "<p>" +
-    game.pitchers.home.stats +
-    "</p>" +
-    "<span>Danger Rating: " +
-    game.pitchers.home.risk +
-    "</span>" +
+      "<h3>💰 POPS Moneyline</h3>" +
+      "<p><strong>Pick:</strong> " + game.moneylinePick.pick + "</p>" +
+      "<p><strong>Confidence:</strong> " + game.moneylinePick.confidence + "</p>" +
+      "<p><strong>Vegas Line:</strong> " + (game.moneylinePick.line || "TBD") + "</p>" +
+      "<p>" + game.moneylinePick.reason + "</p>" +
     "</div>" +
 
     "<div class='model-card'>" +
-    "<h3>💰 POPS Moneyline Pick</h3>" +
-    "<p><strong>" +
-    game.moneylinePick.pick +
-    "</strong></p>" +
-    "<p>" +
-    game.moneylinePick.reason +
-    "</p>" +
-    "<span>Confidence: " +
-    game.moneylinePick.confidence +
-    "</span>" +
+      "<h3>🎯 Starting Pitchers</h3>" +
+      formatPitcher(game.pitchers.away) +
+      "<hr>" +
+      formatPitcher(game.pitchers.home) +
     "</div>" +
 
     "<div class='model-card'>" +
-    "<h3>💣 Best HR Targets</h3>" +
-    formatGameTargets(game.hrTargets) +
+      "<h3>📊 Best Hit Targets</h3>" +
+      formatGameTargets(game.hitTargets, "hit") +
     "</div>" +
 
     "<div class='model-card'>" +
-    "<h3>⚾ Best Hit Targets</h3>" +
-    formatGameTargets(game.hitTargets) +
+      "<h3>💣 Home Run Model</h3>" +
+      formatGameTargets(game.hrTargets, "hr") +
     "</div>" +
 
     "<div class='model-card'>" +
-    "<h3>🌦 Weather</h3>" +
-    "<p>Wind: " +
-    game.weather.wind +
-    "</p>" +
-    "<p>Direction: " +
-    game.weather.direction +
-    "</p>" +
-    "<p>Rain: " +
-    game.weather.rain +
-    "</p>" +
-    "<span>Weather Score: " +
-    game.weather.score +
-    "</span>" +
+      "<h3>🌦 Weather Center</h3>" +
+      "<p><strong>Temperature:</strong> " + game.weather.temp + "</p>" +
+      "<p><strong>Wind:</strong> " + game.weather.wind + " " + game.weather.direction + "</p>" +
+      "<p><strong>Rain:</strong> " + game.weather.rain + "</p>" +
+      "<p><strong>HR Boost:</strong> " + game.weather.score + "</p>" +
     "</div>" +
 
     "<div class='model-card'>" +
-    "<h3>🚦 NRFI / YRFI</h3>" +
-    "<p><strong>" +
-    game.nrfi.pick +
-    "</strong></p>" +
-    "<p>" +
-    game.nrfi.reason +
-    "</p>" +
-    "<span>Confidence: " +
-    game.nrfi.confidence +
-    "</span>" +
+      "<h3>🚦 NRFI / YRFI Model</h3>" +
+      "<p><strong>Pick:</strong> " + game.nrfi.pick + "</p>" +
+      "<p><strong>Confidence:</strong> " + game.nrfi.confidence + "</p>" +
+      "<p>" + game.nrfi.reason + "</p>" +
+    "</div>" +
+
+    "<div class='model-card'>" +
+      "<h3>📈 Team Comparison</h3>" +
+      "<p><strong>Starting Pitching:</strong> " + (game.teamEdge?.startingPitching || "TBD") + "</p>" +
+      "<p><strong>Bullpen:</strong> " + (game.teamEdge?.bullpen || "TBD") + "</p>" +
+      "<p><strong>Offense:</strong> " + (game.teamEdge?.offense || "TBD") + "</p>" +
+      "<p><strong>Defense:</strong> " + (game.teamEdge?.defense || "TBD") + "</p>" +
+      "<p><strong>Recent Form:</strong> " + (game.teamEdge?.recentForm || "TBD") + "</p>" +
     "</div>";
 
   const breakdown = document.getElementById("gameBreakdown");
   if (breakdown) {
-    breakdown.scrollIntoView({
-      behavior: "smooth"
-    });
+    breakdown.scrollIntoView({ behavior: "smooth" });
   }
 }
 
-function formatGameTargets(players) {
+function formatPitcher(pitcher) {
+  return (
+    "<p><strong>" + pitcher.name + " - " + pitcher.team + "</strong></p>" +
+    "<p>" + pitcher.stats + "</p>" +
+    "<p><strong>ERA:</strong> " + (pitcher.era || "TBD") + "</p>" +
+    "<p><strong>WHIP:</strong> " + (pitcher.whip || "TBD") + "</p>" +
+    "<p><strong>HR/9:</strong> " + (pitcher.hr9 || "TBD") + "</p>" +
+    "<p><strong>Hard-Hit Allowed:</strong> " + (pitcher.hardHit || "TBD") + "</p>" +
+    "<p><strong>Barrel Allowed:</strong> " + (pitcher.barrel || "TBD") + "</p>" +
+    "<span>Danger Rating: " + pitcher.risk + "</span>"
+  );
+}
+
+function formatGameTargets(players, type) {
   if (!players || players.length === 0) {
     return "<p>No targets loaded.</p>";
   }
@@ -255,11 +239,11 @@ function formatGameTargets(players) {
 
   players.forEach(function(player) {
     html +=
-      "<li><strong>" +
-      player.player +
-      "</strong> — " +
-      player.score +
-      "</li>";
+      "<li>" +
+      "<strong>" + player.player + "</strong><br>" +
+      "<span>POPS Score: " + (player.score || "TBD") + "</span><br>" +
+      "<small>" + (player.reason || "Strong POPS profile.") + "</small>" +
+      "</li><br>";
   });
 
   html += "</ol>";
