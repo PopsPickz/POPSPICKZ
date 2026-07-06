@@ -642,15 +642,16 @@ function loadSummaryCards() {
 }
 
 function initDashboard() {
-  loadMLBScores();
-  loadDailySlate();
-  loadHRPicks();
-  loadBatterStats();
-  loadPitcherTargets();
-  loadMoneyline();
-  loadWeather();
-  loadNRFI();
-  loadSummaryCards();
+  // loadMLBScores();   // Disabled
+
+loadDailySlate();
+loadHRPicks();
+loadBatterStats();
+loadPitcherTargets();
+loadMoneyline();
+loadWeather();
+loadNRFI();
+loadSummaryCards();
 }
 
 initDashboard();
