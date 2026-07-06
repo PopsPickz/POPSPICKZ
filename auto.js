@@ -84,9 +84,27 @@ async function loadAutoSlate() {
       `;
     });
 
-    slateBox.innerHTML = cards.join("");
+   document.getElementById("slateList").innerHTML = cards.join("");
+   document.getElementById("pitcherTargetsList").innerHTML =
+games.map(g => {
 
-  } catch (err) {
+    const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
+    const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
+
+    const awayRisk = getHRRiskScore(awayPitcher);
+    const homeRisk = getHRRiskScore(homePitcher);
+
+    const target =
+        awayRisk > homeRisk
+            ? ⁠ ${awayPitcher} 🔥 ${awayRisk}/100 ⁠
+            : ⁠ ${homePitcher} 🔥 ${homeRisk}/100 ⁠;
+
+    return `
+        <div class="model-card">
+            <strong>${target}</strong>
+        </div>
+    `;
+}).join("");  } catch (err) {
     slateBox.innerHTML = "<div class='model-card'>Could not load POPS Pickz AI slate.</div>";
     console.error(err);
   }
