@@ -219,14 +219,16 @@ function renderMoneyline(gameModels) {
 
       const confidence = Math.max(80, Math.min(98, Math.round(70 + Math.abs(edge))));
       const rating = ratingFromScore(confidence);
-
-      return `
+      const reasons = buildMoneylineExplanation(g);      return `
         <div class="model-card">
           <h3>💰 ${g.model.moneyline}</h3>
           <p><strong>${g.away} vs ${g.home}</strong></p>
           <p><strong>POPS Rating:</strong> ${g.rating}/10</p>
           <p><strong>Tier:</strong> ${g.tier}</p>
-          <p><strong>Confidence:</strong> ${confidence}/100</p>
+          <div class="ai-box">
+          <strong>Why POPS Likes It:</strong>
+  ${reasons.map(r => ⁠ <p>${r}</p> ⁠).join("")}
+</div>          <p><strong>Confidence:</strong> ${confidence}/100</p>
           <p><strong>Display Rating:</strong> ${rating}/10</p>
           <p><strong>Run Support:</strong> ${g.away} ${g.model.awayRun}/100 vs ${g.home} ${g.model.homeRun}/100</p>
         </div>
