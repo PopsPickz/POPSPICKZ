@@ -10,10 +10,23 @@ async function loadAutoSlate() {
   slateBox.innerHTML = loadingCard("Loading POPS Pickz 8.0 slate...");
 
   try {
-    const games = await getTodaysGames();
-    const teamStats = await getTeamStats();
-    const pitcherStats = await getPitcherStats();
-    const hitterStats = await getHitterStats();
+    console.log("Loading Games...");
+const games = await getTodaysGames();
+console.log("Games:", games);
+
+console.log("Loading Team Stats...");
+const teamStats = await getTeamStats();
+console.log("Teams:", teamStats);
+
+console.log("Loading Pitchers...");
+const pitcherStats = await getPitcherStats();
+console.log("Pitchers:", pitcherStats);
+
+console.log("Loading Hitters...");
+const hitterStats = await getHitterStats();
+console.log("Hitters:", hitterStats);
+
+console.log("Finished Loading APIs");
 
     if (!games || !games.length) {
       slateBox.innerHTML = loadingCard("No MLB games found today.");
