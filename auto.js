@@ -20,7 +20,7 @@ async function loadAutoSlate() {
       const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
       const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
       const venue = g.venue?.name || "Unknown Stadium";
-
+      const weather = await getGameWeather(venue, g.gameDate);      
       const gameTime = new Date(g.gameDate).toLocaleTimeString([], {
         hour: "numeric",
         minute: "2-digit"
