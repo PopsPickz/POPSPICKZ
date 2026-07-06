@@ -5,9 +5,9 @@ async function loadAutoSlate() {
   slateBox.innerHTML = "<div class='model-card'>Loading POPS Pickz AI slate...</div>";
 
   try {
-    const games = await fetchMLBSchedule();
-    const teamStats = await fetchTeamStats();
-    const pitcherStats = await fetchPitcherStats();
+    const games = await getTodaysGames();
+    const teamStats = await getTeamStats();
+    const pitcherStats = await getPitcherStats();
 
     if (!games.length) {
       slateBox.innerHTML = "<div class='model-card'>No MLB games found today.</div>";
