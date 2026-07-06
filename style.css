@@ -294,3 +294,66 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+/* =======================================
+   POPS Pickz 6.0 Premium Ratings
+=======================================*/
+
+.rating-badge{
+display:inline-block;
+padding:8px 14px;
+margin:8px 0;
+border-radius:999px;
+font-weight:900;
+font-size:15px;
+letter-spacing:.5px;
+text-transform:uppercase;
+}
+
+.tier-elite{
+background:#8a2be2;
+color:#fff;
+box-shadow:0 0 20px #8a2be2;
+}
+
+.tier-excellent{
+background:#00c853;
+color:#fff;
+box-shadow:0 0 20px #00c853;
+}
+
+.tier-verystrong{
+background:#2196f3;
+color:#fff;
+box-shadow:0 0 20px #2196f3;
+}
+
+.tier-strong{
+background:#f5b700;
+color:#000;
+box-shadow:0 0 20px #f5b700;
+}
+
+.pops-rating{
+font-size:26px;
+font-weight:900;
+color:#39ff14;
+text-shadow:0 0 12px rgba(57,255,20,.6);
+margin:8px 0;
+}
+
+.pops-score{
+color:#f5b700;
+font-size:17px;
+font-weight:800;
+}
+
+.model-card:hover{
+transform:translateY(-4px);
+transition:.25s;
+}
+
+.premium-card:hover{
+transform:scale(1.02);
+transition:.25s;
+box-shadow:0 0 28px rgba(245,183,0,.45);
+}
