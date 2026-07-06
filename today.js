@@ -2,13 +2,15 @@ const todayData = {
   games: [
     {
       game: "Boston Red Sox vs Los Angeles Angels",
+      time: "9:31 PM ET",
+      venue: "Angel Stadium",
       finalGrade: "A",
 
       pitchers: {
         away: {
           name: "R. Suarez",
           team: "Boston Red Sox",
-          stats: "LHP • Strong starter profile • Lower run-risk arm • Limits damage better than Angels side",
+          stats: "LHP • POPS pitching edge • lower run-risk starter • gives Boston the matchup advantage",
           era: "TBD",
           whip: "TBD",
           hr9: "TBD",
@@ -19,7 +21,7 @@ const todayData = {
         home: {
           name: "R. Johnson",
           team: "Los Angeles Angels",
-          stats: "RHP • High-risk target • Struggles with traffic on base • Boston bats get the matchup edge",
+          stats: "RHP • POPS target pitcher • Boston bats get the better hit and HR setup",
           era: "TBD",
           whip: "TBD",
           hr9: "TBD",
@@ -33,23 +35,32 @@ const todayData = {
         pick: "Boston Red Sox",
         line: "-154",
         confidence: "72%",
-        reason: "Boston has the better pitching edge with Suarez, stronger hit-target group, and favorable matchup vs Johnson."
+        reason: "Boston has the starting pitching edge with Suarez, stronger hit targets, and the market favorite price."
       },
 
       hrTargets: [
-        { player: "Wilyer Abreu", score: "88/100", reason: "Strong power profile plus wind blowing out." },
-        { player: "Willson Contreras", score: "86/100", reason: "Power bat with strong HR odds." },
-        { player: "Zach Neto", score: "82/100", reason: "Best Angels HR profile despite tougher matchup." },
-        { player: "Jarren Duran", score: "80/100", reason: "Contact plus extra-base upside." },
-        { player: "Jorge Soler", score: "78/100", reason: "Power upside hitter." }
+        { player: "Wilyer Abreu", score: "90/100", reason: "Best HR odds on board at +330 plus strong Boston matchup." },
+        { player: "Willson Contreras", score: "88/100", reason: "+360 HR price with strong power profile." },
+        { player: "Zach Neto", score: "84/100", reason: "Top Angels HR profile at +400." },
+        { player: "Jarren Duran", score: "82/100", reason: "Good lineup spot and +430 HR value." },
+        { player: "Jorge Soler", score: "80/100", reason: "Power bat with +450 HR upside." },
+        { player: "Jo Adell", score: "78/100", reason: "Power-first hitter with +470 HR value." },
+        { player: "Jose Siri", score: "76/100", reason: "+480 HR dart with power upside." },
+        { player: "Carlos Narvaez", score: "72/100", reason: "+600 long-shot HR value." },
+        { player: "Masataka Yoshida", score: "70/100", reason: "Better hit target than HR target but playable at +680." },
+        { player: "Anthony Seigler", score: "66/100", reason: "+800 long-shot HR option." }
       ],
 
       hitTargets: [
-        { player: "Wilyer Abreu", score: "94/100", reason: "Best overall POPS hit target in this game." },
-        { player: "Jarren Duran", score: "91/100", reason: "Contact, speed, and lineup value." },
-        { player: "Masataka Yoshida", score: "89/100", reason: "Contact-first hitter with strong single/double chance." },
-        { player: "Zach Neto", score: "84/100", reason: "Top Angels hit profile." },
-        { player: "Carlos Narvaez", score: "78/100", reason: "Lower-tier hit target with matchup upside." }
+        { player: "Wilyer Abreu", score: "94/100", reason: "Top POPS hit target with favorable matchup vs Johnson." },
+        { player: "Jarren Duran", score: "91/100", reason: "Contact, speed, and lineup value make him a strong hit target." },
+        { player: "Masataka Yoshida", score: "89/100", reason: "Contact-first profile with strong single/double chance." },
+        { player: "Carlos Narvaez", score: "84/100", reason: "Good Boston value hit target lower in the order." },
+        { player: "Ceddanne Rafaela", score: "82/100", reason: "Athletic contact profile with hit upside." },
+        { player: "Zach Neto", score: "81/100", reason: "Best Angels hit profile despite tougher matchup." },
+        { player: "Jo Adell", score: "77/100", reason: "Power upside but more strikeout risk." },
+        { player: "Jorge Soler", score: "76/100", reason: "Power bat; less safe for hits than HRs." },
+        { player: "Logan O'Hoppe", score: "74/100", reason: "Lower-tier Angels hit option." }
       ],
 
       weather: {
@@ -63,7 +74,7 @@ const todayData = {
       nrfi: {
         pick: "NRFI Lean",
         confidence: "60%",
-        reason: "Suarez supports NRFI, but Johnson and wind out create some YRFI danger."
+        reason: "Suarez gives Boston the first-inning pitching edge, but Johnson and wind out create some YRFI danger."
       },
 
       teamEdge: {
@@ -71,110 +82,76 @@ const todayData = {
         bullpen: "TBD",
         offense: "Boston Red Sox",
         defense: "TBD",
-        recentForm: "TBD"
+        recentForm: "Boston Red Sox"
       }
     }
   ],
 
   hrPicks: [
-    {
-      player: "Wilyer Abreu",
-      matchup: "vs R. Johnson",
-      barrel: 14,
-      hardHit: 48,
-      iso: 0.230,
-      hr9: 1.7,
-      weather: 8,
-      ballpark: 7,
-      platoon: 7
-    },
-    {
-      player: "Willson Contreras",
-      matchup: "vs R. Johnson",
-      barrel: 13,
-      hardHit: 47,
-      iso: 0.220,
-      hr9: 1.7,
-      weather: 8,
-      ballpark: 7,
-      platoon: 7
-    },
-    {
-      player: "Zach Neto",
-      matchup: "vs R. Suarez",
-      barrel: 12,
-      hardHit: 45,
-      iso: 0.210,
-      hr9: 1.0,
-      weather: 8,
-      ballpark: 7,
-      platoon: 6
-    },
-    {
-      player: "Jarren Duran",
-      matchup: "vs R. Johnson",
-      barrel: 10,
-      hardHit: 44,
-      iso: 0.190,
-      hr9: 1.7,
-      weather: 8,
-      ballpark: 7,
-      platoon: 7
-    }
+    { player: "Wilyer Abreu", matchup: "vs R. Johnson", barrel: 14, hardHit: 48, iso: 0.230, hr9: 1.7, weather: 8, ballpark: 7, platoon: 7 },
+    { player: "Willson Contreras", matchup: "vs R. Johnson", barrel: 13, hardHit: 47, iso: 0.220, hr9: 1.7, weather: 8, ballpark: 7, platoon: 7 },
+    { player: "Zach Neto", matchup: "vs R. Suarez", barrel: 12, hardHit: 45, iso: 0.210, hr9: 1.0, weather: 8, ballpark: 7, platoon: 6 },
+    { player: "Jarren Duran", matchup: "vs R. Johnson", barrel: 10, hardHit: 44, iso: 0.190, hr9: 1.7, weather: 8, ballpark: 7, platoon: 7 },
+    { player: "Jorge Soler", matchup: "vs R. Suarez", barrel: 13, hardHit: 46, iso: 0.220, hr9: 1.0, weather: 8, ballpark: 7, platoon: 6 },
+    { player: "Jo Adell", matchup: "vs R. Suarez", barrel: 12, hardHit: 45, iso: 0.210, hr9: 1.0, weather: 8, ballpark: 7, platoon: 6 },
+    { player: "Jose Siri", matchup: "vs R. Suarez", barrel: 11, hardHit: 43, iso: 0.200, hr9: 1.0, weather: 8, ballpark: 7, platoon: 6 },
+    { player: "Carlos Narvaez", matchup: "vs R. Johnson", barrel: 9, hardHit: 41, iso: 0.170, hr9: 1.7, weather: 8, ballpark: 7, platoon: 7 },
+    { player: "Masataka Yoshida", matchup: "vs R. Johnson", barrel: 7, hardHit: 39, iso: 0.150, hr9: 1.7, weather: 8, ballpark: 7, platoon: 7 },
+    { player: "Anthony Seigler", matchup: "vs R. Johnson", barrel: 8, hardHit: 38, iso: 0.160, hr9: 1.7, weather: 8, ballpark: 7, platoon: 7 }
   ],
 
   batterStats: [
     {
       player: "Wilyer Abreu",
       matchup: "vs R. Johnson",
-      hrScore: "88/100",
+      hrScore: "90/100",
       hitScore: "94/100",
-      hitModel: "Strong contact profile • favorable pitcher matchup • good weather boost",
-      why: "Best overall POPS hit target in this game."
+      hitModel: "Strong contact profile • favorable pitcher matchup • best Boston HR price",
+      why: "Best overall POPS hitter in this game."
     },
     {
       player: "Jarren Duran",
       matchup: "vs R. Johnson",
-      hrScore: "80/100",
+      hrScore: "82/100",
       hitScore: "91/100",
-      hitModel: "Contact + speed profile • good lineup position • strong hit chance",
-      why: "Better hit target than pure HR target."
+      hitModel: "Contact + speed + lineup value",
+      why: "Better hit target than HR target."
     },
     {
       player: "Masataka Yoshida",
       matchup: "vs R. Johnson",
-      hrScore: "72/100",
+      hrScore: "70/100",
       hitScore: "89/100",
-      hitModel: "Contact-first hitter • low strikeout style • good single/double chance",
-      why: "Strong POPS hit target."
+      hitModel: "Contact-first hitter • low strikeout style",
+      why: "Strong hit target for singles/doubles."
+    },
+    {
+      player: "Carlos Narvaez",
+      matchup: "vs R. Johnson",
+      hrScore: "72/100",
+      hitScore: "84/100",
+      hitModel: "Boston lineup value • cheaper HR price",
+      why: "Sneaky POPS value."
     },
     {
       player: "Zach Neto",
       matchup: "vs R. Suarez",
-      hrScore: "82/100",
-      hitScore: "84/100",
-      hitModel: "Best Angels hit profile despite tougher pitcher matchup",
-      why: "Top Angels bat to consider."
-    },
-    {
-      player: "Jo Adell",
-      matchup: "vs R. Suarez",
-      hrScore: "78/100",
-      hitScore: "76/100",
-      hitModel: "Power upside • higher strikeout risk",
-      why: "Better HR dart than safe hit target."
+      hrScore: "84/100",
+      hitScore: "81/100",
+      hitModel: "Best Angels hitter profile",
+      why: "Top Angels bat despite tougher pitching matchup."
     }
   ],
 
   pitcherTargets: [
     {
       pitcher: "R. Johnson",
-      stats: "RHP • Target pitcher for Boston bats • higher traffic risk • HR and hit opportunity allowed",
+      stats: "RHP • Target pitcher for Boston bats • Boston has hit and HR edge",
       grade: "🔥🔥🔥🔥"
     },
     {
       pitcher: "R. Suarez",
-      stats: "LHP • Stronger starter • lower hit-risk profile • Angels bats have tougher matchup",
+      stats: "LHP • Stronger starter • Angels bats have tougher matchup",
       grade: "🔥🔥"
     }
   ],
