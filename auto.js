@@ -55,6 +55,8 @@ async function getWeather(venueName, gameDate) {
 }
 
 async function loadAutoSlate() {
+  await loadTeamStats();
+  
   const slateBox = document.getElementById("gameList");
   if (!slateBox) return;
 
@@ -112,13 +114,46 @@ function getPitcherScore(pitcherName) {
   return 70;
 }
 
+let teamStatsMap = {};
+
+async function loadTeamStats() {
+  const url = "https://statsapi.mlb.com/api/v1/teams/stats?stats=season&group=hitting&sportIds=1";
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  const splits = data.stats?.[0]?.splits || [];
+
+  splits.forEach(item => {
+    const teamName = item.team.name;
+    const stat = item.stat;
+
+    teamStatsMap[teamName] = {
+      runs: Number(stat.runs || 0),
+      avg: Number(stat.avg || 0),
+      obp: Number(stat.obp || 0),
+      slg: Number(stat.slg || 0),
+      ops: Number(stat.ops || 0)
+    };
+  });
+}
+
 function getRunSupportScore(teamName) {
-  const eliteTeams = [
-    "Los Angeles Dodgers",
-    "New York Yankees",
-    "Philadelphia Phillies",
-    "Atlanta Braves"
-  ];
+  const stats = teamStatsMap[teamName];
+
+  if (!stats) return 70;
+
+  let score = 50;
+
+  score += stats.ops * 40;
+  score += stats.obp * 30;
+  score += stats.slg * 25;
+
+  if (stats.runs > 500) score += 8;
+  if (stats.runs > 600) score += 5;
+
+  return Math.max(50, Math.min(98, Math.round(score)));
+}
 
   const strongTeams = [
     "Toronto Blue Jays",
