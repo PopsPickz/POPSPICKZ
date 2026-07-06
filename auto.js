@@ -1,229 +1,25 @@
-const stadiums = {
-  "Kauffman Stadium": { lat: 39.0517, lon: -94.4803 },
-  "George M. Steinbrenner Field": { lat: 27.9799, lon: -82.5067 },
-  "Nationals Park": { lat: 38.8730, lon: -77.0074 },
-  "Truist Park": { lat: 33.8908, lon: -84.4678 },
-  "Busch Stadium": { lat: 38.6226, lon: -90.1928 },
-  "Petco Park": { lat: 32.7073, lon: -117.1566 },
-  "Oracle Park": { lat: 37.7786, lon: -122.3893 },
-  "Dodger Stadium": { lat: 34.0739, lon: -118.2400 },
-  "Yankee Stadium": { lat: 40.8296, lon: -73.9262 },
-  "Fenway Park": { lat: 42.3467, lon: -71.0972 },
-  "Wrigley Field": { lat: 41.9484, lon: -87.6553 },
-  "Citi Field": { lat: 40.7571, lon: -73.8458 }
-};
-
-let teamStatsMap = {};
-let pitcherStatsMap = {};
-
-async function loadTeamStats() {
-  const url = "https://statsapi.mlb.com/api/v1/teams/stats?stats=season&group=hitting&sportIds=1";
-  const res = await fetch(url);
-  const data = await res.json();
-
-  const splits = data.stats?.[0]?.splits || [];
-
-  splits.forEach(item => {
-    const teamName = item.team.name;
-    const stat = item.stat;
-
-    teamStatsMap[teamName] = {
-      runs: Number(stat.runs || 0),
-      avg: Number(stat.avg || 0),
-      obp: Number(stat.obp || 0),
-      slg: Number(stat.slg || 0),
-      ops: Number(stat.ops || 0)
-    };
-  });
-}
-
-function getRunSupportScore(teamName) {
-  const stats = teamStatsMap[teamName];
-  if (!stats) return 70;
-
-  let score = 50;
-  score += stats.ops * 40;
-  score += stats.obp * 30;
-  score += stats.slg * 25;
-
-  if (stats.runs > 500) score += 8;
-  if (stats.runs > 600) score += 5;
-
-  return Math.max(50, Math.min(98, Math.round(score)));
-}
-
-async function loadPitcherStats() {
-  const url = "https://statsapi.mlb.com/api/v1/stats?stats=season&group=pitching&playerPool=ALL&sportIds=1&limit=5000";
-  const res = await fetch(url);
-  const data = await res.json();
-
-  const splits = data.stats?.[0]?.splits || [];
-
-  splits.forEach(item => {
-    const name = item.player.fullName;
-    const stat = item.stat;
-
-    pitcherStatsMap[name] = {
-      era: stat.era || "N/A",
-      whip: stat.whip || "N/A",
-      innings: stat.inningsPitched || "0",
-      strikeouts: Number(stat.strikeOuts || 0),
-      walks: Number(stat.baseOnBalls || 0),
-      homeRuns: Number(stat.homeRuns || 0)
-    };
-  });
-}
-
-function getPitcherStats(pitcherName) {
-  return pitcherStatsMap[pitcherName] || {
-    era: "N/A",
-    whip: "N/A",
-    innings: "0",
-    strikeouts: 0,
-    walks: 0,
-    homeRuns: 0
-  };
-}
-
-function getPitcherScore(pitcherName) {
-  const p = getPitcherStats(pitcherName);
-  if (p.era === "N/A") return 50;
-
-  let score = 75;
-  const era = Number(p.era);
-  const whip = Number(p.whip);
-
-  if (era <= 3.00) score += 12;
-  else if (era <= 4.00) score += 6;
-  else if (era >= 5.00) score -= 12;
-
-  if (whip <= 1.15) score += 8;
-  else if (whip >= 1.40) score -= 8;
-
-  if (p.homeRuns >= 20) score -= 6;
-  if (p.walks > p.strikeouts * 0.4) score -= 5;
-
-  return Math.max(40, Math.min(98, Math.round(score)));
-}
-
-function getHRRiskScore(pitcherName) {
-  const p = getPitcherStats(pitcherName);
-  if (p.era === "N/A") return 50;
-
-  let score = 50;
-  const era = Number(p.era);
-  const whip = Number(p.whip);
-
-  score += p.homeRuns * 1.5;
-
-  if (era >= 5.00) score += 15;
-  else if (era >= 4.25) score += 8;
-
-  if (whip >= 1.40) score += 10;
-  else if (whip >= 1.30) score += 5;
-
-  if (p.walks > p.strikeouts * 0.4) score += 6;
-
-  return Math.max(40, Math.min(99, Math.round(score)));
-}
-
-function getMoneylinePick(away, home, awayPitcher, homePitcher) {
-  const awayTotal = getRunSupportScore(away) + getPitcherScore(awayPitcher);
-  const homeTotal = getRunSupportScore(home) + getPitcherScore(homePitcher) + 3;
-
-  return homeTotal >= awayTotal ? home : away;
-}
-
-async function getWeather(venueName, gameDate) {
-  const venue = stadiums[venueName];
-
-  if (!venue) {
-    return { temp: "N/A", wind: "N/A", note: "Weather unavailable" };
-  }
-
-  const weatherUrl = ⁠ https://api.open-meteo.com/v1/forecast?latitude=${venue.lat}&longitude=${venue.lon}&hourly=temperature_2m,wind_speed_10m,wind_direction_10m&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto ⁠;
-
-  try {
-    const res = await fetch(weatherUrl);
-    const data = await res.json();
-
-    const gameHour = new Date(gameDate).getHours();
-    const index = data.hourly.time.findIndex(t => new Date(t).getHours() === gameHour);
-
-    if (index === -1) {
-      return { temp: "N/A", wind: "N/A", note: "Weather time unavailable" };
-    }
-
-    return {
-      temp: Math.round(data.hourly.temperature_2m[index]) + "°F",
-      wind: Math.round(data.hourly.wind_speed_10m[index]) + " mph",
-      direction: Math.round(data.hourly.wind_direction_10m[index]) + "°",
-      note: "Auto weather"
-    };
-  } catch (err) {
-    return { temp: "N/A", wind: "N/A", note: "Weather error" };
-  }
-}
-function getTargetGrade(score) {
-  if (score >= 90) return "🔥🔥🔥🔥🔥";
-  if (score >= 80) return "🔥🔥🔥🔥";
-  if (score >= 70) return "🔥🔥🔥";
-  if (score >= 60) return "🔥🔥";
-  return "🔥";
-function getNRFIScore(awayPitcher, homePitcher, awayTeam, homeTeam) {
-  const awayPitcherScore = getPitcherScore(awayPitcher);
-  const homePitcherScore = getPitcherScore(homePitcher);
-
-  const awayHRRisk = getHRRiskScore(awayPitcher);
-  const homeHRRisk = getHRRiskScore(homePitcher);
-  const nrfiScore = getNRFIScore(awayPitcher, homePitcher, away, home);
-  const nrfiPick = getNRFIPick(nrfiScore);  const awayRun = getRunSupportScore(awayTeam);
-  const homeRun = getRunSupportScore(homeTeam);
-
-  let score = 50;
-
-  score += (awayPitcherScore + homePitcherScore) / 4;
-  score -= (awayHRRisk + homeHRRisk) / 6;
-  score -= (awayRun + homeRun) / 10;
-
-  return Math.max(30, Math.min(95, Math.round(score)));
-}
-
-function getNRFIPick(score) {
-  if (score >= 80) return "🟢 Elite NRFI";
-  if (score >= 65) return "🟡 NRFI Lean";
-  return "🔴 YRFI Alert";
-}}async function loadAutoSlate() {
+async function loadAutoSlate() {
   const slateBox = document.getElementById("slateList");
   if (!slateBox) return;
 
-  slateBox.innerHTML = "<div class='model-card'>Loading auto MLB slate...</div>";
+  slateBox.innerHTML = "<div class='model-card'>Loading POPS Pickz AI slate...</div>";
 
   try {
-    await loadTeamStats();
-    await loadPitcherStats();
-
-    const today = new Date().toISOString().split("T")[0];
-    const url = ⁠ https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=probablePitcher,venue ⁠;
-
-    const res = await fetch(url);
-    const data = await res.json();
-
-    const games = data.dates?.[0]?.games || [];
+    const games = await fetchMLBSchedule();
+    const teamStats = await fetchTeamStats();
+    const pitcherStats = await fetchPitcherStats();
 
     if (!games.length) {
       slateBox.innerHTML = "<div class='model-card'>No MLB games found today.</div>";
       return;
     }
-      const pitcherTargetList = [];    const cards = await Promise.all(games.map(async g => {
+
+    const cards = games.map(g => {
       const away = g.teams.away.team.name;
       const home = g.teams.home.team.name;
 
       const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
       const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
-
-      const awayStats = getPitcherStats(awayPitcher);
-      const homeStats = getPitcherStats(homePitcher);
 
       const venue = g.venue?.name || "Unknown Stadium";
 
@@ -232,33 +28,39 @@ function getNRFIPick(score) {
         minute: "2-digit"
       });
 
-      const weather = await getWeather(venue, g.gameDate);
+      const awayRun = runSupportScore(away, teamStats);
+      const homeRun = runSupportScore(home, teamStats);
 
-      const awayRunSupport = getRunSupportScore(away);
-      const homeRunSupport = getRunSupportScore(home);
+      const awayPitchScore = pitcherScore(awayPitcher, pitcherStats);
+      const homePitchScore = pitcherScore(homePitcher, pitcherStats);
 
-      const moneylinePick = getMoneylinePick(away, home, awayPitcher, homePitcher);
+      const awayHRRisk = hrRiskScore(awayPitcher, pitcherStats);
+      const homeHRRisk = hrRiskScore(homePitcher, pitcherStats);
 
-      const awayPitcherScore = getPitcherScore(awayPitcher);
-      const homePitcherScore = getPitcherScore(homePitcher);
+      const mlPick = moneylineLean(
+        away,
+        home,
+        awayPitcher,
+        homePitcher,
+        teamStats,
+        pitcherStats
+      );
 
-      const awayHRRisk = getHRRiskScore(awayPitcher);
-      const homeHRRisk = getHRRiskScore(homePitcher);
-pitcherTargetList.push({
-  pitcher: awayPitcher,
-  team: away,
-  opponent: home,
-  risk: awayHRRisk,
-  grade: getTargetGrade(awayHRRisk)
-});
+      const firstInningScore = nrfiScore(
+        away,
+        home,
+        awayPitcher,
+        homePitcher,
+        teamStats,
+        pitcherStats
+      );
 
-pitcherTargetList.push({
-  pitcher: homePitcher,
-  team: home,
-  opponent: away,
-  risk: homeHRRisk,
-  grade: getTargetGrade(homeHRRisk)
-});      return `
+      const firstInningPick = nrfiPick(firstInningScore);
+
+      const awayP = pitcherStats[awayPitcher] || {};
+      const homeP = pitcherStats[homePitcher] || {};
+
+      return `
         <div class="slate-card model-card">
           <h3>${away} vs ${home}</h3>
 
@@ -266,39 +68,26 @@ pitcherTargetList.push({
           <p><strong>Venue:</strong> ${venue}</p>
 
           <p><strong>${away} Pitcher:</strong> ${awayPitcher}</p>
-          <p>ERA: ${awayStats.era} | WHIP: ${awayStats.whip} | HR Allowed: ${awayStats.homeRuns} | POPS Pitcher Score: ${awayPitcherScore}/100</p>
+          <p>ERA: ${awayP.era || "N/A"} | WHIP: ${awayP.whip || "N/A"} | HR Allowed: ${awayP.homeRuns ?? "N/A"} | POPS Pitcher Score: ${awayPitchScore}/100</p>
           <p><strong>${awayPitcher} HR Risk:</strong> ${awayHRRisk}/100</p>
 
           <p><strong>${home} Pitcher:</strong> ${homePitcher}</p>
-          <p>ERA: ${homeStats.era} | WHIP: ${homeStats.whip} | HR Allowed: ${homeStats.homeRuns} | POPS Pitcher Score: ${homePitcherScore}/100</p>
+          <p>ERA: ${homeP.era || "N/A"} | WHIP: ${homeP.whip || "N/A"} | HR Allowed: ${homeP.homeRuns ?? "N/A"} | POPS Pitcher Score: ${homePitchScore}/100</p>
           <p><strong>${homePitcher} HR Risk:</strong> ${homeHRRisk}/100</p>
 
-          <p><strong>Weather:</strong> ${weather.temp}, Wind ${weather.wind}</p>
+          <p><strong>Run Support:</strong> ${away} ${awayRun}/100 vs ${home} ${homeRun}/100</p>
 
-          <p><strong>Run Support:</strong> ${away} ${awayRunSupport}/100 vs ${home} ${homeRunSupport}/100</p>
+          <p><strong>NRFI/YRFI:</strong> ${firstInningPick} — ${firstInningScore}/100</p>
 
-          <p><strong>NRFI/YRFI:</strong> ${nrfiPick} — ${nrfiScore}/100</p>
-
-          <p><strong>POPS Moneyline Lean:</strong> ✅ ${moneylinePick}</p>
+          <p><strong>POPS Moneyline Lean:</strong> ✅ ${mlPick}</p>
+        </div>
       `;
-    }));
+    });
 
     slateBox.innerHTML = cards.join("");
-pitcherTargetList.sort((a, b) => b.risk - a.risk);
 
-const targetBox = document.getElementById("pitcherTargets");
-
-if (targetBox) {
-  targetBox.innerHTML = pitcherTargetList.slice(0, 10).map(p => `
-    <div class="model-card">
-      <h3>${p.grade} ${p.pitcher}</h3>
-      <p><strong>Team:</strong> ${p.team}</p>
-      <p><strong>Opponent:</strong> ${p.opponent}</p>
-      <p><strong>HR Risk:</strong> ${p.risk}/100</p>
-    </div>
-  `).join("");
-}  } catch (err) {
-    slateBox.innerHTML = "<div class='model-card'>Could not load MLB slate.</div>";
+  } catch (err) {
+    slateBox.innerHTML = "<div class='model-card'>Could not load POPS Pickz AI slate.</div>";
     console.error(err);
   }
 }
