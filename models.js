@@ -85,3 +85,10 @@ function nrfiPick(score) {
   if (score >= 65) return "🟡 NRFI Lean";
   return "🔴 YRFI Alert";
 }
+function targetGrade(score) {
+  if (score >= 90) return "🔥🔥🔥🔥🔥";
+  if (score >= 80) return "🔥🔥🔥🔥";
+  if (score >= 70) return "🔥🔥🔥";
+  if (score >= 60) return "🔥🔥";
+  return "🔥";
+}
