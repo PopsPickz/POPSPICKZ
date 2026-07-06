@@ -26,16 +26,8 @@ async function loadAutoSlate() {
         minute: "2-digit"
       });
 
-      const awayRun = runSupportScore(away, teamStats);
-      const homeRun = runSupportScore(home, teamStats);
-      const awayPitchScore = pitcherScore(awayPitcher, pitcherStats);
-      const homePitchScore = pitcherScore(homePitcher, pitcherStats);
-      const awayHRRisk = hrRiskScore(awayPitcher, pitcherStats);
-      const homeHRRisk = hrRiskScore(homePitcher, pitcherStats);
-      const mlPick = moneylineLean(away, home, awayPitcher, homePitcher, teamStats, pitcherStats);
-      const firstInningScore = nrfiScore(away, home, awayPitcher, homePitcher, teamStats, pitcherStats);
-      const firstInningPick = nrfiPick(firstInningScore);
-
+      const model = buildGameModel(g, teamStats, pitcherStats);
+      const firstInningPick = nrfiPick(model.nrfiScore);
       const awayP = pitcherStats[awayPitcher] || {};
       const homeP = pitcherStats[homePitcher] || {};
 
