@@ -130,9 +130,9 @@ async function loadDailySlate() {
       "</span>";
 
     card.onclick = function() {
-      showGameBreakdown(away + " vs " + home);
-    };
-
+  alert(away + " vs " + home);
+  showGameBreakdown(away + " vs " + home);
+};
     slateList.appendChild(card);
   });
 }
