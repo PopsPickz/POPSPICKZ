@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>POPS Pickz Premium</title>
-  <link rel="stylesheet" href="style.css" />
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <nav class="topbar">
@@ -14,10 +16,13 @@
 </nav>
 
 <header class="command-hero">
+
   <p class="tag">MLB Daily Command Center</p>
-  <h1>Today’s POPS Board</h1>
+
+  <h1>Today's POPS Board</h1>
 
   <div class="summary-grid">
+
     <div class="summary-card">
       <span>🔥 Top HR Pick</span>
       <strong id="topHRPick">Loading...</strong>
@@ -37,81 +42,154 @@
       <span>💰 Best Moneyline</span>
       <strong id="bestMoneyline">Loading...</strong>
     </div>
+
   </div>
+
 </header>
 
 <main class="container">
 
-  <section class="quick-actions">
-    <a href="#slate">📅<span>Slate</span></a>
-    <a href="#hr">💣<span>HR</span></a>
-    <a href="#batterStats">⚾<span>Hits</span></a>
-    <a href="#pitchers">🎯<span>Pitchers</span></a>
-    <a href="#moneyline">💰<span>Money</span></a>
-    <a href="#nrfi">🚦<span>NRFI</span></a>
-  </section>
+<!-- Quick Navigation -->
 
-  <section id="slate" class="panel">
-    <h2>📅 Today’s MLB Slate</h2>
-    <div id="slateList" class="grid">
-      <div class="model-card">Loading today’s POPS slate...</div>
-    </div>
-  </section>
+<section class="quick-actions">
 
-  <section id="gameBreakdown" class="panel">
-    <h2>📊 Game Breakdown</h2>
-    <div id="gameBreakdownContent" class="grid">
-      <div class="model-card">Tap a game to view full POPS breakdown.</div>
-    </div>
-  </section>
+<a href="#slate">📅<span>Slate</span></a>
+<a href="#hr">💣<span>HR</span></a>
+<a href="#batterStats">⚾<span>Hits</span></a>
+<a href="#pitchers">🎯<span>Pitchers</span></a>
+<a href="#moneyline">💰<span>Money</span></a>
+<a href="#nrfi">🚦<span>NRFI</span></a>
 
-  <section id="hr" class="panel feature-panel">
-    <h2>💣 POPS Top HR Pickz</h2>
-    <div id="dailyHRPicks" class="grid">
-      <div class="model-card">Loading HR picks...</div>
-    </div>
-  </section>
+</section>
 
-  <section id="batterStats" class="panel">
-    <h2>⚾ Strong Hit Targets</h2>
-    <div id="batterStatsList" class="grid">
-      <div class="model-card">Loading hit targets...</div>
-    </div>
-  </section>
+<!-- Today's Slate -->
 
-  <section id="pitchers" class="panel">
-    <h2>🎯 Target Pitchers</h2>
-    <div id="pitcherTargets" class="grid">
-      <div class="model-card">Loading target pitchers...</div>
-    </div>
-  </section>
+<section id="slate" class="panel">
 
-  <section id="moneyline" class="panel">
-    <h2>💰 Moneyline Model</h2>
-    <div id="moneylinePicks" class="grid">
-      <div class="model-card">Loading moneyline picks...</div>
-    </div>
-  </section>
+<h2>📅 Today's MLB Slate</h2>
 
-  <section id="nrfi" class="panel">
-    <h2>🚦 NRFI / YRFI Center</h2>
-    <div id="nrfiPicks" class="grid">
-      <div class="model-card">Loading NRFI/YRFI picks...</div>
-    </div>
-  </section>
+<div id="slateList" class="grid">
+
+<div class="model-card">
+Loading today's POPS slate...
+</div>
+
+</div>
+
+</section>
+
+<!-- Game Breakdown -->
+
+<section id="gameBreakdown" class="panel">
+
+<h2>📊 Game Breakdown</h2>
+
+<div id="gameBreakdownContent" class="grid">
+
+<div class="model-card">
+Tap a game to view the complete POPS Pickz breakdown.
+</div>
+
+</div>
+
+</section>
+
+<!-- Home Run Picks -->
+
+<section id="hr" class="panel feature-panel">
+
+<h2>💣 POPS Top HR Pickz</h2>
+
+<div id="dailyHRPicks" class="grid">
+
+<div class="model-card">
+Loading HR Picks...
+</div>
+
+</div>
+
+</section>
+
+<!-- Hit Targets -->
+
+<section id="batterStats" class="panel">
+
+<h2>⚾ Strong Hit Targets</h2>
+
+<div id="batterStatsList" class="grid">
+
+<div class="model-card">
+Loading Hit Targets...
+</div>
+
+</div>
+
+</section>
+
+<!-- Pitchers -->
+
+<section id="pitchers" class="panel">
+
+<h2>🎯 Target Pitchers</h2>
+
+<div id="pitcherTargets" class="grid">
+
+<div class="model-card">
+Loading Target Pitchers...
+</div>
+
+</div>
+
+</section>
+
+<!-- Moneyline -->
+
+<section id="moneyline" class="panel">
+
+<h2>💰 Moneyline Model</h2>
+
+<div id="moneylinePicks" class="grid">
+
+<div class="model-card">
+Loading Moneyline Picks...
+</div>
+
+</div>
+
+</section>
+
+<!-- NRFI -->
+
+<section id="nrfi" class="panel">
+
+<h2>🚦 NRFI / YRFI Center</h2>
+
+<div id="nrfiPicks" class="grid">
+
+<div class="model-card">
+Loading NRFI / YRFI Picks...
+</div>
+
+</div>
+
+</section>
 
 </main>
 
 <nav class="bottom-nav">
-  <a href="#slate">📅<span>Slate</span></a>
-  <a href="#hr">💣<span>HR</span></a>
-  <a href="#batterStats">⚾<span>Hits</span></a>
-  <a href="#moneyline">💰<span>Money</span></a>
-  <a href="#nrfi">🚦<span>NRFI</span></a>
+
+<a href="#slate">📅<span>Slate</span></a>
+<a href="#hr">💣<span>HR</span></a>
+<a href="#batterStats">⚾<span>Hits</span></a>
+<a href="#moneyline">💰<span>Money</span></a>
+<a href="#nrfi">🚦<span>NRFI</span></a>
+
 </nav>
 
 <footer>
-  POPS Pickz Premium ©️ 2026
+
+POPS Pickz Premium ©️ 2026
+
 </footer>
 
 <script src="today.js"></script>
@@ -121,4 +199,7 @@
 <script src="models.js"></script>
 <script src="script.js"></script>
 <script src="auto.js"></script>
+
+</body>
+
 </html>
