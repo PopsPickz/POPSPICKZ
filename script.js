@@ -197,7 +197,7 @@ function loadDailySlate() {
 
     "<div class='model-card'>" +
       "<h3>📊 Best Hit Targets</h3>" +
-      formatGameTargets(game.hitTargets) +
+      formatPremiumHitCards(game.hitTargets)
     "</div>" +
 
     "<div class='model-card'>" +
