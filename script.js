@@ -228,7 +228,7 @@ function loadMoneyline() {
 
 function loadNRFI() {
   const section = document.getElementById("nrfiPicks");
-  const nrfi = safeArray("nrfi");
+ const nrfi = safeArray("eliteNRFI");
   if (!section) return;
 
   section.innerHTML = nrfi.length
