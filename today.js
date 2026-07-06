@@ -7,30 +7,29 @@ const todayData = {
       finalGrade: "A",
 
       pitchers: {
-        away: {
-          name: "R. Suarez",
-          team: "Boston Red Sox",
-          stats: "LHP • POPS pitching edge • lower run-risk starter • gives Boston the matchup advantage",
-          era: "TBD",
-          whip: "TBD",
-          hr9: "TBD",
-          hardHit: "TBD",
-          barrel: "TBD",
-          risk: "🔥🔥"
-        },
-        home: {
-          name: "R. Johnson",
-          team: "Los Angeles Angels",
-          stats: "RHP • POPS target pitcher • Boston bats get the better hit and HR setup",
-          era: "TBD",
-          whip: "TBD",
-          hr9: "TBD",
-          hardHit: "TBD",
-          barrel: "TBD",
-          risk: "🔥🔥🔥🔥"
-        }
-      },
-
+  away: {
+    name: "R. Suarez",
+    team: "Boston Red Sox",
+    stats: "LHP • 4-3 record • 2.94 ERA • Strong starter profile • Boston pitching edge",
+    era: "2.94",
+    whip: "TBD",
+    hr9: "TBD",
+    hardHit: "TBD",
+    barrel: "TBD",
+    risk: "🔥🔥"
+  },
+  home: {
+    name: "R. Johnson",
+    team: "Los Angeles Angels",
+    stats: "RHP • 1-3 record • 7.40 ERA • 1.52 WHIP • High-risk target pitcher • 2.22 HR/9 allowed",
+    era: "7.40",
+    whip: "1.52",
+    hr9: "2.22",
+    hardHit: "TBD",
+    barrel: "TBD",
+    risk: "🔥🔥🔥🔥"
+  }
+}
       moneylinePick: {
         pick: "Boston Red Sox",
         line: "-154",
