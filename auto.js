@@ -164,8 +164,13 @@ async function getWeather(venueName, gameDate) {
     return { temp: "N/A", wind: "N/A", note: "Weather error" };
   }
 }
-
-async function loadAutoSlate() {
+function getTargetGrade(score) {
+  if (score >= 90) return "🔥🔥🔥🔥🔥";
+  if (score >= 80) return "🔥🔥🔥🔥";
+  if (score >= 70) return "🔥🔥🔥";
+  if (score >= 60) return "🔥🔥";
+  return "🔥";
+}async function loadAutoSlate() {
   const slateBox = document.getElementById("slateList");
   if (!slateBox) return;
 
@@ -187,8 +192,7 @@ async function loadAutoSlate() {
       slateBox.innerHTML = "<div class='model-card'>No MLB games found today.</div>";
       return;
     }
-
-    const cards = await Promise.all(games.map(async g => {
+      const pitcherTargetList = [];    const cards = await Promise.all(games.map(async g => {
       const away = g.teams.away.team.name;
       const home = g.teams.home.team.name;
 
@@ -217,8 +221,21 @@ async function loadAutoSlate() {
 
       const awayHRRisk = getHRRiskScore(awayPitcher);
       const homeHRRisk = getHRRiskScore(homePitcher);
+pitcherTargetList.push({
+  pitcher: awayPitcher,
+  team: away,
+  opponent: home,
+  risk: awayHRRisk,
+  grade: getTargetGrade(awayHRRisk)
+});
 
-      return `
+pitcherTargetList.push({
+  pitcher: homePitcher,
+  team: home,
+  opponent: away,
+  risk: homeHRRisk,
+  grade: getTargetGrade(homeHRRisk)
+});      return `
         <div class="slate-card model-card">
           <h3>${away} vs ${home}</h3>
 
@@ -243,8 +260,20 @@ async function loadAutoSlate() {
     }));
 
     slateBox.innerHTML = cards.join("");
+pitcherTargetList.sort((a, b) => b.risk - a.risk);
 
-  } catch (err) {
+const targetBox = document.getElementById("pitcherTargets");
+
+if (targetBox) {
+  targetBox.innerHTML = pitcherTargetList.slice(0, 10).map(p => `
+    <div class="model-card">
+      <h3>${p.grade} ${p.pitcher}</h3>
+      <p><strong>Team:</strong> ${p.team}</p>
+      <p><strong>Opponent:</strong> ${p.opponent}</p>
+      <p><strong>HR Risk:</strong> ${p.risk}/100</p>
+    </div>
+  `).join("");
+}  } catch (err) {
     slateBox.innerHTML = "<div class='model-card'>Could not load MLB slate.</div>";
     console.error(err);
   }
