@@ -54,8 +54,94 @@ async function loadAutoSlate() {
    }));
 
     slateBox.innerHTML = cards.join("");
+  const hitters = Object.values(hitterStats);
 
-    const pitcherBox = document.getElementById("pitcherTargetsList");
+const hrBox = document.getElementById("dailyHRPicks");
+if (hrBox) {
+  const hrList = [];
+
+  games.forEach(g => {
+    const away = g.teams.away.team.name;
+    const home = g.teams.home.team.name;
+    const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
+    const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
+
+    const awayRisk = hrRiskScore(awayPitcher, pitcherStats);
+    const homeRisk = hrRiskScore(homePitcher, pitcherStats);
+
+    hitters.forEach(h => {
+      if (h.team === away) {
+        hrList.push({
+          player: h.name,
+          matchup: ⁠ vs ${homePitcher} ⁠,
+          score: hitterHRScore(h, homeRisk)
+        });
+      }
+
+      if (h.team === home) {
+        hrList.push({
+          player: h.name,
+          matchup: ⁠ vs ${awayPitcher} ⁠,
+          score: hitterHRScore(h, awayRisk)
+        });
+      }
+    });
+  });
+
+  hrBox.innerHTML = hrList
+    .filter(h => h.score >= 80)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 20)
+    .map(h => `
+      <div class="model-card">
+        <h3>💣 ${h.player}</h3>
+        <p>${h.matchup}</p>
+        <p><strong>POPS HR Score:</strong> ${h.score}/100</p>
+      </div>
+    `).join("");
+}
+
+const hitBox = document.getElementById("batterStatsList");
+if (hitBox) {
+  const hitList = [];
+
+  games.forEach(g => {
+    const away = g.teams.away.team.name;
+    const home = g.teams.home.team.name;
+    const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
+    const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
+
+    hitters.forEach(h => {
+      if (h.team === away) {
+        hitList.push({
+          player: h.name,
+          matchup: ⁠ vs ${homePitcher} ⁠,
+          score: hitterHitScore(h)
+        });
+      }
+
+      if (h.team === home) {
+        hitList.push({
+          player: h.name,
+          matchup: ⁠ vs ${awayPitcher} ⁠,
+          score: hitterHitScore(h)
+        });
+      }
+    });
+  });
+
+  hitBox.innerHTML = hitList
+    .filter(h => h.score >= 80)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 20)
+    .map(h => `
+      <div class="model-card">
+        <h3>⚾ ${h.player}</h3>
+        <p>${h.matchup}</p>
+        <p><strong>POPS Hit Score:</strong> ${h.score}/100</p>
+      </div>
+    `).join("");
+}    const pitcherBox = document.getElementById("pitcherTargetsList");
     if (pitcherBox) {
       pitcherBox.innerHTML = games.map(g => {
         const away = g.teams.away.team.name;
