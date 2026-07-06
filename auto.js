@@ -110,7 +110,36 @@ if (moneyList) {
       </div>
     `;
   }).join("");
-}    document.getElementById("pitcherTargetsList").innerHTML =
+const nrfiList = document.getElementById("nrfiPicks");
+
+if (nrfiList) {
+  nrfiList.innerHTML = games.map(g => {
+    const away = g.teams.away.team.name;
+    const home = g.teams.home.team.name;
+
+    const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
+    const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
+
+    const score = nrfiScore(
+      away,
+      home,
+      awayPitcher,
+      homePitcher,
+      teamStats,
+      pitcherStats
+    );
+
+    const pick = nrfiPick(score);
+
+    return `
+      <div class="model-card">
+        <h3>${pick}</h3>
+        <p><strong>${away} vs ${home}</strong></p>
+        <p><strong>Score:</strong> ${score}/100</p>
+      </div>
+    `;
+  }).join("");
+}}    document.getElementById("pitcherTargetsList").innerHTML =
 games.map(g => {
 
     const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
