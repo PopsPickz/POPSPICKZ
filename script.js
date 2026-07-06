@@ -1,5 +1,5 @@
 function safeArray(name) {
-  const data = window.todayData || todayData || {};
+  const data = window.todayData || (typeof todayData !== "undefined" ? todayData : {});
   return Array.isArray(data[name]) ? data[name] : [];
 }
 
