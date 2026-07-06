@@ -14,7 +14,7 @@ async function loadAutoSlate() {
       return;
     }
 
-    const cards = games.map(g => {
+      const cards = await Promise.all(games.map(async g => {
       const away = g.teams.away.team.name;
       const home = g.teams.home.team.name;
       const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
