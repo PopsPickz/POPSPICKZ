@@ -41,8 +41,7 @@ body::before {
   z-index: -1;
 }
 
-.topbar,
-.navbar {
+.topbar {
   background: #050505;
   border-bottom: 2px solid var(--gold);
   padding: 18px 22px;
@@ -52,30 +51,21 @@ body::before {
   box-shadow: 0 0 25px rgba(245,183,0,.35);
 }
 
-.brand,
-.logo {
+.brand {
   font-size: 30px;
   font-weight: 900;
   color: var(--gold);
   text-shadow: 0 0 14px rgba(245,183,0,.8);
 }
 
-.admin-link,
-.nav-links a {
+.admin-link {
   color: var(--white);
   text-decoration: none;
   font-weight: 900;
-  margin-left: 14px;
   text-transform: uppercase;
 }
 
-.nav-links a:hover,
-.admin-link:hover {
-  color: var(--gold);
-}
-
-.command-hero,
-.hero {
+.command-hero {
   text-align: center;
   padding: 75px 18px;
   background:
@@ -91,19 +81,12 @@ body::before {
   text-transform: uppercase;
 }
 
-.command-hero h1,
-.hero h1 {
+.command-hero h1 {
   font-size: clamp(42px, 8vw, 90px);
   margin: 10px 0;
   color: var(--white);
   text-transform: uppercase;
   text-shadow: 4px 4px 0 #000, 0 0 20px rgba(245,183,0,.8);
-}
-
-.subtitle {
-  font-size: 22px;
-  color: var(--white);
-  font-weight: 900;
 }
 
 .summary-grid {
@@ -157,7 +140,6 @@ body::before {
   padding: 14px;
   color: var(--white);
   font-weight: 900;
-  box-shadow: 0 0 12px rgba(245,183,0,.2);
 }
 
 .quick-actions {
@@ -204,9 +186,7 @@ body::before {
   text-shadow: 0 0 12px rgba(245,183,0,.7);
 }
 
-.grid,
-.model-list,
-.game-center {
+.grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
   gap: 18px;
@@ -222,6 +202,16 @@ body::before {
   box-shadow: inset 0 0 16px rgba(245,183,0,.08), 0 0 14px rgba(0,0,0,.8);
 }
 
+.clickable-game {
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.clickable-game:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 24px rgba(245,183,0,.45);
+}
+
 .model-card h3,
 .game-card h3 {
   color: var(--gold);
@@ -231,7 +221,8 @@ body::before {
 }
 
 .model-card p,
-.game-card p {
+.game-card p,
+.model-card li {
   color: var(--muted);
   line-height: 1.45;
   font-family: Arial, sans-serif;
@@ -258,36 +249,6 @@ body::before {
   background: var(--green);
   color: #000 !important;
   font-weight: 900;
-  box-shadow: 0 0 16px rgba(57,255,20,.7);
-}
-
-button {
-  background: var(--gold);
-  color: #000;
-  border: none;
-  border-radius: 999px;
-  padding: 13px 20px;
-  font-weight: 900;
-  cursor: pointer;
-  margin: 8px;
-  text-transform: uppercase;
-}
-
-input,
-textarea {
-  width: 100%;
-  padding: 13px;
-  margin: 7px 0;
-  border-radius: 10px;
-  border: 1px solid var(--gold);
-  background: #050505;
-  color: var(--white);
-  font-size: 16px;
-}
-
-textarea {
-  min-height: 320px;
-  font-family: monospace;
 }
 
 .bottom-nav {
@@ -322,21 +283,9 @@ footer {
 }
 
 @media (max-width: 700px) {
-  .topbar,
-  .navbar {
+  .topbar {
     flex-direction: column;
     gap: 10px;
-  }
-
-  .nav-links {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-  }
-
-  .nav-links a {
-    margin: 0;
   }
 
   .panel {
