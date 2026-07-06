@@ -1,326 +1,185 @@
 const todayData = {
   games: [
     {
-      game: "San Diego Padres vs Los Angeles Dodgers",
-      time: "Live - 5th Inning",
-      venue: "Dodger Stadium",
-      finalGrade: "B+",
-
-      pitchers: {
-        away: {
-          name: "Sung-Mun Song",
-          team: "San Diego Padres",
-          throws: "RHP",
-          stats: "Live game starter • Padres side",
-          era: "Live",
-          whip: "Live",
-          hr9: "Live",
-          hardHit: "Live",
-          barrel: "Live",
-          risk: "🔥🔥"
-        },
-        home: {
-          name: "Emmet Sheehan",
-          team: "Los Angeles Dodgers",
-          throws: "RHP",
-          stats: "5.08 ERA profile • command risk • Padres bats can attack if he loses the zone",
-          era: "5.08",
-          whip: "Command risk",
-          hr9: "HR risk",
-          hardHit: "Contact risk",
-          barrel: "Power risk",
-          risk: "🔥🔥🔥"
-        }
-      },
-
-      moneylinePick: {
-        pick: "Los Angeles Dodgers",
-        line: "-120",
-        confidence: "85%",
-        reason: "Dodgers have the home-field edge, stronger overall team profile, and market lean."
-      },
-
-      hrTargets: [],
-      hitTargets: [],
-
-      weather: {
-        temp: "Game environment active",
-        wind: "Live",
-        direction: "Game in progress",
-        rain: "Clear lean",
-        score: "Neutral"
-      },
-
-      nrfi: {
-        pick: "Game already live",
-        confidence: "Pass",
-        reason: "NRFI/YRFI is no longer playable once the game has started."
-      },
-
-      teamEdge: {
-        startingPitching: "Dodgers lean",
-        bullpen: "Dodgers",
-        offense: "Dodgers",
-        defense: "Dodgers",
-        recentForm: "Dodgers"
-      }
-    },
-
-    {
       game: "Boston Red Sox vs Los Angeles Angels",
       time: "9:31 PM ET",
       venue: "Angel Stadium",
-      finalGrade: "A",
 
       pitchers: {
         away: {
-          name: "R. Suarez",
+          name: "Ranger Suárez",
           team: "Boston Red Sox",
           throws: "LHP",
-          stats: "2.94 ERA • 1.13 WHIP • Boston starting pitching edge",
           era: "2.94",
-          whip: "1.13",
-          hr9: "Low HR risk",
-          hardHit: "Limits damage",
-          barrel: "Lower barrel risk",
-          risk: "🔥🔥"
+          hr9: "Low risk",
+          flyBall: "36%",
+          targetRating: "🔥🔥",
+          verdict: "Not a main pitcher to attack."
         },
         home: {
-          name: "R. Johnson",
+          name: "Ryan Johnson",
           team: "Los Angeles Angels",
           throws: "RHP",
-          stats: "7.40 ERA • 1.52 WHIP • POPS target pitcher for hits, runs, and HRs",
           era: "7.40",
-          whip: "1.52",
-          hr9: "High HR risk",
-          hardHit: "High contact risk",
-          barrel: "Power risk",
-          risk: "🔥🔥🔥🔥"
+          hr9: "2.22",
+          flyBall: "High",
+          targetRating: "🔥🔥🔥🔥🔥",
+          verdict: "Primary pitcher to attack for Boston hitters."
         }
-      },
-
-      moneylinePick: {
-        pick: "Boston Red Sox",
-        line: "-154",
-        confidence: "86%",
-        reason: "Boston has the better starter, better offensive matchup, and faces the main pitcher to target."
       },
 
       hrTargets: [
         {
           player: "Wilyer Abreu",
           score: "90/100",
-          reason: "Strong HR profile, +330 odds, lefty bat vs high-risk RHP, and wind blowing out."
+          odds: "+330",
+          grade: "Very Strong",
+          reason: "Lefty bat vs high-risk RHP with strong HR odds and wind out."
         },
         {
           player: "Willson Contreras",
           score: "88/100",
-          reason: ".912 OPS profile with +360 HR odds and strong power setup."
+          odds: "+360",
+          grade: "Strong",
+          reason: "Strong power profile and favorable matchup vs Johnson."
         },
         {
           player: "Zach Neto",
           score: "85/100",
-          reason: "Top Angels power bat with +400 HR odds, but tougher matchup vs Suarez."
+          odds: "+400",
+          grade: "Strong",
+          reason: "Best Angels power bat, but tougher matchup vs Suárez."
         }
       ],
 
       hitTargets: [
         {
           player: "Willson Contreras",
-          matchup: "vs R. Johnson",
-          hitScore: "95/100",
-          hrScore: "88/100",
+          grade: "Elite",
+          score: "95/100",
           avg: ".286",
           obp: ".377",
-          slg: ".529",
           ops: ".912",
-          iso: ".243",
-          xBA: "Strong contact profile",
-          xSLG: "Power profile",
-          hardHit: "Strong",
-          barrel: "Strong",
-          sweetSpot: "Good launch profile",
-          chase: "Disciplined approach",
-          whiff: "Playable swing-miss risk",
-          strikeout: "Playable K risk",
-          walk: "Good OBP profile",
-          hitsLast10: "Strong form lean",
-          splits: "RHB vs RHP",
-          bvp: "No major negative history",
-          pitcherMatchup: "Johnson: 7.40 ERA • 1.52 WHIP",
-          why: "Elite POPS hit target because of AVG, OBP, OPS, power, and pitcher matchup."
+          reason: "Best overall hit profile with strong AVG, OBP, OPS, and power."
         },
         {
           player: "Wilyer Abreu",
-          matchup: "vs R. Johnson",
-          hitScore: "92/100",
-          hrScore: "90/100",
-          avg: ".266",
+          grade: "Very Strong",
+          score: "92/100",
+          avg: ".267",
           obp: ".336",
-          slg: ".433",
-          ops: ".763",
-          iso: ".167",
-          xBA: "Strong lefty contact profile",
-          xSLG: "Power upside",
-          hardHit: "Strong",
-          barrel: "Strong",
-          sweetSpot: "Good launch profile",
-          chase: "Playable chase profile",
-          whiff: "Playable swing-miss risk",
-          strikeout: "Playable K risk",
-          walk: "Solid plate profile",
-          hitsLast10: "Strong matchup lean",
-          splits: "LHB vs RHP",
-          bvp: "No major negative history",
-          pitcherMatchup: "Johnson: 7.40 ERA • 1.52 WHIP",
-          why: "Very strong hit and HR target against the main pitcher to attack."
+          ops: ".769",
+          reason: "Strong lefty matchup vs Johnson and playable HR upside."
         },
         {
           player: "Zach Neto",
-          matchup: "vs R. Suarez",
-          hitScore: "86/100",
-          hrScore: "85/100",
+          grade: "Strong",
+          score: "85/100",
           avg: ".228",
           obp: ".320",
-          slg: ".444",
           ops: ".773",
-          iso: ".216",
-          xBA: "Power-over-contact profile",
-          xSLG: "Strong power profile",
-          hardHit: "Strong",
-          barrel: "Strong",
-          sweetSpot: "Power launch profile",
-          chase: "Aggressive hitter",
-          whiff: "Swing-miss risk",
-          strikeout: "Moderate K risk",
-          walk: "Playable walk profile",
-          hitsLast10: "Strong power lean",
-          splits: "RHB vs LHP",
-          bvp: "No major negative history",
-          pitcherMatchup: "Suarez: 2.94 ERA • 1.13 WHIP",
-          why: "Strong Angels bat, but matchup is tougher than Boston’s bats."
+          reason: "Top Angels hit/power target, but matchup is tougher."
         }
       ],
 
-      weather: {
-        temp: "81°F",
-        wind: "8 MPH",
-        direction: "Out to center field",
-        rain: "1%",
-        score: "8/10"
+      moneylinePick: {
+        pick: "Boston Red Sox",
+        line: "-154",
+        confidence: "86%",
+        reason: "Better starting pitcher edge and Boston gets the clear pitcher to attack."
       },
 
       nrfi: {
         pick: "Pass",
         confidence: "Pass",
-        reason: "Suarez helps NRFI, but Johnson and wind out create YRFI danger."
-      },
-
-      teamEdge: {
-        startingPitching: "Boston Red Sox",
-        bullpen: "Boston Red Sox lean",
-        offense: "Boston Red Sox",
-        defense: "Boston Red Sox lean",
-        recentForm: "Boston Red Sox"
+        reason: "Suárez supports NRFI, but Johnson creates too much YRFI risk."
       }
     }
   ],
 
   pitcherTargets: [
     {
-      pitcher: "R. Johnson",
-      stats: "Target pitcher • 7.40 ERA • 1.52 WHIP • Boston bats get the best hit and HR setup",
-      grade: "🔥🔥🔥🔥"
+      pitcher: "Ranger Suárez",
+      team: "Boston Red Sox",
+      era: "2.94",
+      hr9: "Low risk",
+      flyBall: "36%",
+      grade: "🔥🔥",
+      verdict: "Not a main pitcher to attack."
     },
     {
-      pitcher: "Emmet Sheehan",
-      stats: "Target pitcher • 5.08 ERA profile • command risk • Padres bats can attack if he loses the zone",
-      grade: "🔥🔥🔥"
+      pitcher: "Ryan Johnson",
+      team: "Los Angeles Angels",
+      era: "7.40",
+      hr9: "2.22",
+      flyBall: "High",
+      grade: "🔥🔥🔥🔥🔥",
+      verdict: "Primary pitcher to attack."
     }
   ],
 
   hrPicks: [
     {
       player: "Wilyer Abreu",
-      matchup: "vs R. Johnson",
-      barrel: 14,
-      hardHit: 48,
-      iso: 0.167,
-      hr9: 1.7,
-      weather: 8,
-      ballpark: 7,
-      platoon: 8
+      matchup: "vs Ryan Johnson",
+      score: "90/100",
+      odds: "+330",
+      grade: "Very Strong"
     },
     {
       player: "Willson Contreras",
-      matchup: "vs R. Johnson",
-      barrel: 13,
-      hardHit: 47,
-      iso: 0.243,
-      hr9: 1.7,
-      weather: 8,
-      ballpark: 7,
-      platoon: 6
+      matchup: "vs Ryan Johnson",
+      score: "88/100",
+      odds: "+360",
+      grade: "Strong"
     },
     {
       player: "Zach Neto",
-      matchup: "vs R. Suarez",
-      barrel: 12,
-      hardHit: 45,
-      iso: 0.216,
-      hr9: 1.0,
-      weather: 8,
-      ballpark: 7,
-      platoon: 7
+      matchup: "vs Ranger Suárez",
+      score: "85/100",
+      odds: "+400",
+      grade: "Strong"
     }
   ],
 
   batterStats: [
     {
       player: "Willson Contreras",
-      matchup: "vs R. Johnson",
+      matchup: "vs Ryan Johnson",
       hitScore: "95/100",
-      hrScore: "88/100",
+      grade: "Elite",
       avg: ".286",
       obp: ".377",
-      slg: ".529",
       ops: ".912",
-      why: "Elite hit profile and strong HR profile against Johnson."
+      why: "Elite hit profile."
     },
     {
       player: "Wilyer Abreu",
-      matchup: "vs R. Johnson",
+      matchup: "vs Ryan Johnson",
       hitScore: "92/100",
-      hrScore: "90/100",
-      avg: ".266",
+      grade: "Very Strong",
+      avg: ".267",
       obp: ".336",
-      slg: ".433",
-      ops: ".763",
-      why: "Best HR target and very strong hit target."
+      ops: ".769",
+      why: "Strong matchup vs target pitcher."
     },
     {
       player: "Zach Neto",
-      matchup: "vs R. Suarez",
-      hitScore: "86/100",
-      hrScore: "85/100",
+      matchup: "vs Ranger Suárez",
+      hitScore: "85/100",
+      grade: "Strong",
       avg: ".228",
       obp: ".320",
-      slg: ".444",
       ops: ".773",
-      why: "Strong Angels bat, but tougher matchup."
+      why: "Best Angels bat, tougher matchup."
     }
   ],
 
   moneyline: [
     {
       team: "Boston Red Sox",
-      reason: "Strong play only: better starter, better offense, and Johnson is the target pitcher.",
+      reason: "Better starter and better matchup vs target pitcher Ryan Johnson.",
       confidence: "86%"
-    },
-    {
-      team: "Los Angeles Dodgers",
-      reason: "Home-field edge, stronger overall roster, and market lean.",
-      confidence: "85%"
     }
   ],
 
