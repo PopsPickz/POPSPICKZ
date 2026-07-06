@@ -39,11 +39,9 @@ async function loadTeamStats() {
 
 function getRunSupportScore(teamName) {
   const stats = teamStatsMap[teamName];
-
   if (!stats) return 70;
 
   let score = 50;
-
   score += stats.ops * 40;
   score += stats.obp * 30;
   score += stats.slg * 25;
@@ -89,11 +87,9 @@ function getPitcherStats(pitcherName) {
 
 function getPitcherScore(pitcherName) {
   const p = getPitcherStats(pitcherName);
-
   if (p.era === "N/A") return 50;
 
   let score = 75;
-
   const era = Number(p.era);
   const whip = Number(p.whip);
 
@@ -110,69 +106,11 @@ function getPitcherScore(pitcherName) {
   return Math.max(40, Math.min(98, Math.round(score)));
 }
 
-function getMoneylinePick(away, home, awayPitcher, homePitcher) {
-  const awayRun = getRunSupportScore(away);
-  const homeRun = getRunSupportScore(home);
-
-  const awayPitcherScore = getPitcherScore(awayPitcher);
-  const homePitcherScore = getPitcherScore(homePitcher);
-
-  const awayTotal = awayRun + awayPitcherScore;
-  const homeTotal = homeRun + homePitcherScore + 3;
-
-  return homeTotal >= awayTotal ? home : away;
-}
-
-async function getWeather(venueName, gameDate) {
-  const venue = stadiums[venueName];
-
-  if (!venue) {
-    return {
-      temp: "N/A",
-      wind: "N/A",
-      note: "Weather unavailable"
-    };
-  }
-
-  const weatherUrl =
-    ⁠ https://api.open-meteo.com/v1/forecast?latitude=${venue.lat}&longitude=${venue.lon}&hourly=temperature_2m,wind_speed_10m,wind_direction_10m&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto ⁠;
-
-  try {
-    const res = await fetch(weatherUrl);
-    const data = await res.json();
-
-    const gameHour = new Date(gameDate).getHours();
-    const index = data.hourly.time.findIndex(t => new Date(t).getHours() === gameHour);
-
-    if (index === -1) {
-      return {
-        temp: "N/A",
-        wind: "N/A",
-        note: "Weather time unavailable"
-      };
-    }
-
-    return {
-      temp: Math.round(data.hourly.temperature_2m[index]) + "°F",
-      wind: Math.round(data.hourly.wind_speed_10m[index]) + " mph",
-      direction: Math.round(data.hourly.wind_direction_10m[index]) + "°",
-      note: "Auto weather"
-    };
-  } catch (err) {
-    return {
-      temp: "N/A",
-      wind: "N/A",
-      note: "Weather error"
-    };
-  }
-}
 function getHRRiskScore(pitcherName) {
   const p = getPitcherStats(pitcherName);
-
   if (p.era === "N/A") return 50;
 
   let score = 50;
-
   const era = Number(p.era);
   const whip = Number(p.whip);
 
@@ -187,7 +125,47 @@ function getHRRiskScore(pitcherName) {
   if (p.walks > p.strikeouts * 0.4) score += 6;
 
   return Math.max(40, Math.min(99, Math.round(score)));
-}async function loadAutoSlate() {
+}
+
+function getMoneylinePick(away, home, awayPitcher, homePitcher) {
+  const awayTotal = getRunSupportScore(away) + getPitcherScore(awayPitcher);
+  const homeTotal = getRunSupportScore(home) + getPitcherScore(homePitcher) + 3;
+
+  return homeTotal >= awayTotal ? home : away;
+}
+
+async function getWeather(venueName, gameDate) {
+  const venue = stadiums[venueName];
+
+  if (!venue) {
+    return { temp: "N/A", wind: "N/A", note: "Weather unavailable" };
+  }
+
+  const weatherUrl = ⁠ https://api.open-meteo.com/v1/forecast?latitude=${venue.lat}&longitude=${venue.lon}&hourly=temperature_2m,wind_speed_10m,wind_direction_10m&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto ⁠;
+
+  try {
+    const res = await fetch(weatherUrl);
+    const data = await res.json();
+
+    const gameHour = new Date(gameDate).getHours();
+    const index = data.hourly.time.findIndex(t => new Date(t).getHours() === gameHour);
+
+    if (index === -1) {
+      return { temp: "N/A", wind: "N/A", note: "Weather time unavailable" };
+    }
+
+    return {
+      temp: Math.round(data.hourly.temperature_2m[index]) + "°F",
+      wind: Math.round(data.hourly.wind_speed_10m[index]) + " mph",
+      direction: Math.round(data.hourly.wind_direction_10m[index]) + "°",
+      note: "Auto weather"
+    };
+  } catch (err) {
+    return { temp: "N/A", wind: "N/A", note: "Weather error" };
+  }
+}
+
+async function loadAutoSlate() {
   const slateBox = document.getElementById("slateList");
   if (!slateBox) return;
 
@@ -198,9 +176,7 @@ function getHRRiskScore(pitcherName) {
     await loadPitcherStats();
 
     const today = new Date().toISOString().split("T")[0];
-
-    const url =
-      ⁠ https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=probablePitcher,venue ⁠;
+    const url = ⁠ https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=probablePitcher,venue ⁠;
 
     const res = await fetch(url);
     const data = await res.json();
@@ -239,6 +215,9 @@ function getHRRiskScore(pitcherName) {
       const awayPitcherScore = getPitcherScore(awayPitcher);
       const homePitcherScore = getPitcherScore(homePitcher);
 
+      const awayHRRisk = getHRRiskScore(awayPitcher);
+      const homeHRRisk = getHRRiskScore(homePitcher);
+
       return `
         <div class="slate-card model-card">
           <h3>${away} vs ${home}</h3>
@@ -248,9 +227,11 @@ function getHRRiskScore(pitcherName) {
 
           <p><strong>${away} Pitcher:</strong> ${awayPitcher}</p>
           <p>ERA: ${awayStats.era} | WHIP: ${awayStats.whip} | HR Allowed: ${awayStats.homeRuns} | POPS Pitcher Score: ${awayPitcherScore}/100</p>
+          <p><strong>${awayPitcher} HR Risk:</strong> ${awayHRRisk}/100</p>
 
           <p><strong>${home} Pitcher:</strong> ${homePitcher}</p>
           <p>ERA: ${homeStats.era} | WHIP: ${homeStats.whip} | HR Allowed: ${homeStats.homeRuns} | POPS Pitcher Score: ${homePitcherScore}/100</p>
+          <p><strong>${homePitcher} HR Risk:</strong> ${homeHRRisk}/100</p>
 
           <p><strong>Weather:</strong> ${weather.temp}, Wind ${weather.wind}</p>
 
