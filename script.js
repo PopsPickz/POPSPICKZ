@@ -1,3 +1,9 @@
+// ===============================
+// POPS Pickz 6.0 — script.js
+// Manual today.js dashboard loader
+// Shows only Strong+ plays
+// ===============================
+
 function safeArray(name) {
   const data = window.todayData || (typeof todayData !== "undefined" ? todayData : {});
   return Array.isArray(data[name]) ? data[name] : [];
@@ -14,11 +20,30 @@ function scoreText(score) {
   return score;
 }
 
+function ratingFromScore(score) {
+  return Number((Number(score) / 10).toFixed(1));
+}
+
+function tierFromScore(score) {
+  const rating = ratingFromScore(score);
+  if (rating >= 9.5) return "Elite Play";
+  if (rating >= 9.0) return "Excellent";
+  if (rating >= 8.5) return "Very Strong";
+  if (rating >= 8.0) return "Strong";
+  return "Do Not Show";
+}
+
+function strongOnly(items, scoreKey = "score") {
+  return (items || []).filter(item => Number(item[scoreKey] || item.rating || 0) >= 80);
+}
+
+// ---------- Dashboard ----------
+
 function loadDashboard() {
-  const hr = safeArray("hrPicks");
-  const hits = safeArray("batterStats");
-  const pitchers = safeArray("pitcherTargets");
-  const money = safeArray("moneyline");
+  const hr = strongOnly(safeArray("hrPicks"));
+  const hits = strongOnly(safeArray("batterStats"), "hitScore");
+  const pitchers = strongOnly(safeArray("pitcherTargets"), "score");
+  const money = strongOnly(safeArray("moneyline"), "score");
 
   const topHR = document.getElementById("topHRPick");
   const topHit = document.getElementById("topHitPick");
@@ -28,8 +53,10 @@ function loadDashboard() {
   if (topHR) topHR.textContent = hr[0]?.player || "No HR Pick";
   if (topHit) topHit.textContent = hits[0]?.player || "No Hit Pick";
   if (topPitcher) topPitcher.textContent = pitchers[0]?.pitcher || "No Target";
-  if (bestMoney) bestMoney.textContent = money[0]?.team || "No Moneyline";
+  if (bestMoney) bestMoney.textContent = money[0]?.team || money[0]?.pick || "No Moneyline";
 }
+
+// ---------- Daily Slate ----------
 
 function loadDailySlate() {
   const slateList = document.getElementById("slateList");
@@ -83,12 +110,12 @@ function showGameBreakdown(gameName) {
 
     "<div class='model-card'>" +
       "<h3>💣 POPS HR Pickz</h3>" +
-      formatHRTargets(game.hrTargets) +
+      formatHRTargets(strongOnly(game.hrTargets || [])) +
     "</div>" +
 
     "<div class='model-card'>" +
       "<h3>⚾ Hit Targets</h3>" +
-      formatHitTargets(game.hitTargets) +
+      formatHitTargets(strongOnly(game.hitTargets || [], "hitScore")) +
     "</div>" +
 
     "<div class='model-card'>" +
@@ -104,11 +131,30 @@ function showGameBreakdown(gameName) {
   document.getElementById("gameBreakdown").scrollIntoView({ behavior: "smooth" });
 }
 
+// ---------- Format Cards ----------
+
+function formatScoreBadge(score, label) {
+  if (!score || Number(score) < 80) return "";
+
+  return (
+    "<span class='score-badge'>" +
+      label + ": " + score + "/100 | " +
+      ratingFromScore(score) + "/10 | " +
+      tierFromScore(score) +
+    "</span>"
+  );
+}
+
 function formatPitcher(p) {
   if (!p) return "";
 
+  const score = p.score || p.targetScore || p.hrRisk || 0;
+
+  if (score && Number(score) < 80) return "";
+
   let html = "<div class='premium-card model-card'>";
   html += "<h3>" + p.name + "</h3>";
+  if (score) html += formatScoreBadge(score, "POPS Rating");
   if (p.team) html += "<p><strong>Team:</strong> " + p.team + "</p>";
   if (p.throws) html += "<p><strong>Throws:</strong> " + p.throws + "</p>";
   if (p.era) html += "<p><strong>ERA:</strong> " + p.era + "</p>";
@@ -121,14 +167,16 @@ function formatPitcher(p) {
 }
 
 function formatHRTargets(players) {
-  if (!players || players.length === 0) return "<p>No 80+ HR picks loaded.</p>";
+  const filtered = strongOnly(players || []);
+
+  if (!filtered.length) return "<p>No 80+ HR picks loaded.</p>";
 
   let html = "";
-  players.forEach(function(p, i) {
+  filtered.forEach(function(p, i) {
     html +=
       "<div class='model-card premium-card'>" +
       "<h3>💣 #" + (i + 1) + " " + p.player + "</h3>" +
-      (p.score ? "<span class='score-badge'>POPS HR Score: " + scoreText(p.score) + "</span>" : "") +
+      formatScoreBadge(p.score, "POPS HR Score") +
       (p.odds ? "<p><strong>HR Odds:</strong> " + p.odds + "</p>" : "") +
       (p.matchup ? "<p><strong>Matchup:</strong> " + p.matchup + "</p>" : "") +
       (p.barrel ? "<p><strong>Barrel:</strong> " + p.barrel + "%</p>" : "") +
@@ -138,19 +186,23 @@ function formatHRTargets(players) {
       (p.reason ? "<p>" + p.reason + "</p>" : "") +
       "</div>";
   });
+
   return html;
 }
 
 function formatHitTargets(players) {
-  if (!players || players.length === 0) return "<p>No strong hit targets loaded.</p>";
+  const filtered = strongOnly(players || [], "hitScore");
+
+  if (!filtered.length) return "<p>No strong hit targets loaded.</p>";
 
   let html = "";
-  players.forEach(function(p, i) {
+  filtered.forEach(function(p, i) {
+    const score = p.score || p.hitScore;
+
     html +=
       "<div class='model-card premium-card'>" +
       "<h3>⚾ #" + (i + 1) + " " + p.player + "</h3>" +
-      (p.grade ? "<span>" + p.grade + "</span>" : "") +
-      (p.score || p.hitScore ? "<p><strong>POPS Hit Score:</strong> " + scoreText(p.score || p.hitScore) + "</p>" : "") +
+      formatScoreBadge(score, "POPS Hit Score") +
       (p.matchup ? "<p><strong>Matchup:</strong> " + p.matchup + "</p>" : "") +
       (p.avg ? "<p><strong>AVG:</strong> " + p.avg + "</p>" : "") +
       (p.obp ? "<p><strong>OBP:</strong> " + p.obp + "</p>" : "") +
@@ -158,14 +210,19 @@ function formatHitTargets(players) {
       (p.reason || p.why ? "<p>" + (p.reason || p.why) + "</p>" : "") +
       "</div>";
   });
+
   return html;
 }
 
 function formatMoneyline(m) {
-  if (!m || !m.pick) return "<p>No strong moneyline loaded.</p>";
+  if (!m || (!m.pick && !m.team)) return "<p>No strong moneyline loaded.</p>";
+
+  const score = Number(m.score || m.confidenceScore || 0);
+  if (score && score < 80) return "<p>No strong moneyline loaded.</p>";
 
   return (
-    "<p><strong>Pick:</strong> " + m.pick + "</p>" +
+    (score ? formatScoreBadge(score, "POPS Moneyline Score") : "") +
+    "<p><strong>Pick:</strong> " + (m.pick || m.team) + "</p>" +
     (m.line ? "<p><strong>Line:</strong> " + m.line + "</p>" : "") +
     (m.confidence ? "<p><strong>Confidence:</strong> " + m.confidence + "</p>" : "") +
     (m.reason ? "<p>" + m.reason + "</p>" : "")
@@ -175,12 +232,18 @@ function formatMoneyline(m) {
 function formatNRFI(n) {
   if (!n || !n.pick || n.pick === "Pass") return "<p>No strong NRFI/YRFI play.</p>";
 
+  const score = Number(n.score || n.confidenceScore || 0);
+  if (score && score < 80) return "<p>No strong NRFI/YRFI play.</p>";
+
   return (
+    (score ? formatScoreBadge(score, "POPS NRFI Score") : "") +
     "<p><strong>Pick:</strong> " + n.pick + "</p>" +
     (n.confidence ? "<p><strong>Confidence:</strong> " + n.confidence + "</p>" : "") +
     (n.reason ? "<p>" + n.reason + "</p>" : "")
   );
 }
+
+// ---------- Section Loaders ----------
 
 function loadHRPicks() {
   const section = document.getElementById("dailyHRPicks");
@@ -196,7 +259,7 @@ function loadBatterStats() {
 
 function loadPitcherTargets() {
   const section = document.getElementById("pitcherTargets");
-  const pitchers = safeArray("pitcherTargets");
+  const pitchers = strongOnly(safeArray("pitcherTargets"), "score");
   if (!section) return;
 
   section.innerHTML = pitchers.length
@@ -206,40 +269,42 @@ function loadPitcherTargets() {
         era: p.era,
         hr9: p.hr9,
         flyBall: p.flyBall,
+        score: p.score,
         grade: p.grade,
         verdict: p.verdict
       })).join("")
-    : "<div class='model-card'>No target pitchers loaded.</div>";
+    : "<div class='model-card'>No target pitchers 80+ loaded.</div>";
 }
 
 function loadMoneyline() {
   const section = document.getElementById("moneylinePicks");
-  const money = safeArray("moneyline");
+  const money = strongOnly(safeArray("moneyline"), "score");
   if (!section) return;
 
   section.innerHTML = money.length
     ? money.map(m =>
-        "<div class='model-card premium-card'><h3>💰 " + m.team + "</h3>" +
-        "<p>" + (m.reason || "") + "</p>" +
-        "<span>" + (m.confidence || "") + "</span></div>"
+        "<div class='model-card premium-card'><h3>💰 " + (m.team || m.pick) + "</h3>" +
+        formatMoneyline(m) +
+        "</div>"
       ).join("")
     : "<div class='model-card'>No strong moneyline loaded.</div>";
 }
 
 function loadNRFI() {
   const section = document.getElementById("nrfiPicks");
- const nrfi = safeArray("eliteNRFI");
+  const nrfi = strongOnly(safeArray("eliteNRFI"), "score");
   if (!section) return;
 
   section.innerHTML = nrfi.length
     ? nrfi.map(n =>
         "<div class='model-card premium-card'><h3>🚦 " + n.game + "</h3>" +
-        "<p><strong>" + n.pick + "</strong></p>" +
-"<p><strong>Score:</strong> " + n.score + "/100</p>" +
-        "<p>" + (n.reason || "") + "</p></div>"
+        formatNRFI(n) +
+        "</div>"
       ).join("")
     : "<div class='model-card'>No strong NRFI/YRFI play.</div>";
 }
+
+// ---------- Init ----------
 
 function initDashboard() {
   loadDashboard();
