@@ -20,11 +20,30 @@ async function loadAutoSlate() {
       return;
     }
 
-    const gameModels = await Promise.all(
-      games.map(game => buildAutoGame(game, teamStats, pitcherStats))
+    [7/6/26, 9:29:20 AM] Sean g: }
+[7/6/26, 9:31:02 AM] Sean g: const gameModels = await Promise.all(
+  games.map(game => buildAutoGame(game, teamStats, pitcherStats))
+);
+
+// Score + filter only 8.0+ plays
+const scoredGames = gameModels
+  .map(game => {
+    const model = buildMoneylineModel(game);
+
+    const scored = scorePlay(
+      {
+        ...game,
+        model
+      },
+      "moneyline"
     );
 
-    renderSlate(gameModels, slateBox);
+    return scored;
+  })
+  .filter(game => game.showOnSite);
+
+// Show only Strong / Very Strong / Excellent / Elite
+renderSlate(scoredGames, slateBox);
     renderPitcherTargets(gameModels);
     renderMoneyline(gameModels);
     renderNRFI(gameModels);
