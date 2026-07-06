@@ -357,3 +357,18 @@ transform:scale(1.02);
 transition:.25s;
 box-shadow:0 0 28px rgba(245,183,0,.45);
 }
+.ai-box {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(245, 183, 0, 0.08);
+  border: 1px solid rgba(245, 183, 0, 0.45);
+}
+
+.ai-box strong {
+  color: var(--gold);
+}
+
+.ai-box p {
+  margin: 6px 0;
+}
