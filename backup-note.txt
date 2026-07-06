@@ -1,0 +1,9 @@
+POPS Pickz 5.0 working backup.
+Current files before POPS Pickz AI rebuild:
+•⁠  ⁠index.html
+•⁠  ⁠style.css
+•⁠  ⁠script.js
+•⁠  ⁠today.js
+•⁠  ⁠api.js
+•⁠  ⁠models.js
+•⁠  ⁠auto.js
