@@ -60,6 +60,8 @@ async function loadAutoSlate() {
       `;
     });
 
+   }));
+
     slateBox.innerHTML = cards.join("");
 
     const pitcherBox = document.getElementById("pitcherTargetsList");
