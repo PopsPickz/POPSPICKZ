@@ -43,15 +43,55 @@ var todayData = {
   ],
 
   moneyline: [
-    { team: "Los Angeles Dodgers ✅", confidence: "96/100 ⭐⭐⭐⭐⭐", reason: "Pitcher ✅ | Run Support 94–58 | Bullpen ✅ | Offense ✅ | Defense ✅ | Home Field ✅" },
-    { team: "Atlanta Braves ✅", confidence: "93/100 ⭐⭐⭐⭐⭐", reason: "Pitcher ✅ | Run Support 89–70 | Bullpen ✅ | Offense ✅ | Defense ✅ | Home Field ✅" },
-    { team: "Philadelphia Phillies ✅", confidence: "87/100 ⭐⭐⭐⭐☆", reason: "Pitcher ✅ | Run Support 90–74 | Bullpen ✅ | Offense ✅ | Defense ✅ | Road Team ❌" },
-    { team: "Milwaukee Brewers ✅", confidence: "82/100 ⭐⭐⭐⭐☆", reason: "Pitcher 🟡 | Run Support 84–78 | Bullpen ✅ | Offense ✅ | Defense ✅ | Road Team ❌" },
-    { team: "Toronto Blue Jays ✅", confidence: "81/100 ⭐⭐⭐⭐☆", reason: "Pitcher ✅ | Run Support 80–78 | Bullpen 🟡 | Offense ✅ | Defense ✅ | Road Team ❌" },
-    { team: "New York Yankees ✅", confidence: "72/100 ⭐⭐⭐☆☆", reason: "Pitcher 🟡 | Run Support 82–79 | Bullpen ✅ | Offense ✅ | Defense ✅ | Road Team ❌" },
-    { team: "Washington Nationals ✅", confidence: "70/100 ⭐⭐⭐☆☆", reason: "Pitcher ✅ | Run Support 83–81 | Bullpen ❌ | Offense 🟡 | Home Field ✅" },
-    { team: "Arizona Diamondbacks ✅", confidence: "68/100 ⭐⭐⭐☆☆", reason: "Pitcher 🟡 | Run Support 85–83 | Bullpen 🟡 | Offense ✅ | Road Team ❌" }
-  ],
+  {
+    team: "Los Angeles Dodgers ✅",
+    score: 96,
+    confidence: "96/100 ⭐⭐⭐⭐⭐",
+    reason: "Pitcher ✅ | Run Support 94–58 | Bullpen ✅ | Offense ✅ | Defense ✅ | Home Field ✅"
+  },
+  {
+    team: "Atlanta Braves ✅",
+    score: 93,
+    confidence: "93/100 ⭐⭐⭐⭐⭐",
+    reason: "Pitcher ✅ | Run Support 89–70 | Bullpen ✅ | Offense ✅ | Defense ✅ | Home Field ✅"
+  },
+  {
+    team: "Philadelphia Phillies ✅",
+    score: 87,
+    confidence: "87/100 ⭐⭐⭐⭐☆",
+    reason: "Pitcher ✅ | Run Support 90–74 | Bullpen ✅ | Offense ✅ | Defense ✅ | Road Team ❌"
+  },
+  {
+    team: "Milwaukee Brewers ✅",
+    score: 82,
+    confidence: "82/100 ⭐⭐⭐⭐☆",
+    reason: "Pitcher 🟡 | Run Support 84–78 | Bullpen ✅ | Offense ✅ | Defense ✅ | Road Team ❌"
+  },
+  {
+    team: "Toronto Blue Jays ✅",
+    score: 81,
+    confidence: "81/100 ⭐⭐⭐⭐☆",
+    reason: "Pitcher ✅ | Run Support 80–78 | Bullpen 🟡 | Offense ✅ | Defense ✅ | Road Team ❌"
+  },
+  {
+    team: "New York Yankees ✅",
+    score: 72,
+    confidence: "72/100 ⭐⭐⭐☆☆",
+    reason: "Pitcher 🟡 | Run Support 82–79 | Bullpen ✅ | Offense ✅ | Defense ✅ | Road Team ❌"
+  },
+  {
+    team: "Washington Nationals ✅",
+    score: 70,
+    confidence: "70/100 ⭐⭐⭐☆☆",
+    reason: "Pitcher ✅ | Run Support 83–81 | Bullpen ❌ | Offense 🟡 | Home Field ✅"
+  },
+  {
+    team: "Arizona Diamondbacks ✅",
+    score: 68,
+    confidence: "68/100 ⭐⭐⭐☆☆",
+    reason: "Pitcher 🟡 | Run Support 85–83 | Bullpen 🟡 | Offense ✅ | Road Team ❌"
+  }
+],
 
   nrfi: [
     { game: "Philadelphia Phillies vs Kansas City Royals", pick: "NRFI", confidence: "76%", reason: "Sánchez profile supports early run prevention." },
