@@ -44,7 +44,7 @@ async function loadAutoSlate() {
           <h3>${away} vs ${home}</h3>
           <p><strong>Time:</strong> ${gameTime}</p>
           <p><strong>Venue:</strong> ${venue}</p>
-
+          <p><strong>Weather:</strong> ${weather.temp}, Wind ${weather.wind}</p>        
           <p><strong>${away} Pitcher:</strong> ${awayPitcher}</p>
           <p>ERA: ${awayP.era || "N/A"} | WHIP: ${awayP.whip || "N/A"} | HR Allowed: ${awayP.homeRuns ?? "N/A"} | POPS Pitcher Score: ${awayPitchScore}/100</p>
           <p><strong>${awayPitcher} HR Risk:</strong> ${awayHRRisk}/100</p>
