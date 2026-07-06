@@ -7,11 +7,7 @@ const todayData = {
     reason: "Strong first-inning pitchers, low early scoring offenses."
   },
   {
-    game: "Dodgers vs Giants",
-    score: 86,
-    pick: "NRFI",
-    reason: "Excellent command pitchers and pitcher-friendly matchup."
-  }
+    
 ],  games: [
     {
       game: "Philadelphia Phillies vs Kansas City Royals",
