@@ -11,8 +11,8 @@ const todayData = {
           team: "Boston Red Sox",
           throws: "LHP",
           era: "2.94",
-          hr9: "Low risk",
-          flyBall: "36%",
+          hr9: "0.51",
+          flyBall: "Low FB / 40.0% GB",
           targetRating: "🔥🔥",
           verdict: "Not a main pitcher to attack."
         },
@@ -22,9 +22,11 @@ const todayData = {
           throws: "RHP",
           era: "7.40",
           hr9: "2.22",
-          flyBall: "High",
+          flyBall: "34.9%",
+          hardHit: "39.8%",
+          barrel: "7.2%",
           targetRating: "🔥🔥🔥🔥🔥",
-          verdict: "Primary pitcher to attack for Boston hitters."
+          verdict: "Main pitcher to attack for Boston hits, runs, and HRs."
         }
       },
 
@@ -34,21 +36,29 @@ const todayData = {
           score: "90/100",
           odds: "+330",
           grade: "Very Strong",
-          reason: "Lefty bat vs high-risk RHP with strong HR odds and wind out."
+          avg: ".266",
+          obp: ".331",
+          slg: ".429",
+          ops: ".760",
+          reason: "Lefty bat vs high-risk RHP Johnson with strong HR odds and wind out."
         },
         {
           player: "Willson Contreras",
           score: "88/100",
           odds: "+360",
           grade: "Strong",
-          reason: "Strong power profile and favorable matchup vs Johnson."
+          avg: ".283",
+          obp: ".377",
+          slg: ".529",
+          ops: ".906",
+          reason: "Best Boston power/contact profile against Johnson."
         },
         {
           player: "Zach Neto",
           score: "85/100",
           odds: "+400",
           grade: "Strong",
-          reason: "Best Angels power bat, but tougher matchup vs Suárez."
+          reason: "Top Angels power bat, but matchup is tougher vs Suárez."
         }
       ],
 
@@ -57,28 +67,31 @@ const todayData = {
           player: "Willson Contreras",
           grade: "Elite",
           score: "95/100",
-          avg: ".286",
+          avg: ".283",
           obp: ".377",
-          ops: ".912",
-          reason: "Best overall hit profile with strong AVG, OBP, OPS, and power."
+          slg: ".529",
+          ops: ".906",
+          reason: "Best hit profile in this game."
         },
         {
           player: "Wilyer Abreu",
           grade: "Very Strong",
           score: "92/100",
-          avg: ".267",
-          obp: ".336",
-          ops: ".769",
-          reason: "Strong lefty matchup vs Johnson and playable HR upside."
+          avg: ".266",
+          obp: ".331",
+          slg: ".429",
+          ops: ".760",
+          reason: "Strong matchup vs Johnson."
         },
         {
-          player: "Zach Neto",
+          player: "Ceddanne Rafaela",
           grade: "Strong",
-          score: "85/100",
-          avg: ".228",
-          obp: ".320",
-          ops: ".773",
-          reason: "Top Angels hit/power target, but matchup is tougher."
+          score: "87/100",
+          avg: ".282",
+          obp: ".331",
+          slg: ".435",
+          ops: ".766",
+          reason: "Strong hit profile and Boston matchup edge."
         }
       ],
 
@@ -86,13 +99,13 @@ const todayData = {
         pick: "Boston Red Sox",
         line: "-154",
         confidence: "86%",
-        reason: "Better starting pitcher edge and Boston gets the clear pitcher to attack."
+        reason: "Boston has the better starter and faces the clear target pitcher."
       },
 
       nrfi: {
         pick: "Pass",
         confidence: "Pass",
-        reason: "Suárez supports NRFI, but Johnson creates too much YRFI risk."
+        reason: "Suárez supports NRFI, but Johnson creates YRFI risk."
       }
     }
   ],
@@ -102,8 +115,8 @@ const todayData = {
       pitcher: "Ranger Suárez",
       team: "Boston Red Sox",
       era: "2.94",
-      hr9: "Low risk",
-      flyBall: "36%",
+      hr9: "0.51",
+      flyBall: "Low FB / 40.0% GB",
       grade: "🔥🔥",
       verdict: "Not a main pitcher to attack."
     },
@@ -112,7 +125,7 @@ const todayData = {
       team: "Los Angeles Angels",
       era: "7.40",
       hr9: "2.22",
-      flyBall: "High",
+      flyBall: "34.9%",
       grade: "🔥🔥🔥🔥🔥",
       verdict: "Primary pitcher to attack."
     }
@@ -148,9 +161,10 @@ const todayData = {
       matchup: "vs Ryan Johnson",
       hitScore: "95/100",
       grade: "Elite",
-      avg: ".286",
+      avg: ".283",
       obp: ".377",
-      ops: ".912",
+      slg: ".529",
+      ops: ".906",
       why: "Elite hit profile."
     },
     {
@@ -158,20 +172,22 @@ const todayData = {
       matchup: "vs Ryan Johnson",
       hitScore: "92/100",
       grade: "Very Strong",
-      avg: ".267",
-      obp: ".336",
-      ops: ".769",
+      avg: ".266",
+      obp: ".331",
+      slg: ".429",
+      ops: ".760",
       why: "Strong matchup vs target pitcher."
     },
     {
-      player: "Zach Neto",
-      matchup: "vs Ranger Suárez",
-      hitScore: "85/100",
+      player: "Ceddanne Rafaela",
+      matchup: "vs Ryan Johnson",
+      hitScore: "87/100",
       grade: "Strong",
-      avg: ".228",
-      obp: ".320",
-      ops: ".773",
-      why: "Best Angels bat, tougher matchup."
+      avg: ".282",
+      obp: ".331",
+      slg: ".435",
+      ops: ".766",
+      why: "Strong hit profile."
     }
   ],
 
@@ -180,14 +196,6 @@ const todayData = {
       team: "Boston Red Sox",
       reason: "Better starter and better matchup vs target pitcher Ryan Johnson.",
       confidence: "86%"
-    }
-  ],
-
-  weather: [
-    {
-      stadium: "Angel Stadium",
-      condition: "Clear • 81°F • 1% rain • 8 MPH wind out to center",
-      boost: "Strong HR weather"
     }
   ],
 
