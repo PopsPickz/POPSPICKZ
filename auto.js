@@ -17,10 +17,8 @@ async function loadAutoSlate() {
     const cards = games.map(g => {
       const away = g.teams.away.team.name;
       const home = g.teams.home.team.name;
-
       const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
       const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
-
       const venue = g.venue?.name || "Unknown Stadium";
 
       const gameTime = new Date(g.gameDate).toLocaleTimeString([], {
@@ -30,31 +28,12 @@ async function loadAutoSlate() {
 
       const awayRun = runSupportScore(away, teamStats);
       const homeRun = runSupportScore(home, teamStats);
-
       const awayPitchScore = pitcherScore(awayPitcher, pitcherStats);
       const homePitchScore = pitcherScore(homePitcher, pitcherStats);
-
       const awayHRRisk = hrRiskScore(awayPitcher, pitcherStats);
       const homeHRRisk = hrRiskScore(homePitcher, pitcherStats);
-
-      const mlPick = moneylineLean(
-        away,
-        home,
-        awayPitcher,
-        homePitcher,
-        teamStats,
-        pitcherStats
-      );
-
-      const firstInningScore = nrfiScore(
-        away,
-        home,
-        awayPitcher,
-        homePitcher,
-        teamStats,
-        pitcherStats
-      );
-
+      const mlPick = moneylineLean(away, home, awayPitcher, homePitcher, teamStats, pitcherStats);
+      const firstInningScore = nrfiScore(away, home, awayPitcher, homePitcher, teamStats, pitcherStats);
       const firstInningPick = nrfiPick(firstInningScore);
 
       const awayP = pitcherStats[awayPitcher] || {};
@@ -63,7 +42,6 @@ async function loadAutoSlate() {
       return `
         <div class="slate-card model-card">
           <h3>${away} vs ${home}</h3>
-
           <p><strong>Time:</strong> ${gameTime}</p>
           <p><strong>Venue:</strong> ${venue}</p>
 
@@ -76,89 +54,82 @@ async function loadAutoSlate() {
           <p><strong>${homePitcher} HR Risk:</strong> ${homeHRRisk}/100</p>
 
           <p><strong>Run Support:</strong> ${away} ${awayRun}/100 vs ${home} ${homeRun}/100</p>
-
           <p><strong>NRFI/YRFI:</strong> ${firstInningPick} — ${firstInningScore}/100</p>
-
           <p><strong>POPS Moneyline Lean:</strong> ✅ ${mlPick}</p>
         </div>
       `;
     });
 
-   document.getElementById("slateList").innerHTML = cards.join("");
-   const moneyList = document.getElementById("moneylineList");
+    slateBox.innerHTML = cards.join("");
 
-if (moneyList) {
-  moneyList.innerHTML = games.map(g => {
+    const pitcherBox = document.getElementById("pitcherTargetsList");
+    if (pitcherBox) {
+      pitcherBox.innerHTML = games.map(g => {
+        const away = g.teams.away.team.name;
+        const home = g.teams.home.team.name;
+        const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
+        const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
 
-    const away = g.teams.away.team.name;
-    const home = g.teams.home.team.name;
+        const awayRisk = hrRiskScore(awayPitcher, pitcherStats);
+        const homeRisk = hrRiskScore(homePitcher, pitcherStats);
 
-    const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
-    const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
+        const targetPitcher = awayRisk >= homeRisk ? awayPitcher : homePitcher;
+        const targetTeam = awayRisk >= homeRisk ? away : home;
+        const opponent = awayRisk >= homeRisk ? home : away;
+        const risk = awayRisk >= homeRisk ? awayRisk : homeRisk;
+        const grade = targetGrade(risk);
 
-    const pick = getMoneylinePick(
-      away,
-      home,
-      awayPitcher,
-      homePitcher
-    );
+        return `
+          <div class="model-card">
+            <h3>${grade} ${targetPitcher}</h3>
+            <p><strong>Team:</strong> ${targetTeam}</p>
+            <p><strong>Opponent:</strong> ${opponent}</p>
+            <p><strong>HR Risk:</strong> ${risk}/100</p>
+          </div>
+        `;
+      }).join("");
+    }
 
-    return `
-      <div class="model-card">
-        <h3>💰 ${pick}</h3>
-        <p>${away} vs ${home}</p>
-      </div>
-    `;
-  }).join("");
-const nrfiList = document.getElementById("nrfiPicks");
+    const moneyList = document.getElementById("moneylineList");
+    if (moneyList) {
+      moneyList.innerHTML = games.map(g => {
+        const away = g.teams.away.team.name;
+        const home = g.teams.home.team.name;
+        const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
+        const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
+        const pick = moneylineLean(away, home, awayPitcher, homePitcher, teamStats, pitcherStats);
 
-if (nrfiList) {
-  nrfiList.innerHTML = games.map(g => {
-    const away = g.teams.away.team.name;
-    const home = g.teams.home.team.name;
+        return `
+          <div class="model-card">
+            <h3>💰 ${pick}</h3>
+            <p>${away} vs ${home}</p>
+          </div>
+        `;
+      }).join("");
+    }
 
-    const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
-    const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
+    const nrfiList = document.getElementById("nrfiPicks");
+    if (nrfiList) {
+      nrfiList.innerHTML = games.map(g => {
+        const away = g.teams.away.team.name;
+        const home = g.teams.home.team.name;
+        const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
+        const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
 
-    const score = nrfiScore(
-      away,
-      home,
-      awayPitcher,
-      homePitcher,
-      teamStats,
-      pitcherStats
-    );
+        const score = nrfiScore(away, home, awayPitcher, homePitcher, teamStats, pitcherStats);
+        const pick = nrfiPick(score);
 
-    const pick = nrfiPick(score);
+        return `
+          <div class="model-card">
+            <h3>${pick}</h3>
+            <p><strong>${away} vs ${home}</strong></p>
+            <p><strong>Score:</strong> ${score}/100</p>
+          </div>
+        `;
+      }).join("");
+    }
 
-    return `
-      <div class="model-card">
-        <h3>${pick}</h3>
-        <p><strong>${away} vs ${home}</strong></p>
-        <p><strong>Score:</strong> ${score}/100</p>
-      </div>
-    `;
-  }).join("");
-}}    document.getElementById("pitcherTargetsList").innerHTML =
-games.map(g => {
-
-    const awayPitcher = g.teams.away.probablePitcher?.fullName || "TBD";
-    const homePitcher = g.teams.home.probablePitcher?.fullName || "TBD";
-
-    const awayRisk = getHRRiskScore(awayPitcher);
-    const homeRisk = getHRRiskScore(homePitcher);
-
-    const target =
-        awayRisk > homeRisk
-            ? ⁠ ${awayPitcher} 🔥 ${awayRisk}/100 ⁠
-            : ⁠ ${homePitcher} 🔥 ${homeRisk}/100 ⁠;
-
-    return `
-        <div class="model-card">
-            <strong>${target}</strong>
-        </div>
-    `;
-}).join("");  } catch (err) {
+  } catch (err) {
     slateBox.innerHTML = "<div class='model-card'>Could not load POPS Pickz AI slate.</div>";
     console.error(err);
   }
