@@ -1,5 +1,5 @@
 // ===============================
-// POPS Pickz 7.0 — data-engine.js
+// POPS Pickz 8.0 — data-engine.js
 // Converts live MLB data into POPS-ready picks
 // ===============================
 
@@ -133,7 +133,7 @@ function createAutoHitPicks(games = [], hitterStats = {}) {
           game: ⁠ ${away} vs ${home} ⁠,
           matchup: ⁠ vs ${homePitcher} ⁠,
           score,
-          reason: ⁠ Contact profile creates strong hit upside ⁠
+          reason: "Contact profile creates strong hit upside"
         });
       }
 
@@ -146,7 +146,7 @@ function createAutoHitPicks(games = [], hitterStats = {}) {
           game: ⁠ ${away} vs ${home} ⁠,
           matchup: ⁠ vs ${awayPitcher} ⁠,
           score,
-          reason: ⁠ Contact profile creates strong hit upside ⁠
+          reason: "Contact profile creates strong hit upside"
         });
       }
     });
