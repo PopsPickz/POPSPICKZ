@@ -1,13 +1,13 @@
 const todayData = {
  eliteNRFI: [
   {
-    matchup: "Mets vs Braves",
+    game: "Mets vs Braves",
     score: 89,
     pick: "NRFI",
     reason: "Strong first-inning pitchers, low early scoring offenses."
   },
   {
-    matchup: "Dodgers vs Giants",
+    game: "Dodgers vs Giants",
     score: 86,
     pick: "NRFI",
     reason: "Excellent command pitchers and pitcher-friendly matchup."
