@@ -5,7 +5,7 @@
 async function getTodaysGames() {
   const today = new Date().toISOString().split("T")[0];
 
-  const url = ⁠ https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=probablePitcher,venue ⁠;
+ const url = ⁠ https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=probablePitcher,venue ⁠;
 
   const res = await fetch(url);
   const data = await res.json();
