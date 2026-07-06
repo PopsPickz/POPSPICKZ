@@ -1,17 +1,37 @@
+// ===============================
+// POPS Pickz 6.0 — models.js
+// Core MLB scoring models
+// ===============================
+
+// ---------- Utility ----------
+
+function clampScore(value, fallback = 75) {
+  const num = Number(value);
+
+  if (Number.isNaN(num)) return fallback;
+
+  return Math.max(0, Math.min(100, Math.round(num)));
+}
+
+// ---------- Team Run Support ----------
+
 function runSupportScore(teamName, teamStats) {
   const s = teamStats[teamName];
   if (!s) return 70;
 
   let score = 50;
-  score += s.ops * 40;
-  score += s.obp * 30;
-  score += s.slg * 25;
+
+  score += Number(s.ops || 0) * 40;
+  score += Number(s.obp || 0) * 30;
+  score += Number(s.slg || 0) * 25;
 
   if (s.runs > 500) score += 8;
   if (s.runs > 600) score += 5;
 
-  return Math.max(50, Math.min(98, Math.round(score)));
+  return clampScore(score, 70);
 }
+
+// ---------- Pitcher Strength ----------
 
 function pitcherScore(pitcherName, pitcherStats) {
   const p = pitcherStats[pitcherName];
@@ -35,6 +55,8 @@ function pitcherScore(pitcherName, pitcherStats) {
   return Math.max(40, Math.min(98, Math.round(score)));
 }
 
+// ---------- Pitcher HR Risk ----------
+
 function hrRiskScore(pitcherName, pitcherStats) {
   const p = pitcherStats[pitcherName];
   if (!p || p.era === "N/A") return 50;
@@ -44,7 +66,7 @@ function hrRiskScore(pitcherName, pitcherStats) {
   const era = Number(p.era);
   const whip = Number(p.whip);
 
-  score += p.homeRuns * 1.5;
+  score += Number(p.homeRuns || 0) * 1.5;
 
   if (era >= 5.00) score += 15;
   else if (era >= 4.25) score += 8;
@@ -56,6 +78,8 @@ function hrRiskScore(pitcherName, pitcherStats) {
 
   return Math.max(40, Math.min(99, Math.round(score)));
 }
+
+// ---------- Moneyline Lean ----------
 
 function moneylineLean(away, home, awayPitcher, homePitcher, teamStats, pitcherStats) {
   const awayTotal =
@@ -69,6 +93,8 @@ function moneylineLean(away, home, awayPitcher, homePitcher, teamStats, pitcherS
 
   return homeTotal >= awayTotal ? home : away;
 }
+
+// ---------- NRFI Score ----------
 
 function nrfiScore(away, home, awayPitcher, homePitcher, teamStats, pitcherStats) {
   let score = 50;
@@ -85,31 +111,101 @@ function nrfiPick(score) {
   if (score >= 65) return "🟡 NRFI Lean";
   return "🔴 YRFI Alert";
 }
-function targetGrade(score) {
-  if (score >= 90) return "🔥🔥🔥🔥🔥";
-  if (score >= 80) return "🔥🔥🔥🔥";
-  if (score >= 70) return "🔥🔥🔥";
-  if (score >= 60) return "🔥🔥";
-  return "🔥";
-}
-// =====================================
-// POPS Pickz 6.0 — Model Builder
-// =====================================
 
-function clampScore(value) {
-  const num = Number(value) || 0;
-  return Math.max(0, Math.min(100, num));
+// ---------- Display Grades ----------
+
+function targetGrade(score) {
+  if (score >= 95) return "🔥🔥🔥🔥🔥 Elite";
+  if (score >= 90) return "🔥🔥🔥🔥 Excellent";
+  if (score >= 85) return "🔥🔥🔥 Very Strong";
+  if (score >= 80) return "🔥🔥 Strong";
+  return "Do Not Show";
 }
+
+// ---------- Main Game Model ----------
+
+function buildGameModel(game, teamStats, pitcherStats) {
+  const away = game.teams.away.team.name;
+  const home = game.teams.home.team.name;
+
+  const awayPitcher = game.teams.away.probablePitcher?.fullName || "TBD";
+  const homePitcher = game.teams.home.probablePitcher?.fullName || "TBD";
+
+  const awayRun = runSupportScore(away, teamStats);
+  const homeRun = runSupportScore(home, teamStats);
+
+  const awayPitchScore = pitcherScore(awayPitcher, pitcherStats);
+  const homePitchScore = pitcherScore(homePitcher, pitcherStats);
+
+  const awayHRRisk = hrRiskScore(awayPitcher, pitcherStats);
+  const homeHRRisk = hrRiskScore(homePitcher, pitcherStats);
+
+  const moneyline = moneylineLean(
+    away,
+    home,
+    awayPitcher,
+    homePitcher,
+    teamStats,
+    pitcherStats
+  );
+
+  const nrfi = nrfiScore(
+    away,
+    home,
+    awayPitcher,
+    homePitcher,
+    teamStats,
+    pitcherStats
+  );
+
+  const chosenPitcherScore =
+    moneyline === home ? homePitchScore : awayPitchScore;
+
+  const chosenOffenseScore =
+    moneyline === home ? homeRun : awayRun;
+
+  const opponentOffenseScore =
+    moneyline === home ? awayRun : homeRun;
+
+  const runEdge = Math.abs(homeRun - awayRun);
+
+  return {
+    awayRun,
+    homeRun,
+    awayPitchScore,
+    homePitchScore,
+    awayHRRisk,
+    homeHRRisk,
+    moneyline,
+    nrfiScore: nrfi,
+
+    startingPitcherScore: chosenPitcherScore,
+    offenseScore: chosenOffenseScore,
+    bullpenScore: 80,
+    recentFormScore: clampScore(75 + runEdge, 75),
+    vegasScore: clampScore(78 + runEdge, 75),
+    injuryScore: 85,
+    travelScore: 82,
+    opponentOffenseScore
+  };
+}
+
+// =====================================
+// POPS Pickz 6.0 — Model Builders
+// Used by engine.js
+// =====================================
 
 function buildMoneylineModel(game = {}) {
+  const m = game.model || game;
+
   return {
-    startingPitcher: clampScore(game.startingPitcherScore || game.pitcherScore || 75),
-    bullpen: clampScore(game.bullpenScore || 75),
-    offense: clampScore(game.offenseScore || game.teamOffenseScore || 75),
-    recentForm: clampScore(game.recentFormScore || game.formScore || 75),
-    vegas: clampScore(game.vegasScore || game.marketScore || 75),
-    injuries: clampScore(game.injuryScore || 75),
-    travel: clampScore(game.travelScore || game.restScore || 75)
+    startingPitcher: clampScore(m.startingPitcherScore || m.pitcherScore || 75),
+    bullpen: clampScore(m.bullpenScore || 75),
+    offense: clampScore(m.offenseScore || m.teamOffenseScore || 75),
+    recentForm: clampScore(m.recentFormScore || m.formScore || 75),
+    vegas: clampScore(m.vegasScore || m.marketScore || 75),
+    injuries: clampScore(m.injuryScore || 75),
+    travel: clampScore(m.travelScore || m.restScore || 75)
   };
 }
 
@@ -137,12 +233,14 @@ function buildHitModel(player = {}) {
 }
 
 function buildNRFIModel(game = {}) {
+  const m = game.model || game;
+
   return {
-    startingPitchers: clampScore(game.startingPitchersScore || game.pitcherScore || 75),
-    firstInningHistory: clampScore(game.firstInningScore || game.nrfiHistoryScore || 75),
-    offenseSlowStart: clampScore(game.offenseSlowStartScore || 75),
-    bullpenBackup: clampScore(game.bullpenBackupScore || game.bullpenScore || 75),
-    weather: clampScore(game.weatherScore || 75),
-    vegasTotal: clampScore(game.vegasTotalScore || game.totalScore || 75)
+    startingPitchers: clampScore(m.nrfiScore || m.startingPitchersScore || 75),
+    firstInningHistory: clampScore(m.firstInningScore || m.nrfiHistoryScore || m.nrfiScore || 75),
+    offenseSlowStart: clampScore(100 - ((m.awayRun || 75) + (m.homeRun || 75)) / 2),
+    bullpenBackup: clampScore(m.bullpenBackupScore || m.bullpenScore || 75),
+    weather: clampScore(m.weatherScore || 75),
+    vegasTotal: clampScore(m.vegasTotalScore || m.totalScore || 75)
   };
 }
