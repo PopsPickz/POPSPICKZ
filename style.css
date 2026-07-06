@@ -22,7 +22,7 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top, rgba(245,183,0,.22), transparent 28%),
+    radial-gradient(circle at top, rgba(245, 183, 0, 0.22), transparent 28%),
     linear-gradient(180deg, #000000, #070707 45%, #000000);
   color: var(--white);
   font-family: Impact, Arial Black, Arial, sans-serif;
@@ -32,7 +32,7 @@ body::before {
   content: "$  $  $  $  $  $  $";
   position: fixed;
   inset: 0;
-  opacity: .05;
+  opacity: 0.05;
   color: var(--gold);
   font-size: 90px;
   letter-spacing: 35px;
@@ -48,14 +48,14 @@ body::before {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 0 25px rgba(245,183,0,.35);
+  box-shadow: 0 0 25px rgba(245, 183, 0, 0.35);
 }
 
 .brand {
   font-size: 30px;
   font-weight: 900;
   color: var(--gold);
-  text-shadow: 0 0 14px rgba(245,183,0,.8);
+  text-shadow: 0 0 14px rgba(245, 183, 0, 0.8);
 }
 
 .admin-link {
@@ -67,9 +67,9 @@ body::before {
 
 .command-hero {
   text-align: center;
-  padding: 75px 18px;
+  padding: 70px 18px;
   background:
-    radial-gradient(circle at center, rgba(245,183,0,.45), transparent 40%),
+    radial-gradient(circle at center, rgba(245, 183, 0, 0.45), transparent 40%),
     linear-gradient(135deg, #050505, #201500 55%, #050505);
   border-bottom: 3px solid var(--gold);
 }
@@ -86,7 +86,7 @@ body::before {
   margin: 10px 0;
   color: var(--white);
   text-transform: uppercase;
-  text-shadow: 4px 4px 0 #000, 0 0 20px rgba(245,183,0,.8);
+  text-shadow: 4px 4px 0 #000, 0 0 20px rgba(245, 183, 0, 0.8);
 }
 
 .summary-grid {
@@ -98,11 +98,13 @@ body::before {
 }
 
 .summary-card {
-  background: rgba(0,0,0,.85);
+  background: linear-gradient(180deg, rgba(25, 25, 25, 0.95), rgba(0, 0, 0, 0.95));
   border: 2px solid var(--gold);
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 18px;
-  box-shadow: inset 0 0 18px rgba(245,183,0,.15), 0 0 18px rgba(245,183,0,.25);
+  box-shadow:
+    inset 0 0 18px rgba(245, 183, 0, 0.18),
+    0 0 22px rgba(245, 183, 0, 0.28);
 }
 
 .summary-card span {
@@ -123,25 +125,6 @@ body::before {
   padding: 18px;
 }
 
-.ticker {
-  display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  padding: 16px;
-  background: #050505;
-  border-bottom: 2px solid var(--gold);
-}
-
-.ticker div {
-  min-width: 245px;
-  background: #101010;
-  border: 1px solid var(--gold);
-  border-radius: 14px;
-  padding: 14px;
-  color: var(--white);
-  font-weight: 900;
-}
-
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
@@ -152,13 +135,13 @@ body::before {
 .quick-actions a {
   background: linear-gradient(180deg, #1b1b1b, #050505);
   border: 2px solid var(--gold);
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 18px 10px;
   text-align: center;
   color: var(--white);
   text-decoration: none;
   font-size: 28px;
-  box-shadow: 0 0 16px rgba(245,183,0,.25);
+  box-shadow: 0 0 16px rgba(245, 183, 0, 0.25);
 }
 
 .quick-actions span {
@@ -170,12 +153,12 @@ body::before {
 }
 
 .panel {
-  background: linear-gradient(180deg, rgba(18,18,18,.98), rgba(4,4,4,.98));
+  background: linear-gradient(180deg, rgba(18, 18, 18, 0.98), rgba(4, 4, 4, 0.98));
   border: 2px solid var(--gold);
-  border-radius: 22px;
+  border-radius: 24px;
   padding: 22px;
   margin: 26px auto;
-  box-shadow: 0 0 26px rgba(245,183,0,.25);
+  box-shadow: 0 0 30px rgba(245, 183, 0, 0.25);
 }
 
 .panel h2 {
@@ -183,7 +166,7 @@ body::before {
   font-size: 32px;
   margin-top: 0;
   text-transform: uppercase;
-  text-shadow: 0 0 12px rgba(245,183,0,.7);
+  text-shadow: 0 0 12px rgba(245, 183, 0, 0.7);
 }
 
 .grid {
@@ -194,22 +177,36 @@ body::before {
 
 .model-card,
 .game-card {
-  background: linear-gradient(180deg, #141414, #050505);
+  background:
+    linear-gradient(180deg, rgba(245, 183, 0, 0.08), rgba(0, 0, 0, 0.98)),
+    #101010;
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 20px;
   padding: 18px;
   color: var(--white);
-  box-shadow: inset 0 0 16px rgba(245,183,0,.08), 0 0 14px rgba(0,0,0,.8);
+  box-shadow:
+    inset 0 0 18px rgba(245, 183, 0, 0.08),
+    0 0 18px rgba(0, 0, 0, 0.8);
+}
+
+.premium-card {
+  border: 2px solid var(--gold);
+  background:
+    radial-gradient(circle at top left, rgba(245, 183, 0, 0.18), transparent 35%),
+    linear-gradient(180deg, #161616, #030303);
+  box-shadow:
+    inset 0 0 18px rgba(245, 183, 0, 0.12),
+    0 0 24px rgba(245, 183, 0, 0.25);
 }
 
 .clickable-game {
   cursor: pointer;
-  transition: transform .2s ease, box-shadow .2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .clickable-game:hover {
   transform: scale(1.03);
-  box-shadow: 0 0 24px rgba(245,183,0,.45);
+  box-shadow: 0 0 28px rgba(245, 183, 0, 0.45);
 }
 
 .model-card h3,
@@ -235,20 +232,21 @@ body::before {
   font-weight: 900;
 }
 
-.premium-card {
-  border: 2px solid var(--gold);
-  background:
-    linear-gradient(180deg, rgba(245,183,0,.12), rgba(0,0,0,.98));
-}
-
 .score-badge {
   display: inline-block;
-  margin-top: 10px;
-  padding: 9px 13px;
+  margin: 10px 0;
+  padding: 9px 14px;
   border-radius: 999px;
   background: var(--green);
   color: #000 !important;
   font-weight: 900;
+  box-shadow: 0 0 18px rgba(57, 255, 20, 0.65);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid rgba(245, 183, 0, 0.45);
+  margin: 18px 0;
 }
 
 .bottom-nav {
@@ -290,5 +288,9 @@ footer {
 
   .panel {
     padding: 16px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
   }
 }
