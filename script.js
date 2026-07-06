@@ -261,8 +261,44 @@ function formatGameTargets(players) {
   html += "</ol>";
   return html;
 }
+function formatPremiumHitCards(players) {
+  if (!players || players.length === 0) {
+    return "<p>No premium hitter cards loaded.</p>";
+  }
 
-function loadHRPicks() {
+  let html = "";
+
+  players.forEach(function(player, index) {
+    html +=
+      "<div class='model-card premium-card'>" +
+        "<h3>📊 #" + (index + 1) + " " + player.player + "</h3>" +
+        "<span class='score-badge'>POPS Hit Score: " + (player.hitScore || player.score || "TBD") + "</span>" +
+
+        "<p><strong>Matchup:</strong> " + (player.matchup || "N/A") + "</p>" +
+
+        "<p><strong>AVG:</strong> " + (player.avg || "TBD") +
+        " • <strong>OBP:</strong> " + (player.obp || "TBD") +
+        " • <strong>SLG:</strong> " + (player.slg || "TBD") +
+        " • <strong>OPS:</strong> " + (player.ops || "TBD") + "</p>" +
+
+        "<p><strong>xBA:</strong> " + (player.xBA || "TBD") +
+        " • <strong>Hard Hit:</strong> " + (player.hardHit || "TBD") +
+        " • <strong>Barrel:</strong> " + (player.barrel || "TBD") +
+        " • <strong>Line Drive:</strong> " + (player.lineDrive || "TBD") + "</p>" +
+
+        "<p><strong>K%:</strong> " + (player.strikeout || "TBD") +
+        " • <strong>BB%:</strong> " + (player.walk || "TBD") +
+        " • <strong>Hits Last 10:</strong> " + (player.hitsLast10 || "TBD") + "</p>" +
+
+        "<p><strong>Split:</strong> " + (player.splits || "TBD") + "</p>" +
+        "<p><strong>Pitcher Matchup:</strong> " + (player.pitcherMatchup || "TBD") + "</p>" +
+
+        "<p><strong>Why POPS likes it:</strong> " + (player.why || player.reason || "Strong POPS hit profile.") + "</p>" +
+      "</div>";
+  });
+
+  return html;
+}function loadHRPicks() {
   const section = document.getElementById("dailyHRPicks");
   const picks = safeArray("hrPicks");
   if (!section) return;
