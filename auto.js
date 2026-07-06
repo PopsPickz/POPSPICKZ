@@ -31,38 +31,29 @@ async function loadAutoSlate() {
       })
       .filter(game => game.showOnSite);
 
-    const autoMoneyline = createAutoMoneylinePicks(gameModels);
-    const autoNRFI = createAutoNRFIPicks(gameModels);
-    const autoPitchers = createAutoPitcherTargets(gameModels);
-    const autoHR = createAutoHRPicks(games, hitterStats, pitcherStats);
-    const autoHits = createAutoHitPicks(games, hitterStats);
-
-    window.popsAutoData = {
+    const autoData = {
       games: gameModels,
       scoredGames,
-      moneyline: autoMoneyline,
-      nrfi: autoNRFI,
-      pitcherTargets: autoPitchers,
-      hrPicks: autoHR,
-      batterStats: autoHits
+      moneyline: createAutoMoneylinePicks(gameModels),
+      nrfi: createAutoNRFIPicks(gameModels),
+      pitcherTargets: createAutoPitcherTargets(gameModels),
+      hrPicks: createAutoHRPicks(games, hitterStats, pitcherStats),
+      batterStats: createAutoHitPicks(games, hitterStats)
     };
 
-    updateTopSummary(autoMoneyline, autoHR, autoHits, autoPitchers);
+    window.popsAutoData = autoData;
 
     renderSlate(scoredGames.length ? scoredGames : gameModels, slateBox);
-    renderAutoMoneyline(autoMoneyline);
-    renderAutoNRFI(autoNRFI);
-    renderAutoPitcherTargets(autoPitchers);
-    renderAutoHRPicks(autoHR);
-    renderAutoHitTargets(autoHits);
+    applyManualOverrides(autoData);
+    renderAutoPitcherTargets(autoData.pitcherTargets);
+    updateTopSummary(autoData.moneyline, autoData.hrPicks, autoData.batterStats, autoData.pitcherTargets);
+    renderDailySummary(autoData);
 
   } catch (err) {
     console.error(err);
     slateBox.innerHTML = loadingCard("Could not load POPS Pickz 7.0 slate.");
   }
 }
-
-// ---------- Basic Helpers ----------
 
 function $(id) {
   return document.getElementById(id);
@@ -82,7 +73,6 @@ function getTeamName(game, side) {
 
 function getGameTime(game) {
   if (!game.gameDate) return "TBD";
-
   return new Date(game.gameDate).toLocaleTimeString([], {
     hour: "numeric",
     minute: "2-digit"
@@ -91,7 +81,6 @@ function getGameTime(game) {
 
 function getPitcherLine(name, pitcherStats) {
   const p = pitcherStats?.[name] || {};
-
   return ⁠ ERA: ${p.era || "N/A"} | WHIP: ${p.whip || "N/A"} | HR Allowed: ${p.homeRuns ?? "N/A"} ⁠;
 }
 
@@ -101,7 +90,6 @@ function ratingFromScore(score) {
 
 function gradeFromScore(score) {
   const value = Number(score || 0);
-
   if (value >= 95) return "Elite Play";
   if (value >= 90) return "Excellent";
   if (value >= 85) return "Very Strong";
@@ -111,15 +99,8 @@ function gradeFromScore(score) {
 
 function scoreBadge(score, label = "POPS Rating") {
   if (!score || Number(score) < 80) return "";
-
-  return `
-    <span class="score-badge">
-      ${label}: ${ratingFromScore(score)}/10 | ${gradeFromScore(score)}
-    </span>
-  `;
+  return ⁠ <span class="score-badge">${label}: ${ratingFromScore(score)}/10 | ${gradeFromScore(score)}</span> ⁠;
 }
-
-// ---------- Game Builder ----------
 
 async function buildAutoGame(game, teamStats, pitcherStats) {
   const away = getTeamName(game, "away");
@@ -150,21 +131,12 @@ async function buildAutoGame(game, teamStats, pitcherStats) {
   };
 }
 
-// ---------- Top Summary ----------
-
 function updateTopSummary(moneyline = [], hr = [], hits = [], pitchers = []) {
-  const topHR = $("topHRPick");
-  const topHit = $("topHitPick");
-  const topPitcher = $("topTargetPitcher");
-  const bestMoney = $("bestMoneyline");
-
-  if (topHR) topHR.textContent = hr[0]?.player || "No HR Pick";
-  if (topHit) topHit.textContent = hits[0]?.player || "No Hit Pick";
-  if (topPitcher) topPitcher.textContent = pitchers[0]?.pitcher || "No Target";
-  if (bestMoney) bestMoney.textContent = moneyline[0]?.team || moneyline[0]?.pick || "No Moneyline";
+  if ($("topHRPick")) $("topHRPick").textContent = hr[0]?.player || "No HR Pick";
+  if ($("topHitPick")) $("topHitPick").textContent = hits[0]?.player || "No Hit Pick";
+  if ($("topTargetPitcher")) $("topTargetPitcher").textContent = pitchers[0]?.pitcher || "No Target";
+  if ($("bestMoneyline")) $("bestMoneyline").textContent = moneyline[0]?.team || moneyline[0]?.pick || "No Moneyline";
 }
-
-// ---------- Render Slate ----------
 
 function renderSlate(gameModels, slateBox) {
   if (!slateBox) return;
@@ -173,22 +145,17 @@ function renderSlate(gameModels, slateBox) {
     ? gameModels.map(g => `
       <div class="slate-card model-card">
         <h3>${g.away} vs ${g.home}</h3>
-
         <p><strong>Time:</strong> ${g.time}</p>
         <p><strong>Venue:</strong> ${g.venue}</p>
         <p><strong>Weather:</strong> ${g.weather?.temp || "N/A"}, Wind ${g.weather?.wind || "N/A"}</p>
-
         ${g.rating ? ⁠ <p><strong>POPS Rating:</strong> ${g.rating}/10</p> ⁠ : ""}
         ${g.tier ? ⁠ <p><strong>Tier:</strong> ${g.tier}</p> ⁠ : ""}
-
         <p><strong>${g.away} Pitcher:</strong> ${g.awayPitcher}</p>
         <p>${g.awayPitcherLine} | POPS Pitcher Score: ${g.model.awayPitchScore}/100</p>
         <p><strong>${g.awayPitcher} HR Risk:</strong> ${g.model.awayHRRisk}/100</p>
-
         <p><strong>${g.home} Pitcher:</strong> ${g.homePitcher}</p>
         <p>${g.homePitcherLine} | POPS Pitcher Score: ${g.model.homePitchScore}/100</p>
         <p><strong>${g.homePitcher} HR Risk:</strong> ${g.model.homeHRRisk}/100</p>
-
         <p><strong>Run Support:</strong> ${g.away} ${g.model.awayRun}/100 vs ${g.home} ${g.model.homeRun}/100</p>
         <p><strong>NRFI/YRFI:</strong> ${g.nrfiLabel} — ${g.model.nrfiScore}/100</p>
         <p><strong>POPS Moneyline Lean:</strong> ✅ ${g.model.moneyline}</p>
@@ -196,8 +163,6 @@ function renderSlate(gameModels, slateBox) {
     `).join("")
     : loadingCard("No MLB games loaded yet.");
 }
-
-// ---------- Render Moneyline ----------
 
 function renderAutoMoneyline(picks = []) {
   const box = $("moneylinePicks");
@@ -208,14 +173,13 @@ function renderAutoMoneyline(picks = []) {
       <div class="model-card premium-card">
         <h3>💰 ${p.pick || p.team}</h3>
         ${scoreBadge(p.score)}
-        <p><strong>${p.game}</strong></p>
+        <p><strong>${p.game || ""}</strong></p>
         <p><strong>Score:</strong> ${p.score}/100</p>
         <p>${p.reason || ""}</p>
       </div>
     `).join("")
     : loadingCard("No moneyline picks 80+ found yet.");
 }
-// ---------- Render NRFI ----------
 
 function renderAutoNRFI(picks = []) {
   const box = $("nrfiPicks");
@@ -234,8 +198,6 @@ function renderAutoNRFI(picks = []) {
     : loadingCard("No NRFI picks 80+ found yet.");
 }
 
-// ---------- Render Pitcher Targets ----------
-
 function renderAutoPitcherTargets(picks = []) {
   const box = $("pitcherTargets");
   if (!box) return;
@@ -253,8 +215,6 @@ function renderAutoPitcherTargets(picks = []) {
     : loadingCard("No pitcher targets 80+ found yet.");
 }
 
-// ---------- Render HR Picks ----------
-
 function renderAutoHRPicks(picks = []) {
   const box = $("dailyHRPicks");
   if (!box) return;
@@ -263,8 +223,8 @@ function renderAutoHRPicks(picks = []) {
     ? picks.map((p, i) => `
       <div class="model-card premium-card">
         <h3>💣 #${i + 1} ${p.player}</h3>
-        <p><strong>${p.game}</strong></p>
-        <p><strong>Matchup:</strong> ${p.matchup}</p>
+        <p><strong>${p.game || ""}</strong></p>
+        <p><strong>Matchup:</strong> ${p.matchup || ""}</p>
         ${scoreBadge(p.score)}
         <p><strong>Score:</strong> ${p.score}/100</p>
         <p>${p.reason || ""}</p>
@@ -272,8 +232,6 @@ function renderAutoHRPicks(picks = []) {
     `).join("")
     : loadingCard("No HR picks 80+ found yet.");
 }
-
-// ---------- Render Hit Targets ----------
 
 function renderAutoHitTargets(picks = []) {
   const box = $("batterStatsList");
@@ -283,8 +241,8 @@ function renderAutoHitTargets(picks = []) {
     ? picks.map((p, i) => `
       <div class="model-card premium-card">
         <h3>⚾ #${i + 1} ${p.player}</h3>
-        <p><strong>${p.game}</strong></p>
-        <p><strong>Matchup:</strong> ${p.matchup}</p>
+        <p><strong>${p.game || ""}</strong></p>
+        <p><strong>Matchup:</strong> ${p.matchup || ""}</p>
         ${scoreBadge(p.score)}
         <p><strong>Score:</strong> ${p.score}/100</p>
         <p>${p.reason || ""}</p>
@@ -293,8 +251,6 @@ function renderAutoHitTargets(picks = []) {
     : loadingCard("No hit targets 80+ found yet.");
 }
 
-// ---------- Manual Fallback Helpers ----------
-
 function getManualDataArray(name) {
   const data = window.todayData || {};
   return Array.isArray(data[name]) ? data[name] : [];
@@ -302,7 +258,6 @@ function getManualDataArray(name) {
 
 function getManualScore(item) {
   if (!item) return 0;
-
   if (item.score) return Number(item.score);
   if (item.hitScore) return Number(item.hitScore);
   if (item.confidenceScore) return Number(item.confidenceScore);
@@ -317,29 +272,22 @@ function getManualScore(item) {
 
 function filterStrongManual(items = []) {
   return items
-    .map(item => ({
-      ...item,
-      score: getManualScore(item)
-    }))
+    .map(item => ({ ...item, score: getManualScore(item) }))
     .filter(item => item.score >= 80)
     .sort((a, b) => b.score - a.score);
 }
-
-// ---------- Optional Manual Override Renderers ----------
 
 function renderManualMoneylineIfAvailable() {
   const picks = filterStrongManual(getManualDataArray("moneyline"));
   if (!picks.length) return false;
 
-  renderAutoMoneyline(
-    picks.map(p => ({
-      game: p.game || "",
-      team: p.team || p.pick,
-      pick: p.pick || p.team,
-      score: p.score,
-      reason: p.reason || p.confidence || ""
-    }))
-  );
+  renderAutoMoneyline(picks.map(p => ({
+    game: p.game || "",
+    team: p.team || p.pick,
+    pick: p.pick || p.team,
+    score: p.score,
+    reason: p.reason || p.confidence || ""
+  })));
 
   return true;
 }
@@ -348,15 +296,13 @@ function renderManualHRIfAvailable() {
   const picks = filterStrongManual(getManualDataArray("hrPicks"));
   if (!picks.length) return false;
 
-  renderAutoHRPicks(
-    picks.map(p => ({
-      player: p.player,
-      game: p.game || "",
-      matchup: p.matchup || "",
-      score: p.score,
-      reason: p.reason || p.grade || ""
-    }))
-  );
+  renderAutoHRPicks(picks.map(p => ({
+    player: p.player,
+    game: p.game || "",
+    matchup: p.matchup || "",
+    score: p.score,
+    reason: p.reason || p.grade || ""
+  })));
 
   return true;
 }
@@ -365,15 +311,13 @@ function renderManualHitsIfAvailable() {
   const picks = filterStrongManual(getManualDataArray("batterStats"));
   if (!picks.length) return false;
 
-  renderAutoHitTargets(
-    picks.map(p => ({
-      player: p.player,
-      game: p.game || "",
-      matchup: p.matchup || "",
-      score: p.score,
-      reason: p.reason || p.why || p.grade || ""
-    }))
-  );
+  renderAutoHitTargets(picks.map(p => ({
+    player: p.player,
+    game: p.game || "",
+    matchup: p.matchup || "",
+    score: p.score,
+    reason: p.reason || p.why || p.grade || ""
+  })));
 
   return true;
 }
@@ -382,18 +326,15 @@ function renderManualNRFIIfAvailable() {
   const picks = filterStrongManual(getManualDataArray("eliteNRFI"));
   if (!picks.length) return false;
 
-  renderAutoNRFI(
-    picks.map(p => ({
-      game: p.game,
-      pick: p.pick,
-      score: p.score,
-      reason: p.reason || ""
-    }))
-  );
+  renderAutoNRFI(picks.map(p => ({
+    game: p.game,
+    pick: p.pick,
+    score: p.score,
+    reason: p.reason || ""
+  })));
 
   return true;
 }
-// ---------- Apply Manual Overrides ----------
 
 function applyManualOverrides(autoData = {}) {
   const usedManualMoneyline = renderManualMoneylineIfAvailable();
@@ -406,21 +347,6 @@ function applyManualOverrides(autoData = {}) {
   if (!usedManualHits) renderAutoHitTargets(autoData.batterStats || []);
   if (!usedManualNRFI) renderAutoNRFI(autoData.nrfi || []);
 }
-
-// ---------- AI Explanation Blocks ----------
-
-function renderAIReasons(title, reasons = []) {
-  if (!reasons.length) return "";
-
-  return `
-    <div class="ai-box">
-      <strong>${title}</strong>
-      ${reasons.map(r => ⁠ <p>${r}</p> ⁠).join("")}
-    </div>
-  `;
-}
-
-// ---------- POPS Daily Summary ----------
 
 function buildDailySummary(autoData = {}) {
   const topMoney = autoData.moneyline?.[0];
@@ -465,26 +391,5 @@ function renderDailySummary(autoData = {}) {
       <p>No Strong+ plays found yet.</p>
     `;
 }
-
-// ---------- Final Auto Render ----------
-
-function renderPops7(autoData = {}, scoredGames = [], gameModels = [], slateBox = null) {
-  renderSlate(scoredGames.length ? scoredGames : gameModels, slateBox);
-
-  applyManualOverrides(autoData);
-
-  renderAutoPitcherTargets(autoData.pitcherTargets || []);
-
-  updateTopSummary(
-    autoData.moneyline || [],
-    autoData.hrPicks || [],
-    autoData.batterStats || [],
-    autoData.pitcherTargets || []
-  );
-
-  renderDailySummary(autoData);
-}
-
-// ---------- Start ----------
 
 window.addEventListener("DOMContentLoaded", loadAutoSlate);
