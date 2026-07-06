@@ -92,3 +92,57 @@ function targetGrade(score) {
   if (score >= 60) return "🔥🔥";
   return "🔥";
 }
+// =====================================
+// POPS Pickz 6.0 — Model Builder
+// =====================================
+
+function clampScore(value) {
+  const num = Number(value) || 0;
+  return Math.max(0, Math.min(100, num));
+}
+
+function buildMoneylineModel(game = {}) {
+  return {
+    startingPitcher: clampScore(game.startingPitcherScore || game.pitcherScore || 75),
+    bullpen: clampScore(game.bullpenScore || 75),
+    offense: clampScore(game.offenseScore || game.teamOffenseScore || 75),
+    recentForm: clampScore(game.recentFormScore || game.formScore || 75),
+    vegas: clampScore(game.vegasScore || game.marketScore || 75),
+    injuries: clampScore(game.injuryScore || 75),
+    travel: clampScore(game.travelScore || game.restScore || 75)
+  };
+}
+
+function buildHRModel(player = {}) {
+  return {
+    pitcherHRRisk: clampScore(player.pitcherHRRisk || 75),
+    batterPower: clampScore(player.batterPower || player.powerScore || 75),
+    batterForm: clampScore(player.batterForm || player.formScore || 75),
+    park: clampScore(player.parkScore || 75),
+    weather: clampScore(player.weatherScore || 75),
+    handedness: clampScore(player.handednessScore || player.splitScore || 75)
+  };
+}
+
+function buildHitModel(player = {}) {
+  return {
+    contact: clampScore(player.contactScore || 75),
+    recentForm: clampScore(player.recentFormScore || player.formScore || 75),
+    matchup: clampScore(player.matchupScore || 75),
+    pitcherContactAllowed: clampScore(player.pitcherContactAllowed || 75),
+    lineupSpot: clampScore(player.lineupSpotScore || 75),
+    park: clampScore(player.parkScore || 75),
+    weather: clampScore(player.weatherScore || 75)
+  };
+}
+
+function buildNRFIModel(game = {}) {
+  return {
+    startingPitchers: clampScore(game.startingPitchersScore || game.pitcherScore || 75),
+    firstInningHistory: clampScore(game.firstInningScore || game.nrfiHistoryScore || 75),
+    offenseSlowStart: clampScore(game.offenseSlowStartScore || 75),
+    bullpenBackup: clampScore(game.bullpenBackupScore || game.bullpenScore || 75),
+    weather: clampScore(game.weatherScore || 75),
+    vegasTotal: clampScore(game.vegasTotalScore || game.totalScore || 75)
+  };
+}
