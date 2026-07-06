@@ -26,8 +26,16 @@ async function getGameWeather(venueName, gameDate) {
     const res = await fetch(url);
     const data = await res.json();
 
+    if (!data.hourly || !data.hourly.time) {
+      return { temp: "N/A", wind: "N/A", note: "Weather unavailable" };
+    }
+
     const gameHour = new Date(gameDate).getHours();
-    const index = data.hourly.time.findIndex(t => new Date(t).getHours() === gameHour);
+
+    const index = data.hourly.time.findIndex(t => {
+      const hour = new Date(t).getHours();
+      return hour === gameHour;
+    });
 
     if (index === -1) {
       return { temp: "N/A", wind: "N/A", note: "Weather time unavailable" };
