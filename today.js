@@ -1,5 +1,133 @@
 const todayData = {
- eliteNRFI: [
+ const todayData = {
+  eliteNRFI: [],
+
+  moneyline: [
+    {
+      team: "Phillies",
+      confidence: "87/100 ⭐⭐⭐⭐☆",
+      reason: "✅ Starting Pitcher | Run Support 90–74 | ✅ Bullpen | ✅ Offense | ✅ Defense | ❌ Road Team"
+    },
+    {
+      team: "Yankees",
+      confidence: "72/100 ⭐⭐⭐☆☆",
+      reason: "🟡 Starting Pitcher | Run Support 82–79 | ✅ Offense | ✅ Bullpen | ✅ Defense | ❌ Road Team"
+    },
+    {
+      team: "Nationals",
+      confidence: "70/100 ⭐⭐⭐☆☆",
+      reason: "✅ Starting Pitcher | Run Support 83–81 | ❌ Bullpen | 🟡 Offense | ✅ Home Field"
+    },
+    {
+      team: "Braves",
+      confidence: "93/100 ⭐⭐⭐⭐⭐",
+      reason: "✅ Starting Pitcher | Run Support 89–70 | ✅ Bullpen | ✅ Offense | ✅ Defense | ✅ Home Field"
+    },
+    {
+      team: "Brewers",
+      confidence: "82/100 ⭐⭐⭐⭐☆",
+      reason: "🟡 Starting Pitcher | Run Support 84–78 | ✅ Bullpen | ✅ Offense | ✅ Defense | ❌ Road Team"
+    },
+    {
+      team: "Diamondbacks",
+      confidence: "68/100 ⭐⭐⭐☆☆",
+      reason: "🟡 Starting Pitcher | Run Support 85–83 | 🟡 Bullpen | ✅ Offense | ❌ Road Team"
+    },
+    {
+      team: "Blue Jays",
+      confidence: "81/100 ⭐⭐⭐⭐☆",
+      reason: "✅ Starting Pitcher | Run Support 80–78 | 🟡 Bullpen | ✅ Offense | ✅ Defense | ❌ Road Team"
+    },
+    {
+      team: "Dodgers",
+      confidence: "96/100 ⭐⭐⭐⭐⭐",
+      reason: "✅ Starting Pitcher | Run Support 94–58 | ✅ Bullpen | ✅ Offense | ✅ Defense | ✅ Home Field"
+    }
+  ],
+
+  games: [
+    {
+      game: "Philadelphia Phillies vs Kansas City Royals",
+      time: "2:11 PM ET",
+      moneylinePick: "Phillies",
+      runSupport: {
+        away: { team: "Phillies", score: 90, rating: "🟢 Elite" },
+        home: { team: "Royals", score: 74, rating: "🟡 Average" },
+        edge: "Phillies"
+      }
+    },
+    {
+      game: "New York Yankees vs Tampa Bay Rays",
+      time: "6:41 PM ET",
+      moneylinePick: "Yankees",
+      runSupport: {
+        away: { team: "Yankees", score: 82, rating: "🟢 Strong" },
+        home: { team: "Rays", score: 79, rating: "🟡 Good" },
+        edge: "Yankees"
+      }
+    },
+    {
+      game: "Houston Astros vs Washington Nationals",
+      time: "6:46 PM ET",
+      moneylinePick: "Nationals",
+      runSupport: {
+        away: { team: "Astros", score: 81, rating: "🟢 Strong" },
+        home: { team: "Nationals", score: 83, rating: "🟢 Strong" },
+        edge: "Nationals"
+      }
+    },
+    {
+      game: "New York Mets vs Atlanta Braves",
+      time: "7:16 PM ET",
+      moneylinePick: "Braves",
+      runSupport: {
+        away: { team: "Mets", score: 70, rating: "🟡 Average" },
+        home: { team: "Braves", score: 89, rating: "🟢 Elite" },
+        edge: "Braves"
+      }
+    },
+    {
+      game: "Milwaukee Brewers vs St. Louis Cardinals",
+      time: "7:46 PM ET",
+      moneylinePick: "Brewers",
+      runSupport: {
+        away: { team: "Brewers", score: 84, rating: "🟢 Strong" },
+        home: { team: "Cardinals", score: 78, rating: "🟡 Good" },
+        edge: "Brewers"
+      }
+    },
+    {
+      game: "Arizona Diamondbacks vs San Diego Padres",
+      time: "9:41 PM ET",
+      moneylinePick: "Diamondbacks",
+      runSupport: {
+        away: { team: "Diamondbacks", score: 85, rating: "🟢 Strong" },
+        home: { team: "Padres", score: 83, rating: "🟢 Strong" },
+        edge: "Diamondbacks"
+      }
+    },
+    {
+      game: "Toronto Blue Jays vs San Francisco Giants",
+      time: "9:46 PM ET",
+      moneylinePick: "Blue Jays",
+      runSupport: {
+        away: { team: "Blue Jays", score: 80, rating: "🟢 Strong" },
+        home: { team: "Giants", score: 78, rating: "🟡 Good" },
+        edge: "Blue Jays"
+      }
+    },
+    {
+      game: "Colorado Rockies vs Los Angeles Dodgers",
+      time: "10:11 PM ET",
+      moneylinePick: "Dodgers",
+      runSupport: {
+        away: { team: "Rockies", score: 58, rating: "🔴 Weak" },
+        home: { team: "Dodgers", score: 94, rating: "🟢 Elite" },
+        edge: "Dodgers"
+      }
+    }
+  ]
+}; eliteNRFI: [
   {
     game: "Mets vs Braves",
     score: 89,
