@@ -453,5 +453,85 @@ function renderHitTargets(games, hitterStats) {
 }
 
 // ---------- Start ----------
+function renderAutoMoneyline(picks = []) {
+  const box = $("moneylinePicks");
+  if (!box) return;
 
-window.addEventListener("DOMContentLoaded", loadAutoSlate);
+  box.innerHTML = picks.length
+    ? picks.map(p => `
+      <div class="model-card premium-card">
+        <h3>💰 ${p.pick}</h3>
+        <span class="score-badge">POPS Rating: ${(p.score / 10).toFixed(1)}/10 | ${gradeFromScore(p.score)}</span>
+        <p><strong>${p.game}</strong></p>
+        <p><strong>Score:</strong> ${p.score}/100</p>
+        <p>${p.reason}</p>
+      </div>
+    `).join("")
+    : loadingCard("No moneyline picks 80+ found yet.");
+}
+
+function renderAutoNRFI(picks = []) {
+  const box = $("nrfiPicks");
+  if (!box) return;
+
+  box.innerHTML = picks.length
+    ? picks.map(p => `
+      <div class="model-card premium-card">
+        <h3>🚦 ${p.pick}</h3>
+        <p><strong>${p.game}</strong></p>
+        <span class="score-badge">POPS Rating: ${(p.score / 10).toFixed(1)}/10 | ${gradeFromScore(p.score)}</span>
+        <p>${p.reason}</p>
+      </div>
+    `).join("")
+    : loadingCard("No NRFI picks 80+ found yet.");
+}
+
+function renderAutoPitcherTargets(picks = []) {
+  const box = $("pitcherTargets");
+  if (!box) return;
+
+  box.innerHTML = picks.length
+    ? picks.map(p => `
+      <div class="model-card premium-card">
+        <h3>🎯 ${p.pitcher}</h3>
+        <p><strong>${p.team} vs ${p.opponent}</strong></p>
+        <span class="score-badge">HR Risk: ${p.score}/100 | ${gradeFromScore(p.score)}</span>
+        <p>${p.reason}</p>
+      </div>
+    `).join("")
+    : loadingCard("No pitcher targets 80+ found yet.");
+}
+
+function renderAutoHRPicks(picks = []) {
+  const box = $("dailyHRPicks");
+  if (!box) return;
+
+  box.innerHTML = picks.length
+    ? picks.map((p, i) => `
+      <div class="model-card premium-card">
+        <h3>💣 #${i + 1} ${p.player}</h3>
+        <p><strong>${p.game}</strong></p>
+        <p>${p.matchup}</p>
+        <span class="score-badge">POPS Rating: ${(p.score / 10).toFixed(1)}/10 | ${gradeFromScore(p.score)}</span>
+        <p>${p.reason}</p>
+      </div>
+    `).join("")
+    : loadingCard("No HR picks 80+ found yet.");
+}
+
+function renderAutoHitTargets(picks = []) {
+  const box = $("batterStatsList");
+  if (!box) return;
+
+  box.innerHTML = picks.length
+    ? picks.map((p, i) => `
+      <div class="model-card premium-card">
+        <h3>⚾ #${i + 1} ${p.player}</h3>
+        <p><strong>${p.game}</strong></p>
+        <p>${p.matchup}</p>
+        <span class="score-badge">POPS Rating: ${(p.score / 10).toFixed(1)}/10 | ${gradeFromScore(p.score)}</span>
+        <p>${p.reason}</p>
+      </div>
+    `).join("")
+    : loadingCard("No hit targets 80+ found yet.");
+}window.addEventListener("DOMContentLoaded", loadAutoSlate);
