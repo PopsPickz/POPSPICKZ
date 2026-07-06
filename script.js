@@ -235,6 +235,7 @@ function loadNRFI() {
     ? nrfi.map(n =>
         "<div class='model-card premium-card'><h3>🚦 " + n.game + "</h3>" +
         "<p><strong>" + n.pick + "</strong></p>" +
+"<p><strong>Score:</strong> " + n.score + "/100</p>" +
         "<p>" + (n.reason || "") + "</p></div>"
       ).join("")
     : "<div class='model-card'>No strong NRFI/YRFI play.</div>";
