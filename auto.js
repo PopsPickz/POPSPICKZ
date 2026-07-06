@@ -10,38 +10,35 @@ async function loadAutoSlate() {
   slateBox.innerHTML = loadingCard("Loading POPS Pickz 8.0 slate...");
 
   try {
-    console.log("Loading Games...");
-const games = await getTodaysGames();
+    const games = await getTodaysGames();
 
-if (!games || !games.length) {
-  slateBox.innerHTML = loadingCard("No MLB games found today.");
-  return;
-}
+    if (!games || !games.length) {
+      slateBox.innerHTML = loadingCard("No MLB games found today.");
+      return;
+    }
 
-// Show live MLB slate immediately
-slateBox.innerHTML = games.map(game => {
-  const away = getTeamName(game, "away");
-  const home = getTeamName(game, "home");
-  const awayPitcher = getPitcherName(game, "away");
-  const homePitcher = getPitcherName(game, "home");
-  const venue = game.venue?.name || "Unknown Stadium";
-  const time = getGameTime(game);
+    slateBox.innerHTML = games.map(game => {
+      const away = getTeamName(game, "away");
+      const home = getTeamName(game, "home");
+      const awayPitcher = getPitcherName(game, "away");
+      const homePitcher = getPitcherName(game, "home");
+      const venue = game.venue?.name || "Unknown Stadium";
+      const time = getGameTime(game);
 
-  return `
-    <div class="slate-card model-card">
-      <h3>${away} vs ${home}</h3>
-      <p><strong>Time:</strong> ${time}</p>
-      <p><strong>Venue:</strong> ${venue}</p>
-      <p><strong>Away Pitcher:</strong> ${awayPitcher}</p>
-      <p><strong>Home Pitcher:</strong> ${homePitcher}</p>
-    </div>
-  `;
-}).join("");
+      return `
+        <div class="slate-card model-card">
+          <h3>${away} vs ${home}</h3>
+          <p><strong>Time:</strong> ${time}</p>
+          <p><strong>Venue:</strong> ${venue}</p>
+          <p><strong>Away Pitcher:</strong> ${awayPitcher}</p>
+          <p><strong>Home Pitcher:</strong> ${homePitcher}</p>
+        </div>
+      `;
+    }).join("");
 
-// Load heavier stats after slate is visible
-const teamStats = await getTeamStats();
-const pitcherStats = await getPitcherStats();
-const hitterStats = await getHitterStats();
+    const teamStats = await getTeamStats();
+    const pitcherStats = await getPitcherStats();
+    const hitterStats = await getHitterStats();
 
     const gameModels = await Promise.all(
       games.map(game => buildAutoGame(game, teamStats, pitcherStats))
@@ -124,7 +121,6 @@ function gradeFromScore(score) {
 
 function scoreBadge(score, label = "POPS Rating") {
   if (!score || Number(score) < 80) return "";
-
   return ⁠ <span class="score-badge">${label}: ${ratingFromScore(score)}/10 | ${gradeFromScore(score)}</span> ⁠;
 }
 
@@ -163,8 +159,6 @@ function updateTopSummary(moneyline = [], hr = [], hits = [], pitchers = []) {
   if ($("topTargetPitcher")) $("topTargetPitcher").textContent = pitchers[0]?.pitcher || "No Target";
   if ($("bestMoneyline")) $("bestMoneyline").textContent = moneyline[0]?.team || moneyline[0]?.pick || "No Moneyline";
 }
-
-// ---------- POPS 8.0 Slate Cards ----------
 
 function renderSlate(gameModels, slateBox) {
   if (!slateBox) return;
@@ -263,8 +257,6 @@ function showAutoGameBreakdown(gameTitle) {
   $("gameBreakdown")?.scrollIntoView({ behavior: "smooth" });
 }
 
-// ---------- Render Picks ----------
-
 function renderAutoMoneyline(picks = []) {
   const box = $("moneylinePicks");
   if (!box) return;
@@ -351,8 +343,6 @@ function renderAutoHitTargets(picks = []) {
     `).join("")
     : loadingCard("No hit targets 80+ found yet.");
 }
-
-// ---------- Manual Overrides ----------
 
 function getManualDataArray(name) {
   const data = window.todayData || {};
@@ -450,8 +440,6 @@ function applyManualOverrides(autoData = {}) {
   if (!usedManualHits) renderAutoHitTargets(autoData.batterStats || []);
   if (!usedManualNRFI) renderAutoNRFI(autoData.nrfi || []);
 }
-
-// ---------- Daily Summary ----------
 
 function buildDailySummary(autoData = {}) {
   const topMoney = autoData.moneyline?.[0];
