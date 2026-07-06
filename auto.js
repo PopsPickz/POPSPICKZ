@@ -12,26 +12,36 @@ async function loadAutoSlate() {
   try {
     console.log("Loading Games...");
 const games = await getTodaysGames();
-console.log("Games:", games);
 
-console.log("Loading Team Stats...");
+if (!games || !games.length) {
+  slateBox.innerHTML = loadingCard("No MLB games found today.");
+  return;
+}
+
+// Show live MLB slate immediately
+slateBox.innerHTML = games.map(game => {
+  const away = getTeamName(game, "away");
+  const home = getTeamName(game, "home");
+  const awayPitcher = getPitcherName(game, "away");
+  const homePitcher = getPitcherName(game, "home");
+  const venue = game.venue?.name || "Unknown Stadium";
+  const time = getGameTime(game);
+
+  return `
+    <div class="slate-card model-card">
+      <h3>${away} vs ${home}</h3>
+      <p><strong>Time:</strong> ${time}</p>
+      <p><strong>Venue:</strong> ${venue}</p>
+      <p><strong>Away Pitcher:</strong> ${awayPitcher}</p>
+      <p><strong>Home Pitcher:</strong> ${homePitcher}</p>
+    </div>
+  `;
+}).join("");
+
+// Load heavier stats after slate is visible
 const teamStats = await getTeamStats();
-console.log("Teams:", teamStats);
-
-console.log("Loading Pitchers...");
 const pitcherStats = await getPitcherStats();
-console.log("Pitchers:", pitcherStats);
-
-console.log("Loading Hitters...");
 const hitterStats = await getHitterStats();
-console.log("Hitters:", hitterStats);
-
-console.log("Finished Loading APIs");
-
-    if (!games || !games.length) {
-      slateBox.innerHTML = loadingCard("No MLB games found today.");
-      return;
-    }
 
     const gameModels = await Promise.all(
       games.map(game => buildAutoGame(game, teamStats, pitcherStats))
