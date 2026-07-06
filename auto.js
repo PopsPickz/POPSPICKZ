@@ -54,7 +54,7 @@ async function loadAutoSlate() {
    }));
 
     slateBox.innerHTML = cards.join("");
-  const hitters = Object.values(hitterStats);
+  <div id="dailyHRPicks"></div>  const hitters = Object.values(hitterStats);
 
 const hrBox = document.getElementById("dailyHRPicks");
 if (hrBox) {
