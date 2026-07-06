@@ -1,5 +1,5 @@
 // ===============================
-// POPS Pickz 7.0 — auto.js
+// POPS Pickz 8.0 — auto.js
 // Auto-load MLB slate + POPS models
 // ===============================
 
@@ -7,7 +7,7 @@ async function loadAutoSlate() {
   const slateBox = $("slateList");
   if (!slateBox) return;
 
-  slateBox.innerHTML = loadingCard("Loading POPS Pickz 7.0 slate...");
+  slateBox.innerHTML = loadingCard("Loading POPS Pickz 8.0 slate...");
 
   try {
     const games = await getTodaysGames();
@@ -51,7 +51,7 @@ async function loadAutoSlate() {
 
   } catch (err) {
     console.error(err);
-    slateBox.innerHTML = loadingCard("Could not load POPS Pickz 7.0 slate.");
+    slateBox.innerHTML = loadingCard("Could not load POPS Pickz 8.0 slate.");
   }
 }
 
@@ -73,6 +73,7 @@ function getTeamName(game, side) {
 
 function getGameTime(game) {
   if (!game.gameDate) return "TBD";
+
   return new Date(game.gameDate).toLocaleTimeString([], {
     hour: "numeric",
     minute: "2-digit"
@@ -90,6 +91,7 @@ function ratingFromScore(score) {
 
 function gradeFromScore(score) {
   const value = Number(score || 0);
+
   if (value >= 95) return "Elite Play";
   if (value >= 90) return "Excellent";
   if (value >= 85) return "Very Strong";
@@ -99,6 +101,7 @@ function gradeFromScore(score) {
 
 function scoreBadge(score, label = "POPS Rating") {
   if (!score || Number(score) < 80) return "";
+
   return ⁠ <span class="score-badge">${label}: ${ratingFromScore(score)}/10 | ${gradeFromScore(score)}</span> ⁠;
 }
 
@@ -138,31 +141,106 @@ function updateTopSummary(moneyline = [], hr = [], hits = [], pitchers = []) {
   if ($("bestMoneyline")) $("bestMoneyline").textContent = moneyline[0]?.team || moneyline[0]?.pick || "No Moneyline";
 }
 
+// ---------- POPS 8.0 Slate Cards ----------
+
 function renderSlate(gameModels, slateBox) {
   if (!slateBox) return;
 
   slateBox.innerHTML = gameModels.length
-    ? gameModels.map(g => `
-      <div class="slate-card model-card">
-        <h3>${g.away} vs ${g.home}</h3>
-        <p><strong>Time:</strong> ${g.time}</p>
-        <p><strong>Venue:</strong> ${g.venue}</p>
-        <p><strong>Weather:</strong> ${g.weather?.temp || "N/A"}, Wind ${g.weather?.wind || "N/A"}</p>
-        ${g.rating ? ⁠ <p><strong>POPS Rating:</strong> ${g.rating}/10</p> ⁠ : ""}
-        ${g.tier ? ⁠ <p><strong>Tier:</strong> ${g.tier}</p> ⁠ : ""}
-        <p><strong>${g.away} Pitcher:</strong> ${g.awayPitcher}</p>
-        <p>${g.awayPitcherLine} | POPS Pitcher Score: ${g.model.awayPitchScore}/100</p>
-        <p><strong>${g.awayPitcher} HR Risk:</strong> ${g.model.awayHRRisk}/100</p>
-        <p><strong>${g.home} Pitcher:</strong> ${g.homePitcher}</p>
-        <p>${g.homePitcherLine} | POPS Pitcher Score: ${g.model.homePitchScore}/100</p>
-        <p><strong>${g.homePitcher} HR Risk:</strong> ${g.model.homeHRRisk}/100</p>
-        <p><strong>Run Support:</strong> ${g.away} ${g.model.awayRun}/100 vs ${g.home} ${g.model.homeRun}/100</p>
-        <p><strong>NRFI/YRFI:</strong> ${g.nrfiLabel} — ${g.model.nrfiScore}/100</p>
-        <p><strong>POPS Moneyline Lean:</strong> ✅ ${g.model.moneyline}</p>
-      </div>
-    `).join("")
+    ? gameModels.map(g => {
+      const hrDanger = Math.max(g.model.awayHRRisk || 0, g.model.homeHRRisk || 0);
+      const gameScore = Math.max(g.model.awayRun || 0, g.model.homeRun || 0);
+      const rating = ratingFromScore(gameScore);
+      const title = ⁠ ${g.away} vs ${g.home} ⁠;
+
+      return `
+        <div class="slate-card model-card clickable-game" onclick="showAutoGameBreakdown('${title.replace(/'/g, "\\'")}')">
+          <div class="game-card-top">
+            <h3>${title}</h3>
+            <span class="game-time">${g.time}</span>
+          </div>
+
+          <div class="pops-rating">POPS Rating: ${rating}/10</div>
+          ${scoreBadge(gameScore)}
+
+          <p><strong>Venue:</strong> ${g.venue}</p>
+          <p><strong>Weather:</strong> ${g.weather?.temp || "N/A"}, Wind ${g.weather?.wind || "N/A"}</p>
+
+          <div class="mini-meter">
+            <span>💰 Moneyline</span>
+            <strong>${g.model.moneyline}</strong>
+          </div>
+
+          <div class="mini-meter">
+            <span>🚦 First Inning</span>
+            <strong>${g.nrfiLabel} — ${g.model.nrfiScore}/100</strong>
+          </div>
+
+          <div class="mini-meter">
+            <span>💣 HR Danger</span>
+            <strong>${hrDanger}/100</strong>
+          </div>
+
+          <p><small>Tap for full POPS 8.0 breakdown</small></p>
+        </div>
+      `;
+    }).join("")
     : loadingCard("No MLB games loaded yet.");
 }
+
+function showAutoGameBreakdown(gameTitle) {
+  const section = $("gameBreakdownContent");
+  if (!section || !window.popsAutoData?.games) return;
+
+  const game = window.popsAutoData.games.find(g => ⁠ ${g.away} vs ${g.home} ⁠ === gameTitle);
+  if (!game) return;
+
+  const hrDanger = Math.max(game.model.awayHRRisk || 0, game.model.homeHRRisk || 0);
+  const gameScore = Math.max(game.model.awayRun || 0, game.model.homeRun || 0);
+
+  section.innerHTML = `
+    <div class="model-card premium-card">
+      <h2>📊 ${game.away} vs ${game.home}</h2>
+      ${scoreBadge(gameScore)}
+      <p><strong>Time:</strong> ${game.time}</p>
+      <p><strong>Venue:</strong> ${game.venue}</p>
+      <p><strong>Weather:</strong> ${game.weather?.temp || "N/A"}, Wind ${game.weather?.wind || "N/A"}</p>
+    </div>
+
+    <div class="model-card premium-card">
+      <h3>💰 Moneyline Edge</h3>
+      <p><strong>POPS Lean:</strong> ${game.model.moneyline}</p>
+      <p><strong>Run Support:</strong> ${game.away} ${game.model.awayRun}/100 vs ${game.home} ${game.model.homeRun}/100</p>
+    </div>
+
+    <div class="model-card premium-card">
+      <h3>🎯 Starting Pitchers</h3>
+      <p><strong>${game.awayPitcher}</strong> — ${game.awayPitcherLine}</p>
+      <p>POPS Pitcher Score: ${game.model.awayPitchScore}/100</p>
+      <p>HR Risk: ${game.model.awayHRRisk}/100</p>
+      <hr>
+      <p><strong>${game.homePitcher}</strong> — ${game.homePitcherLine}</p>
+      <p>POPS Pitcher Score: ${game.model.homePitchScore}/100</p>
+      <p>HR Risk: ${game.model.homeHRRisk}/100</p>
+    </div>
+
+    <div class="model-card premium-card">
+      <h3>🚦 NRFI / YRFI</h3>
+      <p><strong>${game.nrfiLabel}</strong></p>
+      <p>Score: ${game.model.nrfiScore}/100</p>
+    </div>
+
+    <div class="model-card premium-card">
+      <h3>💣 HR Environment</h3>
+      <p><strong>HR Danger:</strong> ${hrDanger}/100</p>
+      <p>${hrDanger >= 85 ? "💣 Strong home run environment." : "⚾ Moderate home run environment."}</p>
+    </div>
+  `;
+
+  $("gameBreakdown")?.scrollIntoView({ behavior: "smooth" });
+}
+
+// ---------- Render Picks ----------
 
 function renderAutoMoneyline(picks = []) {
   const box = $("moneylinePicks");
@@ -250,6 +328,8 @@ function renderAutoHitTargets(picks = []) {
     `).join("")
     : loadingCard("No hit targets 80+ found yet.");
 }
+
+// ---------- Manual Overrides ----------
 
 function getManualDataArray(name) {
   const data = window.todayData || {};
@@ -347,6 +427,8 @@ function applyManualOverrides(autoData = {}) {
   if (!usedManualHits) renderAutoHitTargets(autoData.batterStats || []);
   if (!usedManualNRFI) renderAutoNRFI(autoData.nrfi || []);
 }
+
+// ---------- Daily Summary ----------
 
 function buildDailySummary(autoData = {}) {
   const topMoney = autoData.moneyline?.[0];
