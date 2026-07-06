@@ -45,3 +45,28 @@ async function getPitcherStats() {
 
   return pitchers;
 }
+async function getHitterStats() {
+  const res = await fetch(
+    "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&playerPool=ALL&sportIds=1&limit=5000"
+  );
+
+  const data = await res.json();
+  const hitters = {};
+
+  (data.stats?.[0]?.splits || []).forEach(player => {
+    hitters[player.player.fullName] = {
+      name: player.player.fullName,
+      team: player.team?.name || "Unknown",
+      avg: player.stat.avg || "0",
+      obp: player.stat.obp || "0",
+      slg: player.stat.slg || "0",
+      ops: player.stat.ops || "0",
+      homeRuns: Number(player.stat.homeRuns || 0),
+      hits: Number(player.stat.hits || 0),
+      atBats: Number(player.stat.atBats || 0),
+      rbi: Number(player.stat.rbi || 0)
+    };
+  });
+
+  return hitters;
+}
