@@ -372,3 +372,46 @@ box-shadow:0 0 28px rgba(245,183,0,.45);
 .ai-box p {
   margin: 6px 0;
 }
+.game-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.game-time {
+  color: var(--green);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.mini-meter {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid rgba(245, 183, 0, 0.45);
+  border-radius: 12px;
+  background: rgba(245, 183, 0, 0.08);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mini-meter span {
+  color: var(--gold);
+}
+
+.mini-meter strong {
+  color: var(--green);
+}
+
+.ai-summary {
+  max-width: 900px;
+  margin: 25px auto 0;
+  text-align: left;
+}
+
+.ai-summary p {
+  color: var(--white);
+  font-family: Arial, sans-serif;
+  font-weight: 900;
+}
