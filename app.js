@@ -5,14 +5,12 @@ var hrBox = document.getElementById("hrBox");
 function getEasternDate() {
   var now = new Date();
 
-  var easternDate = new Intl.DateTimeFormat("en-CA", {
+  return new Intl.DateTimeFormat("en-CA", {
     timeZone: "America/New_York",
     year: "numeric",
     month: "2-digit",
     day: "2-digit"
   }).format(now);
-
-  return easternDate;
 }
 
 async function loadMLBData() {
@@ -33,60 +31,94 @@ async function loadMLBData() {
       games = data.dates[0].games;
     }
 
+    scoresBox.innerHTML = "";
+    hrBox.innerHTML = "<p>Checking for home runs...</p>";
+
     if (games.length === 0) {
-      scoresBox.innerHTML = "No MLB games scheduled for " + today + ".";
-      lineupsBox.innerHTML = "No lineups available.";
+      scoresBox.innerHTML = "No MLB games scheduled today.";
       hrBox.innerHTML = "No home runs today.";
       return;
     }
 
-    scoresBox.innerHTML = "<p><strong>Date:</strong> " + today + "</p>";
+    var allHomeRuns = [];
 
-    games.forEach(function (game) {
+    for (var i = 0; i < games.length; i++) {
+      var game = games[i];
+
       var away = game.teams.away.team.name;
       var home = game.teams.home.team.name;
+      var gamePk = game.gamePk;
 
       var awayScore = game.teams.away.score || 0;
       var homeScore = game.teams.home.score || 0;
-
       var status = game.status.detailedState;
-
-      var gameTime = new Date(game.gameDate).toLocaleTimeString("en-US", {
-        timeZone: "America/New_York",
-        hour: "numeric",
-        minute: "2-digit"
-      });
-
-      var awayPitcher = "TBD";
-      var homePitcher = "TBD";
-
-      if (game.teams.away.probablePitcher) {
-        awayPitcher = game.teams.away.probablePitcher.fullName;
-      }
-
-      if (game.teams.home.probablePitcher) {
-        homePitcher = game.teams.home.probablePitcher.fullName;
-      }
 
       scoresBox.innerHTML +=
         "<div style='border:1px solid #ccc; padding:15px; margin-bottom:15px; border-radius:10px;'>" +
         "<h3>" + away + " vs " + home + "</h3>" +
-        "<p><strong>Game Time:</strong> " + gameTime + " ET</p>" +
         "<p><strong>Score:</strong> " + awayScore + " - " + homeScore + "</p>" +
         "<p><strong>Status:</strong> " + status + "</p>" +
-        "<p><strong>Pitchers:</strong> " + awayPitcher + " vs " + homePitcher + "</p>" +
         "</div>";
-    });
 
-    lineupsBox.innerHTML = "Lineups coming next.";
-    hrBox.innerHTML = "Home run tracker coming next.";
+      var liveURL =
+        "https://statsapi.mlb.com/api/v1.1/game/" +
+        gamePk +
+        "/feed/live";
+
+      var liveResponse = await fetch(liveURL);
+      var liveData = await liveResponse.json();
+
+      var plays = liveData.liveData.plays.allPlays || [];
+
+      plays.forEach(function (play) {
+        if (play.result && play.result.event === "Home Run") {
+          var batter = "Unknown hitter";
+
+          if (play.matchup && play.matchup.batter) {
+            batter = play.matchup.batter.fullName;
+          }
+
+          var inning = play.about.inning;
+          var half = play.about.halfInning;
+
+          var description = play.result.description || "Home Run";
+
+          allHomeRuns.push({
+            batter: batter,
+            game: away + " vs " + home,
+            inning: half + " " + inning,
+            description: description
+          });
+        }
+      });
+    }
+
+    if (allHomeRuns.length === 0) {
+      hrBox.innerHTML =
+        "<p>No home runs yet today.</p>";
+    } else {
+      hrBox.innerHTML = "";
+
+      allHomeRuns.forEach(function (hr) {
+        hrBox.innerHTML +=
+          "<div style='border:2px solid black; padding:15px; margin-bottom:15px; border-radius:10px;'>" +
+          "<h3>💣 " + hr.batter + "</h3>" +
+          "<p><strong>Game:</strong> " + hr.game + "</p>" +
+          "<p><strong>Inning:</strong> " + hr.inning + "</p>" +
+          "<p>" + hr.description + "</p>" +
+          "</div>";
+      });
+    }
+
+    lineupsBox.innerHTML = "Lineups coming after home run tracker.";
 
   } catch (error) {
-    scoresBox.innerHTML = "Error loading MLB scores.";
-    lineupsBox.innerHTML = "Error loading lineups.";
+    console.log(error);
+    scoresBox.innerHTML = "Error loading scores.";
     hrBox.innerHTML = "Error loading home run tracker.";
   }
 }
 
 loadMLBData();
+
 setInterval(loadMLBData, 60000);
