@@ -1,84 +1,69 @@
-const scoresBox = document.getElementById("scoresBox");
-const lineupsBox = document.getElementById("lineupsBox");
-const hrBox = document.getElementById("hrBox");
+var scoresBox = document.getElementById("scoresBox");
+var lineupsBox = document.getElementById("lineupsBox");
+var hrBox = document.getElementById("hrBox");
 
 async function loadMLBData() {
-  const today = new Date().toISOString().split("T")[0];
+  var today = new Date().toISOString().split("T")[0];
 
-  const scheduleURL = ⁠ `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=probablePitcher` ⁠;
+  var scheduleURL =
+    "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=" +
+    today +
+    "&hydrate=probablePitcher";
 
   try {
-    const response = await fetch(scheduleURL);
+    var response = await fetch(scheduleURL);
+    var data = await response.json();
 
-    if (!response.ok) {
-      throw new Error("Failed to load MLB schedule");
+    var games = [];
+
+    if (data.dates && data.dates.length > 0) {
+      games = data.dates[0].games;
     }
 
-    const data = await response.json();
-
-    const games = data.dates?.[0]?.games || [];
-
     if (games.length === 0) {
-      scoresBox.innerHTML = "<p>No MLB games scheduled today.</p>";
-      lineupsBox.innerHTML = "<p>No lineups available.</p>";
-      hrBox.innerHTML = "<p>No home runs today.</p>";
+      scoresBox.innerHTML = "No MLB games scheduled today.";
+      lineupsBox.innerHTML = "No lineups available.";
+      hrBox.innerHTML = "No home runs today.";
       return;
     }
 
     scoresBox.innerHTML = "";
 
-    games.forEach((game) => {
-      const away = game.teams.away.team.name;
-      const home = game.teams.home.team.name;
+    games.forEach(function (game) {
+      var away = game.teams.away.team.name;
+      var home = game.teams.home.team.name;
 
-      const awayScore = game.teams.away.score ?? "-";
-      const homeScore = game.teams.home.score ?? "-";
+      var awayScore = game.teams.away.score || 0;
+      var homeScore = game.teams.home.score || 0;
 
-      const status = game.status.detailedState;
+      var status = game.status.detailedState;
 
-      const awayPitcher =
-        game.teams.away.probablePitcher?.fullName || "TBD";
+      var awayPitcher = "TBD";
+      var homePitcher = "TBD";
 
-      const homePitcher =
-        game.teams.home.probablePitcher?.fullName || "TBD";
+      if (game.teams.away.probablePitcher) {
+        awayPitcher = game.teams.away.probablePitcher.fullName;
+      }
 
-      scoresBox.innerHTML += `
-        <div style="border:1px solid #ccc;padding:15px;margin-bottom:15px;border-radius:10px;">
-          <h3>${away} vs ${home}</h3>
+      if (game.teams.home.probablePitcher) {
+        homePitcher = game.teams.home.probablePitcher.fullName;
+      }
 
-          <p><strong>Score:</strong> ${awayScore} - ${homeScore}</p>
-
-          <p><strong>Status:</strong> ${status}</p>
-
-          <p><strong>Probable Pitchers</strong></p>
-
-          <p>${awayPitcher}</p>
-
-          <p>vs</p>
-
-          <p>${homePitcher}</p>
-
-        </div>
-      `;
+      scoresBox.innerHTML +=
+        "<div style='border:1px solid #ccc; padding:15px; margin-bottom:15px; border-radius:10px;'>" +
+        "<h3>" + away + " vs " + home + "</h3>" +
+        "<p><strong>Score:</strong> " + awayScore + " - " + homeScore + "</p>" +
+        "<p><strong>Status:</strong> " + status + "</p>" +
+        "<p><strong>Pitchers:</strong> " + awayPitcher + " vs " + homePitcher + "</p>" +
+        "</div>";
     });
 
-    lineupsBox.innerHTML =
-      "<p>🚧 Live lineups will be added in Step 2.</p>";
-
-    hrBox.innerHTML =
-      "<p>💣 Live Home Run Tracker will be added in Step 3.</p>";
-
+    lineupsBox.innerHTML = "Lineups coming next.";
+    hrBox.innerHTML = "Home run tracker coming next.";
   } catch (error) {
-    console.error(error);
-
-    scoresBox.innerHTML =
-      "<p>❌ Unable to load MLB scores.</p>";
-
-    lineupsBox.innerHTML =
-      "<p>❌ Unable to load lineups.</p>";
-
-    hrBox.innerHTML =
-      "<p>❌ Unable to load home run tracker.</p>";
+    scoresBox.innerHTML = "Error loading MLB scores.";
+    lineupsBox.innerHTML = "Error loading lineups.";
+    hrBox.innerHTML = "Error loading home run tracker.";
   }
 }
 
